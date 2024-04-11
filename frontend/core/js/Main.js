@@ -9,8 +9,10 @@ class Main {
         Includer.addFilesToLoad(
             [{
                 directory: WEB_DESKTOP_DIR,
-                fileNames: ['fileToInclude.js']
+                fileNames: ['filesToInclude.js']
             }]
         );
+        await Includer.startLoad()
+        console.dir(Includer)
     }
 }
