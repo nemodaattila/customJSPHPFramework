@@ -24,25 +24,28 @@ class HtmlElementCreator {
     /**
      * létrehoz egy egyszerű (nem egymásba ágyazott) html DOM elemet
      * @param type {string} - html DOM típus
-     * @param parent {string | HTMLElement} - szülő DOM element-je, ebbe kerül létrehozásra az elem
+     * @param parent {string | HTMLElement|null} - szülő DOM element-je, ebbe kerül létrehozásra az elem
      * @param params {object} - HTML elem paraméterei
      * @returns {HTMLElement} - a létrejött DOM element
      * @throws {Error} - ha a type nem string, vagy a parent element nem létezik
      */
     static createSimpleHtmlElement(type, parent, params = {}) {
-        if (typeof parent === "string")
-            parent = document.getElementById(parent)
-        if (parent.nodeName === undefined)
-            throw new Error('createHtmlSimpleElement - parent must be DOM element');
-        if (typeof type !== "string")
-            throw new Error('createHtmlSimpleElement type must be a string');
+        if (parent !== null) {
+            if (typeof parent === "string")
+                parent = document.getElementById(parent)
+            if (parent.nodeName === undefined)
+                throw new Error('createHtmlSimpleElement - parent must be DOM element');
+            if (typeof type !== "string")
+                throw new Error('createHtmlSimpleElement type must be a string');
+        }
         let newDiv = document.createElement(type);
         for (let key in params)
             if (key !== "innerHTML")
                 newDiv.setAttribute(key, params[key]);
         if ('innerHTML' in params)
             newDiv.innerHTML = params.innerHTML
-        parent.appendChild(newDiv);
+        if (parent !== null)
+            parent.appendChild(newDiv);
         return newDiv
     };
 
