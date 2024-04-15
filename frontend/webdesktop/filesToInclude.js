@@ -1,5 +1,5 @@
-Includer.setIncludeFileSources(
+Includer.setIncludableFileSources(
     'desktop',[{
-        directory: CORE_FILE_DIR,
+        directory: WEB_DESKTOP_DIR+'Desktop',
         fileNames: ['Desktop.js', 'DesktopModel.js', 'Desktop.css']
     }])

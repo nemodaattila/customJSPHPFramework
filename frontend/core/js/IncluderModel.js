@@ -12,18 +12,18 @@ class IncluderModel {
         this._filesToLoad = [];
     }
 
-    _includeFileSources = [];
+    _includableFileSources = [];
 
-    getIncludeFileSources(name) {
-        return this._includeFileSources[name];
+    getIncludableFileSources(name) {
+        return this._includableFileSources[name];
     }
 
-    setIncludeFileSources(name, value) {
+    setIncludableFileSources(name, value) {
         console.log(value)
         console.log(name)
 
-        if (this._includeFileSources[name] === undefined)
-            this._includeFileSources[name] = value;
+        if (this._includableFileSources[name] === undefined)
+            this._includableFileSources[name] = value;
     }
 
     _loadedJSFiles = []

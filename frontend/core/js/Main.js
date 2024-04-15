@@ -13,6 +13,7 @@ class Main {
             }]
         );
         await Includer.startLoad()
-        console.dir(Includer)
+        await Includer.loadFileSources('desktop')
+            console.dir(Includer)
     }
 }
