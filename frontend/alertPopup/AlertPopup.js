@@ -12,9 +12,9 @@ class AlertPopup {
      * hibaablak eltüntetése
      */
     static init() {
-        document.getElementById('alertAckButton').addEventListener('click', () => {
-            document.getElementById('alertPopupContainer').style.display = "none";
-        })
+        // document.getElementById('alertAckButton').addEventListener('click', () => {
+        //     document.getElementById('alertPopupContainer').style.display = "none";
+        // })
     }
 
     /**

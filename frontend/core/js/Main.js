@@ -8,17 +8,21 @@ class Main {
     static async loadCoreFiles() {
         Includer.addFilesToLoad(
             [{
-                directory: WEB_DESKTOP_DIR,
-                fileNames: ['filesToInclude.js'],
-
-            },{
+                directory: CORE_FILE_DIR,
+                fileNames: ['Messenger.js'],
+            },
+                {
+                    directory: WEB_DESKTOP_DIR,
+                    fileNames: ['filesToInclude.js'],
+                }, {
                 directory: './alertPopup',
                 fileNames: ['filesToInclude.js']
             }]
         );
         await Includer.startLoad()
         await Includer.loadFileSources('alertPopup')
+        // Messenger.setObject(new AlertPopup())
         await Includer.loadFileSources('desktop')
-            console.dir(Includer)
+        console.dir(Includer)
     }
 }

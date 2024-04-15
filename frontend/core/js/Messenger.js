@@ -1,14 +1,20 @@
 //Connector
 class Messenger {
-    _messageObject = undefined
+   static _messageObject = undefined
 
-    showAlert(message) {
+    static setObject(object)
+    {
+        this._messageObject =  object
+    }
+
+
+    static showAlert(message) {
         if (this._messageObject === undefined) {
             alert(message)
         } else this._messageObject.showAlert(message)
     }
 
-    showSuccess(message) {
+    static showSuccess(message) {
         if (this._messageObject === undefined) {
             alert(message)
         } else this._messageObject.showSuccess(message)

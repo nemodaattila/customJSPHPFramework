@@ -17,14 +17,16 @@ class Includer {
         this._model.setIncludableFileSources(name, value);
     }
 
-    static loadFileSources(name)
-    {
+    static async loadFileSources(name) {
         this.addFilesToLoad(this._model.getIncludableFileSources(name))
-        this.startLoad()
+        await this.startLoad()
     }
 
     static addFilesToLoad(filesToLoad) {
-        console.log(filesToLoad)
+        if (filesToLoad === undefined) {
+            Messenger.showAlert('file load error - addFilesToLoad param undefined')
+            return
+        }
         if (!Array.isArray(filesToLoad))
             filesToLoad = [filesToLoad]
         console.log(filesToLoad)
@@ -50,7 +52,7 @@ class Includer {
                 try {
                     res = await this.loadScript(file)
                 } catch (e) {
-                    MessageHandler.showAlert()
+                    Messenger.showAlert('file load failed: ' + e)
                     // alertPopup.showAlert('file load failed: ' + e)
                     this.stopLoad()
                     reject(false)
@@ -80,11 +82,10 @@ class Includer {
                 }
                 script.onerror = () => reject(file)
             })
-        }
-        else if (extension === 'css') {
+        } else if (extension === 'css') {
             return new Promise((resolve, reject) => {
-                let link  = document.createElement('link');
-                link.rel  = 'stylesheet';
+                let link = document.createElement('link');
+                link.rel = 'stylesheet';
                 link.type = 'text/css';
                 link.href = file;
                 link.media = 'all';
