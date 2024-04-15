@@ -9,7 +9,7 @@ class Main {
         Includer.addFilesToLoad(
             [{
                 directory: CORE_FILE_DIR,
-                fileNames: ['Messenger.js'],
+                fileNames: ['Messenger.js','HtmlElementCreator.js'],
             },
                 {
                     directory: WEB_DESKTOP_DIR,
@@ -21,7 +21,7 @@ class Main {
         );
         await Includer.startLoad()
         await Includer.loadFileSources('alertPopup')
-        // Messenger.setObject(new AlertPopup())
+        Messenger.setObject(new AlertPopup())
         await Includer.loadFileSources('desktop')
         console.dir(Includer)
     }

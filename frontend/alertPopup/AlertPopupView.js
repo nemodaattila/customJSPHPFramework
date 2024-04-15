@@ -1,34 +1,40 @@
 class AlertPopupView {
-
     _alertContainer;
-
     _alertMessageContainer
-
     _successContainer;
-
     _successMessageContainer
+    _alertButton
+
     constructor() {
-        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div',document.getElementsByTagName('body')[0])
-        let container = HtmlElementCreator.createSimpleHtmlElement('div',this._alertContainer)
-        this._alertMessageContainer=HtmlElementCreator.createSimpleHtmlElement('div',container);
-        (HtmlElementCreator.createNestedHtmlElement(['div','input'], container, {type: 'button', value: 'OK'}))
-
-        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div',document.getElementsByTagName('body')[0])
-        HtmlElementCreator.createSimpleHtmlElement('p',this._successContainer, {innerText: 'Operation successful'})
-        this._successMessageContainer=HtmlElementCreator.createSimpleHtmlElement('p',this._successMessageContainer)
+        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id:"alertContainer"})
+        let container = HtmlElementCreator.createSimpleHtmlElement('div', this._alertContainer)
+        this._alertMessageContainer = HtmlElementCreator.createSimpleHtmlElement('div', container);
+        this._alertButton = HtmlElementCreator.createNestedHtmlElement(['div', 'input'], container, {
+            type: 'button',
+            value: 'OK'
+        })
+        this._alertButton.addEventListener('click',() =>             this._alertContainer.style.display = "none")
+        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0],{id:"successContainer"})
+        HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer, {innerText: 'Operation successful'})
+        this._successMessageContainer = HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer)
     }
-    // document.getElementById('alertAckButton').addEventListener('click', () => {
-    //     document.getElementById('alertPopupContainer').style.display = "none";
-    // })
 
-    // <div id="alertPopupContainer">
-    //     <div id="alertPopup">
-    //         <div id="alertMessage"></div>
-    //         <div><input id="alertAckButton" type="button" value="OK"></div>
-    //     </div>
-    // </div>
-    // <div id="successPopup">
-    //     <p>Művelet sikeres</p>
-    //     <p id="successMessage"></p>
-    // </div>
+    showAlert(message) {
+        this._alertMessageContainer.innerHTML = "<p>ERROR!</p>" + message
+        this._alertContainer.style.display = "initial";
+        this._alertButton.focus()
+    }
+    showSuccess(message = null) {
+        this._successContainer.style.display = "initial";
+        if (message !== null)
+            this._successMessageContainer.innerHTML = message
+    }
+
+    hideSuccess()
+    {
+        this._successContainer.style.display = "none";
+        this._successMessageContainer.innerHTML = ''
+    }
+
+
 }

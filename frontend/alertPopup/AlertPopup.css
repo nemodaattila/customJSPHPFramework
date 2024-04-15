@@ -1,28 +1,28 @@
-#alertPopup {
+#alertContainer > div {
     text-align: center
 }
 
-#alertPopup {
+#alertContainer > div {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%)
 }
 
-#alertPopup, #alertPopup * {
+#alertContainer > div, #alertContainer > div * {
     padding: 10px
 }
 
-#alertPopupContainer, #successPopup {
+#alertContainer, #successContainer {
     display: none;
     position: fixed
 }
 
-#alertPopup {
+#alertContainer > div {
     position: fixed;
     background: red
 }
 
-#alertPopupContainer {
+#alertContainer {
     top: 0;
     bottom: 0;
     left: 0;
@@ -31,7 +31,7 @@
     z-index: 9999
 }
 
-#successPopup {
+#successContainer {
     padding: 5px;
     bottom: 35px;
     right: 35px;

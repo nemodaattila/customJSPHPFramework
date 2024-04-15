@@ -5,26 +5,23 @@
  * sikeres művelet - képernyő jobb alsó sarkában zöld háttérrel üzenet, 3 mp után eltűnik
  */
 class AlertPopup {
-    static timeout
+    _timeout
+    _view
 
     /**
      * eseménykezelő hozzáadása alert nyugtázó gombhoz
      * hibaablak eltüntetése
      */
-    static init() {
-        // document.getElementById('alertAckButton').addEventListener('click', () => {
-        //     document.getElementById('alertPopupContainer').style.display = "none";
-        // })
+    constructor() {
+        this._view = new AlertPopupView()
     }
 
     /**
      * hibaablak megjelenítése és szöveg kiírása
      * @param message {string} - megjelenítendő hibaüzenet
      */
-    static showAlert(message) {
-        document.getElementById('alertMessage').innerHTML = "<p>HIBA!</p>" + message
-        document.getElementById('alertPopupContainer').style.display = "initial";
-        document.getElementById('alertAckButton').focus()
+    showAlert(message) {
+       this._view.showAlert(message)
     }
 
     /**
@@ -32,16 +29,13 @@ class AlertPopup {
      * timer indítása - 3 mp után eltűnik az üzenet
      * @param message {string|null} - megjelenítendő szöveg
      */
-    static showSuccess(message = null) {
+    showSuccess(message = null) {
         clearTimeout(this.timeout)
-        document.getElementById('successPopup').style.display = "initial";
-        if (message !== null)
-            document.getElementById('successMessage').innerHTML = message
+        this._view.showSuccess(message)
         this.timeout = setTimeout(() => {
-            document.getElementById('successPopup').style.display = "none";
-            document.getElementById('successMessage').innerHTML = ''
+           this._view.hideSuccess()
         }, 3000)
     }
 }
 
-AlertPopup.init();
+
