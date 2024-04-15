@@ -1,5 +1,5 @@
 Includer.setIncludableFileSources(
-    'desktop',[{
-        directory: WEB_DESKTOP_DIR+'AlertPopup',
+    'alertPopup',[{
+        directory: './alertPopup',
         fileNames: ['AlertPopup.js',  'AlertPopup.css']
     }])

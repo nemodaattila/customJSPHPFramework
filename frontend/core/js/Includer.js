@@ -51,7 +51,7 @@ class Includer {
                     res = await this.loadScript(file)
                 } catch (e) {
                     MessageHandler.showAlert()
-                    // AlertPopup.showAlert('file load failed: ' + e)
+                    // alertPopup.showAlert('file load failed: ' + e)
                     this.stopLoad()
                     reject(false)
                     break;
