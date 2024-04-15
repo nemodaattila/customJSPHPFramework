@@ -67,17 +67,35 @@ class Includer {
      */
     static loadScript(file) {
         console.log(file)
-        return new Promise((resolve, reject) => {
-            let script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src = file;
-            document.getElementsByTagName("head")[0].appendChild(script);
-            script.onload = () => {
-                this._model.loadedJSFiles = file
-                resolve(true)
-            }
-            script.onerror = () => reject(file)
-        })
+        let extension = file.split('.').pop().toLowerCase()
+        if (extension === 'js') {
+            return new Promise((resolve, reject) => {
+                let script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = file;
+                document.getElementsByTagName("head")[0].appendChild(script);
+                script.onload = () => {
+                    this._model.loadedFiles = file
+                    resolve(true)
+                }
+                script.onerror = () => reject(file)
+            })
+        }
+        else if (extension === 'css') {
+            return new Promise((resolve, reject) => {
+                let link  = document.createElement('link');
+                link.rel  = 'stylesheet';
+                link.type = 'text/css';
+                link.href = file;
+                link.media = 'all';
+                document.getElementsByTagName("head")[0].appendChild(link);
+                link.onload = () => {
+                    this._model.loadedFiles = file
+                    resolve(true)
+                }
+                link.onerror = () => reject(file)
+            })
+        }
     }
 
     /**

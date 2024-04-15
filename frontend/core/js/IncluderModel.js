@@ -26,13 +26,13 @@ class IncluderModel {
             this._includableFileSources[name] = value;
     }
 
-    _loadedJSFiles = []
-    set loadedJSFiles(value) {
-        this._loadedJSFiles.push(value);
+    _loadedFiles = []
+    set loadedFiles(value) {
+        this._loadedFiles.push(value);
     }
 
     searchInLoadedFiles(fileName) {
-        return this._loadedJSFiles.find(file => file === fileName) !== -1
+        return this._loadedFiles.find(file => file === fileName) !== -1
     }
 
     modules = []
