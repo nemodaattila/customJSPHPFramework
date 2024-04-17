@@ -20,7 +20,7 @@ class Main {
                     directory: WEB_DESKTOP_DIR,
                     fileNames: ['filesToInclude.js'],
                 }, {
-                directory: './alertPopup',
+                directory: MODULE_FILE_DIR+'alertPopup',
                 fileNames: ['filesToInclude.js']
             }]
         );
@@ -33,5 +33,6 @@ class Main {
 
     static initComponents() {
         Desktop.init()
+
     }
 }
