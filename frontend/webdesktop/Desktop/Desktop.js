@@ -5,23 +5,14 @@
 class Desktop {
 
     static _model
-    /**
-     * DOM elemek megjelenítése
-     * mouseUp event hozzáadása
-     */
+
+    static _view
+
     static init() {
         this._model = new DesktopModel()
-        this.desktopElement = HtmlElementCreator.createHtmlElement('div', document.getElementById('main'), {
-            class: 'desktop', id: 'desktop'
-        })
-        this.tabsBarElement = HtmlElementCreator.createHtmlElement('div', this.desktopElement, {
-            class: 'tabsBar', id: 'tabsBar'
-        })
-        this.desktopElement.addEventListener('mouseup', (event) => DesktopEventHandlers.endMove(event))
-        document.body.addEventListener('mousemove', (event) => {
-            if (event.buttons === 1)
-                DesktopEventHandlers.move(event)
-        })
+        this._view = new DesktopView()
+        this._view.createMainDOMElements()
+        console.dir(this)
     }
 
     /**

@@ -1,3 +1,29 @@
 body{
     background-image: url("desktop.webp");
 }
+
+.desktop, .tabsBar{
+    position: absolute
+}
+
+.tabsBar{
+    top: 0;
+    left: 0;
+    display: inline-flex
+}
+
+.tabsBar {
+    right: 0;
+    height: 27px;
+    background: #8897a7;
+    z-index: 109
+}
+
+.desktop {
+    left: 0;
+    right: 0;
+    /*top: 54px;*/
+    bottom: 0;
+    overflow: auto;
+    /*background: url(../image/bg1.jpg) 0 0/cover*/
+}
