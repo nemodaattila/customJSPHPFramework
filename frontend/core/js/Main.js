@@ -32,7 +32,7 @@ class Main {
     }
 
     static initComponents() {
-        Desktop.init()
+        DesktopController.init()
 
     }
 }

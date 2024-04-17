@@ -2,7 +2,7 @@
  * ablakkezelő háttér, valamint a fül-sáv létrehozása
  * ablakok közti váltás lekezelése
  */
-class Desktop {
+class DesktopController {
 
     static _model
 
@@ -25,16 +25,16 @@ class Desktop {
     //  * @param window DesktopWindow - beállítandó aktív ablak
     //  */
     // static switchActiveWindow(window) {
-    //     if (Desktop.activeWindow !== undefined) {
-    //         if (window !== Desktop.activeWindow)
-    //             Desktop.previousWindow = Desktop.activeWindow
-    //         Desktop.activeWindow.setInactive()
+    //     if (DesktopController.activeWindow !== undefined) {
+    //         if (window !== DesktopController.activeWindow)
+    //             DesktopController.previousWindow = DesktopController.activeWindow
+    //         DesktopController.activeWindow.setInactive()
     //     }
     //     if (window !== null) {
-    //         Desktop.activeWindow = window
-    //         Desktop.activeWindow.setActive()
+    //         DesktopController.activeWindow = window
+    //         DesktopController.activeWindow.setActive()
     //     }
-    //     Object.values(Desktop.windows).forEach(actWindow =>
+    //     Object.values(DesktopController.windows).forEach(actWindow =>
     //         actWindow.windowDiv.style.zIndex = actWindow === window ? '100' : (parseInt(actWindow.windowDiv.style.zIndex) - 1).toString())
     // }
     //
@@ -80,9 +80,9 @@ class Desktop {
     //  */
     // static removeWindow(clWindow, windowTab) {
     //     let index = Object.keys(this.windows)[Object.values(this.windows).findIndex(window => window === clWindow)]
-    //     if (Desktop.windows[index] === this.activeWindow)
+    //     if (DesktopController.windows[index] === this.activeWindow)
     //         this.setActiveNextWindow(clWindow)
-    //     delete Desktop.windows[index]
+    //     delete DesktopController.windows[index]
     //     this.tabsBarElement.removeChild(windowTab)
     // }
     //
