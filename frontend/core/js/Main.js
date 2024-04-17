@@ -1,15 +1,16 @@
 class Main {
-    static init() {
+    static async init() {
         Includer.init()
         //DO Auth
-        this.loadCoreFiles()
+        await this.loadCoreFiles()
+        this.initComponents()
     }
 
     static async loadCoreFiles() {
         Includer.addFilesToLoad(
             [{
                 directory: CORE_FILE_DIR,
-                fileNames: ['Messenger.js','HtmlElementCreator.js'],
+                fileNames: ['Messenger.js', 'HtmlElementCreator.js'],
             },
                 {
                     directory: WEB_DESKTOP_DIR,
@@ -24,5 +25,9 @@ class Main {
         Messenger.setObject(new AlertPopup())
         await Includer.loadFileSources('desktop')
         console.dir(Includer)
+    }
+
+    static initComponents() {
+        Desktop.init()
     }
 }
