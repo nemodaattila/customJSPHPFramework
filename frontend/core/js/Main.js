@@ -9,6 +9,10 @@ class Main {
     static async loadCoreFiles() {
         Includer.addFilesToLoad(
             [{
+                directory: './core/css/',
+                fileNames: ['global.css'],
+            },
+                {
                 directory: CORE_FILE_DIR,
                 fileNames: ['Messenger.js', 'HtmlElementCreator.js'],
             },
