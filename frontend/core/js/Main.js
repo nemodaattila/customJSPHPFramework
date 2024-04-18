@@ -14,7 +14,7 @@ class Main {
             },
                 {
                 directory: CORE_FILE_DIR,
-                fileNames: ['Messenger.js', 'HtmlElementCreator.js','ModuleLoader.js'],
+                fileNames: ['Messenger.js', 'HtmlElementCreator.js','ModuleLoader.js','ControllerParent.js','ServiceParent'],
             },
                 {
                     directory: WEB_DESKTOP_DIR,
