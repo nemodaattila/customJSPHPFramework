@@ -14,7 +14,7 @@ class Main {
             },
                 {
                 directory: CORE_FILE_DIR,
-                fileNames: ['Messenger.js', 'HtmlElementCreator.js'],
+                fileNames: ['Messenger.js', 'HtmlElementCreator.js','ModuleLoader.js'],
             },
                 {
                     directory: WEB_DESKTOP_DIR,
@@ -33,6 +33,6 @@ class Main {
 
     static initComponents() {
         DesktopController.init()
-
+        ModuleLoader.loadModule('companies','companyLister')
     }
 }

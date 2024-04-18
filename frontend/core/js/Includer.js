@@ -18,6 +18,7 @@ class Includer {
     }
 
     static async loadFileSources(name) {
+        console.log(name)
         this.addFilesToLoad(this._model.getIncludableFileSources(name))
         await this.startLoad()
     }
