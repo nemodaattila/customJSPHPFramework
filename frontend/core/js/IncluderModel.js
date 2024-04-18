@@ -14,11 +14,11 @@ class IncluderModel {
 
     _includableFileSources = [];
 
-    getIncludableFileSources(name) {
+    getIncludableFileSource(name) {
         return this._includableFileSources[name];
     }
 
-    setIncludableFileSources(name, value) {
+    setIncludableFileSource(name, value) {
         console.log(value)
         console.log(name)
 
@@ -35,5 +35,5 @@ class IncluderModel {
         return this._loadedFiles.find(file => file === fileName) !== -1
     }
 
-    modules = []
+    // modules = []
 }

@@ -1,4 +1,4 @@
-Includer.setIncludableFileSources(
+Includer.setIncludableFileSource(
     'companyLister',[
         {
             directory: MODULE_FILE_DIR+'/companies',

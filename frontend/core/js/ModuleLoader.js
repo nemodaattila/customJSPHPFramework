@@ -26,11 +26,11 @@ class ModuleLoader {
             }]
         );
         await Includer.startLoad()
-        await Includer.loadFileSources(module)
+        await Includer.loadFileSource(module)
         //
-        // let moduleFiles = Includer.getIncludableFileSources(module)
-        //
-        // console.log(moduleFiles)
+        let moduleFiles = Includer.getIncludableFileSource(module)
+
+        console.log(moduleFiles)
         //
         // let moduleName = module.module
         // if (!moduleName.includes('Service'))

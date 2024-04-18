@@ -9,17 +9,17 @@ class Includer {
         this._model = new IncluderModel()
     }
 
-    static getIncludableFileSources(name) {
-        return this._model.getIncludableFileSources(name);
+    static getIncludableFileSource(name) {
+        return this._model.getIncludableFileSource(name);
     }
 
-    static setIncludableFileSources(name, value) {
-        this._model.setIncludableFileSources(name, value);
+    static setIncludableFileSource(name, value) {
+        this._model.setIncludableFileSource(name, value);
     }
 
-    static async loadFileSources(name) {
+    static async loadFileSource(name) {
         console.log(name)
-        this.addFilesToLoad(this._model.getIncludableFileSources(name))
+        this.addFilesToLoad(this._model.getIncludableFileSource(name))
         await this.startLoad()
     }
 

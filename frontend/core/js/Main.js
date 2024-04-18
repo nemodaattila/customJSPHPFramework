@@ -25,9 +25,9 @@ class Main {
             }]
         );
         await Includer.startLoad()
-        await Includer.loadFileSources('alertPopup')
+        await Includer.loadFileSource('alertPopup')
         Messenger.setObject(new AlertPopup())
-        await Includer.loadFileSources('desktop')
+        await Includer.loadFileSource('desktop')
         console.dir(Includer)
     }
 
