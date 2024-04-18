@@ -2,7 +2,9 @@
   "autoload": {
     "psr-4": {
       "rest\\": "rest/",
-      "service\\": "service/"
+      "service\\": "service/",
+      "model\\": "model/",
+      "routes\\": "routes/"
     }
   },
   "require": {
