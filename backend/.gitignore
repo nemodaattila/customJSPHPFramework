@@ -1,5 +1,2 @@
 /.idea
-/vendor
 /config/PDOConfig.php
-/image/cover
-/image/coverThumbnail
