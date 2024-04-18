@@ -2,20 +2,19 @@
  * controllerek ősosztálya
  */
 class ControllerParent {
-
     _model
-
-    _view
-
-    _service
 
     set model(value) {
         this._model = value;
     }
 
+    _view
+
     set view(value) {
         this._view = value;
     }
+
+    _service
 
     set service(value) {
         this._service = value;

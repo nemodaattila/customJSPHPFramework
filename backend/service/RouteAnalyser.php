@@ -2,7 +2,7 @@
 
 namespace service;
 
-use classModel\RequestParameters;
+use model\RequestParameters;
 use routes\Routes;
 
 /**
@@ -17,44 +17,37 @@ class RouteAnalyser
      * @var array|string[][]
      */
     private array $routes;
-
     /**
      * @var string routes taken from url
      */
     private string $routeBase;
-
     /**
      * @var RequestParameters http parameters from request
      */
     private RequestParameters $parameters;
-
     /**
      * @var array data of request processor class
      */
     private array $restData;
 
-    public function __construct($routeBase)
-    {
+    public function __construct($routeBase) {
         $this->routeBase = $routeBase;
         $this->routes = (new Routes())->getRoutes();
         $this->parameters = new RequestParameters();
     }
 
-    public function getParameters(): RequestParameters
-    {
+    public function getParameters(): RequestParameters {
         return $this->parameters;
     }
 
-    public function getRestData(): array
-    {
+    public function getRestData(): array {
         return $this->restData;
     }
 
     /**
      * @return bool iterates all routes and searches for the appropriate route for routeBase
      */
-    public function processGivenRoute(): bool
-    {
+    public function processGivenRoute(): bool {
         foreach ($this->routes as $route) {
             $real = $this->identifyRoute($route[0], $route[1]);
             if ($real) {
@@ -71,30 +64,25 @@ class RouteAnalyser
      * @param string $path url path
      * @return bool true if appropriate false otherwise
      */
-    private function identifyRoute(string $httpMethod, string $path): bool
-    {
+    private function identifyRoute(string $httpMethod, string $path): bool {
         if ($httpMethod !== $_SERVER['REQUEST_METHOD'])
             return false;
-
         $path = str_replace(['//', '/'], '\\', $path);
         $url = explode('\\', $this->routeBase);
         $path = explode('\\', $path);
-        if (count($path) !== count($url)) {
+        if (count($path) !== count($url))
             return false;
-        }
         $length = count($path);
         for ($i = 0; $i < $length; $i++) {
-
             if ($path[$i] !== $url[$i]) {
-
                 if (preg_match('/\$([0-9]+?)/', $path[$i]) !== 1) {
                     $this->parameters->reset();
                     return false;
                 }
-                $this->parameters->addUrlParameter(filter_var($url[$i], FILTER_SANITIZE_STRING));
-            }
+                $this->parameters->addUrlParameter(htmlentities($url[$i]));
+            } else
+                $this->parameters->addUrlParameter(htmlentities($url[$i])); //DO check
         }
         return true;
     }
-
 }

@@ -14,7 +14,7 @@ class Includer {
     }
 
     static getIncludableFileSourceFileNamesOnly(name) {
-        let files =  this._model.getIncludableFileSource(name);
+        let files = this._model.getIncludableFileSource(name);
         let fileNames = []
         files.forEach((group) => {
             group.fileNames.forEach((file) => {
@@ -27,7 +27,6 @@ class Includer {
     static setIncludableFileSource(name, value) {
         this._model.setIncludableFileSource(name, value);
     }
-
 
     static async loadFileSource(name) {
         console.log(name)

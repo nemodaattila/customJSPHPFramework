@@ -2,25 +2,27 @@
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
 class ServiceParent {
-    set model(value) {
-        this._model = value;
-    }
-
     static _instance
 
-    _model
-
-    constructor(){
-        if(self._instance){
+    constructor() {
+        if (self._instance) {
             self._instance = this;
         }
         return self._instance;
     }
+
+    _model
+
+    set model(value) {
+        this._model = value;
+    }
+
     async init() {
         return new Promise(async (resolve) => {
             resolve(true)
         })
     }
+
     // /**
     //  * különböző modulokhoz tartozó betöltendő fájlok: C: controller, M: model, V:View
     //  * @type {{}}

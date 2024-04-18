@@ -1,23 +1,20 @@
 <?php
 
 namespace routes;
-
 /**
  * Class Routes possible routes for Http request Router
  * @package routes
  */
 class Routes
 {
-
     /**
      * possible routes, parameters: type [GET, POST, PUT, DELETE] | url path | called class | called function
      * | authentication level (A: all, L: logged user, NL: not logged user, M: book data maintenance (upload/edit), AD: admin)
      * @var array|string[][]
      * TODO hozzáadni paramétert ami jelöli melyik adatok kellenek a requestből -> url, phpinput, both
      */
-
     private array $routes = [
-        ['get', 'company/meta', 'MetaDataHandler', 'getCompanyMeta', 'A']
+        ['GET', 'company/meta', 'MetaDataHandler', 'getCompanyMeta', 'A']
 //
 //        ['POST', 'addquickdata', 'BookDataHandler', 'addQuickData', 'M'],
 //        ['DELETE', 'deletebook/$1', 'BookDataHandler', 'deleteBook', 'M'],
@@ -38,8 +35,7 @@ class Routes
      * returns all routes
      * @return array
      */
-    public function getRoutes(): array
-    {
+    public function getRoutes(): array {
         return $this->routes;
     }
 }

@@ -7,17 +7,13 @@ class ModuleLoader {
      * @type {{module: string, object: Object, task: string, params: Object|null}}
      */
     static moduleToLoad
-    /**
-     *  ModulInitiator példány
-     *  @type {ModuleInitiator}
-     */
-    static initiator
+    // /**
+    //  *  ModulInitiator példány
+    //  *  @type {ModuleInitiator}
+    //  */
+    // static initiator
 
-    /**
-     * modul betöltés elindítása, ha még nincs betöltve, egyébként aktívvá tétel
-     * @param module {{}} modul paraméterei
-     * @param connectedParams {{}} megnyitást kezdeményező objekttől származó paraméterek
-     */
+
     static async loadModule(moduleGroupName, module, connectedParams = null) {
         Includer.addFilesToLoad(
             [{
@@ -29,8 +25,7 @@ class ModuleLoader {
         //
         let moduleFiles = Includer.getIncludableFileSource(module)
         console.log(moduleFiles)
-        let fileName
-        let directory
+
         let className
         let temp = await this.getComponent(moduleFiles, 'Controller')
         if (!temp) {
@@ -39,22 +34,19 @@ class ModuleLoader {
         }
         // let controllerName =
         // console.log(controllerName)
-        let controller =  new (eval ( await this.loadFile(temp)))()
+        let controller = new (eval(await this.loadFile(temp)))()
         let serviceModel = undefined
         temp = await this.getComponent(moduleFiles, 'ServiceModel')
         if (temp) {
-            serviceModel =  new (eval ( await this.loadFile(temp)))()
+            serviceModel = new (eval(await this.loadFile(temp)))()
         }
-
         temp = await this.getComponent(moduleFiles, 'Service')
         if (temp) {
-
-            let service = new (eval ( await this.loadFile(temp)))() //DO nicer solution?
-            service.init()
+            let service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
             if (serviceModel !== undefined)
                 service.model = serviceModel
-            controller.service =service
-
+            service.init()
+            controller.service = service
         }
         console.dir(controller)
         // let index = moduleFiles.findIndex(file => file.includes('Service'))
@@ -122,8 +114,7 @@ class ModuleLoader {
         // return true
     }
 
-    static async loadFile(tempData)
-    {
+    static async loadFile(tempData) {
         let [directory, fileName] = tempData
         Includer.addFilesToLoad(
             [{
@@ -133,7 +124,7 @@ class ModuleLoader {
         )
         await Includer.startLoad()
         console.log(fileName)
-        return  fileName.split('.')[0]
+        return fileName.split('.')[0]
     }
 
     static getComponent(files, componentName) {

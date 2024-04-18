@@ -3,9 +3,7 @@
  * ablakok közti váltás lekezelése
  */
 class DesktopController {
-
     static _model
-
     static _view
 
     static init() {
@@ -15,9 +13,7 @@ class DesktopController {
         console.dir(this)
     }
 
-    static openWindow(moduleGroupName, moduleName)
-    {
-
+    static openWindow(moduleGroupName, moduleName) {
     }
 
     // /**

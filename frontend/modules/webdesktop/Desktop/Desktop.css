@@ -1,16 +1,14 @@
-body{
+body {
     background-image: url("desktop.webp");
 }
 
 
-
-.tabsBar{
+.tabsBar {
     display: table-row;
     height: 27px;
     background: #8897a7;
     z-index: 109
 }
-
 
 
 .desktop {

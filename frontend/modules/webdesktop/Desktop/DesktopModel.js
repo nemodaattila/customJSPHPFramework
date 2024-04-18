@@ -1,7 +1,12 @@
 class DesktopModel {
-    openNewWindow() {
-        this._windows.push(new Window());
-    }
+
+    _windows = []
+
+    /**
+     * aktív ablak objektuma
+     * @type {DesktopWindow | undefined}
+     */
+    _activeWindow = undefined
 
     get activeWindow() {
         return this._activeWindow;
@@ -10,6 +15,13 @@ class DesktopModel {
     set activeWindow(value) {
         this._activeWindow = value;
     }
+
+    /**
+     * az előző aktív ablak objektuma
+     * @type {DesktopWindow | undefined}
+     */
+    _previousWindow = undefined
+
     get previousWindow() {
         return this._previousWindow;
     }
@@ -18,19 +30,7 @@ class DesktopModel {
         this._previousWindow = value;
     }
 
-    /**
-     * megjelenített ablakok objektumai
-     * @type {{string: DesktopWindow}}
-     */
-    _windows = {}
-    /**
-     * aktív ablak objektuma
-     * @type {DesktopWindow | undefined}
-     */
-    _activeWindow = undefined
-    /**
-     * az előző aktív ablak objektuma
-     * @type {DesktopWindow | undefined}
-     */
-    _previousWindow = undefined
+    openNewWindow() {
+        this._windows.push(new Window());
+    }
 }

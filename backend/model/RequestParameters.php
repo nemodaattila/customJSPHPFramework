@@ -1,7 +1,6 @@
 <?php
 
-namespace classModel;
-
+namespace model;
 /**
  * Class RequestParameters stores data originating from http requests
  * @package core\backend\model
@@ -21,33 +20,27 @@ class RequestParameters
      * adds an url parameter
      * @param string $urlParameter parameter
      */
-    public function addUrlParameter(string $urlParameter): void
-    {
+    public function addUrlParameter(string $urlParameter): void {
         $this->urlParameters[] = $urlParameter;
     }
 
-    public function getUrlParameters(): array
-    {
+    public function getUrlParameters(): array {
         return $this->urlParameters;
     }
 
-    public function getRequestData(): array
-    {
+    public function getRequestData(): array {
         return $this->requestData;
     }
 
-    public function setRequestData(array $requestData): void
-    {
+    public function setRequestData(array $requestData): void {
         $this->requestData = $requestData;
     }
 
     /**
      * resetting parameters to empty
      */
-    public function reset()
-    {
+    public function reset(): void {
         $this->urlParameters = [];
         $this->requestData = [];
     }
-
 }

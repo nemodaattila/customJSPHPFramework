@@ -13,15 +13,15 @@ class Main {
                 fileNames: ['global.css'],
             },
                 {
-                directory: CORE_FILE_DIR,
-                fileNames: ['Messenger.js', 'HtmlElementCreator.js','ModuleLoader.js','ControllerParent.js'
-                    ,'ServiceParent.js','ServiceModelParent.js','RESTHandler.js'],
-            },
+                    directory: CORE_FILE_DIR,
+                    fileNames: ['Messenger.js', 'HtmlElementCreator.js', 'ModuleLoader.js', 'ControllerParent.js'
+                        , 'ServiceParent.js', 'ServiceModelParent.js', 'RESTHandler.js'],
+                },
                 {
                     directory: WEB_DESKTOP_DIR,
                     fileNames: ['filesToInclude.js'],
                 }, {
-                directory: MODULE_FILE_DIR+'alertPopup',
+                directory: MODULE_FILE_DIR + 'alertPopup',
                 fileNames: ['filesToInclude.js']
             }]
         );
@@ -34,6 +34,6 @@ class Main {
 
     static initComponents() {
         DesktopController.init()
-        ModuleLoader.loadModule('companies','companyLister')
+        ModuleLoader.loadModule('companies', 'companyLister')
     }
 }

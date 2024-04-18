@@ -21,7 +21,7 @@ class AlertPopup {
      * @param message {string} - megjelenítendő hibaüzenet
      */
     showAlert(message) {
-       this._view.showAlert(message)
+        this._view.showAlert(message)
     }
 
     /**
@@ -33,7 +33,7 @@ class AlertPopup {
         clearTimeout(this.timeout)
         this._view.showSuccess(message)
         this.timeout = setTimeout(() => {
-           this._view.hideSuccess()
+            this._view.hideSuccess()
         }, 3000)
     }
 }

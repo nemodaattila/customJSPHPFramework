@@ -6,15 +6,15 @@ class AlertPopupView {
     _alertButton
 
     constructor() {
-        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id:"alertContainer"})
+        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id: "alertContainer"})
         let container = HtmlElementCreator.createSimpleHtmlElement('div', this._alertContainer)
         this._alertMessageContainer = HtmlElementCreator.createSimpleHtmlElement('div', container);
         this._alertButton = HtmlElementCreator.createNestedHtmlElement(['div', 'input'], container, {
             type: 'button',
             value: 'OK'
         })
-        this._alertButton.addEventListener('click',() =>             this._alertContainer.style.display = "none")
-        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0],{id:"successContainer"})
+        this._alertButton.addEventListener('click', () => this._alertContainer.style.display = "none")
+        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id: "successContainer"})
         HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer, {innerText: 'Operation successful'})
         this._successMessageContainer = HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer)
     }
@@ -24,17 +24,15 @@ class AlertPopupView {
         this._alertContainer.style.display = "initial";
         this._alertButton.focus()
     }
+
     showSuccess(message = null) {
         this._successContainer.style.display = "initial";
         if (message !== null)
             this._successMessageContainer.innerHTML = message
     }
 
-    hideSuccess()
-    {
+    hideSuccess() {
         this._successContainer.style.display = "none";
         this._successMessageContainer.innerHTML = ''
     }
-
-
 }

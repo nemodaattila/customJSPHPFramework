@@ -1,7 +1,6 @@
 <?php
 
-use service\HttpRequestHandler;
+use service\RESTHandler;
 
 require_once "./vendor/autoload.php";
-
-new HttpRequestHandler();
+new RESTHandler();

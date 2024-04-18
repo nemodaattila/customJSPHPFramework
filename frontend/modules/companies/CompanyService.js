@@ -1,24 +1,21 @@
-
 class CompanyService extends ServiceParent {
-
-    companyTypes = null;
+    _model
+    set model(value) {
+        this._model = value;
+    }
 
     async init() {
         return new Promise(async (resolve) => {
-            if (this.tableAttributeParams !== undefined) {
+            if (this._model.loaded)
                 resolve(true)
-                return
-            }
-            this.tableAttributeParams = await this.getTableAttributeParamsFromServer(['companies'])
-            await this.getAttributeValuesFromServer()
+            await this.getMetaParameters()
             resolve(true)
         })
     }
-    static async getMetaParameters() {
-        CompanyService.companyTypes = {0: 'Nem vevő'}
-        CompanyService.supplierCompanyTypes = {0: 'Nem beszállító', 1: 'Beszállító'}
-        Object.values(await this.createAndSendRequest('getCompanyMeta')).forEach(type =>
-            CompanyService.companyTypes[type.id] = type.name)
+
+    async getMetaParameters() {
+        this._model.companyTypes = await RESTHandler.send({url: 'company/meta', requestType: 'GET'})
+        this._model.loaded = true
     }
 
     // static requiredFiles = {
@@ -168,12 +165,10 @@ class CompanyService extends ServiceParent {
     // static selectedRecord = null
     // static getUrl = 'getCompanies'
     //
-
     //
     // /**
     //  * cégekkel kapcsolatos meta-paraméterek lekérése szerverről - típusok
     //  */
-
     //
     // /**
     //  * új cég beküldése

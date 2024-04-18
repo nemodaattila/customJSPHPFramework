@@ -9,20 +9,16 @@ class RESTHandler {
      * @type {[]}
      * @private
      */
-    _customHeader = [];
-    /**
-     * ha true, akkor a http response-t JSON-ben várja, és vissza is alakítja azt
-     * @type {boolean}
-     * @private
-     */
-    _responseIsJSONEncoded = true;
+    static _customHeader = [];
+
     /**
      * backend szerver url-je
      * @type {string}
      * @private
      */
-    _targetUrl = '../backend/ajaxHandler.php';
-    set targetUrl(value) {
+    static _targetUrl = '../backend/';
+
+    static set targetUrl(value) {
         this._targetUrl += value;
     }
 
@@ -31,8 +27,9 @@ class RESTHandler {
      * @type {string}
      * @private
      */
-    _requestType = 'POST';
-    set requestType(value) {
+    static _requestType = 'POST';
+
+    static set requestType(value) {
         this._requestType = value.toUpperCase();
     }
 
@@ -41,31 +38,17 @@ class RESTHandler {
      * @type {string | null}
      * @private
      */
-    _postFields;
-    get postFields() {
+    static _postFields;
+
+    static get postFields() {
         return this._postFields
     }
 
-    set postFields(value) {
+    static set postFields(value) {
         this._postFields = value;
     }
 
-    /**
-     * 200-as válasz esetén meghívandó függvény
-     * @type {function}
-     * @private
-     */
-    _callbackFunction;
-    set callbackFunction(value) {
-        this._callbackFunction = value;
-    }
-
-    /**
-     * egyedi header hozzáadása a requesthez
-     * @param name header név
-     * @param value header érték
-     */
-    addCustomHeader(name, value) {
+    static addCustomHeader(name, value) {
         this._customHeader.push([name, value]);
     }
 
@@ -74,7 +57,13 @@ class RESTHandler {
      * válasz fogadása,
      * callback metódus meghívása, hiba esetén hibaüzenet megjelenítése
      */
-    send(refreshCountDown = true) {
+    static send(params = {}) {
+        if (params && params.url) {
+            this.targetUrl = params.url
+        } else Messenger.showAlert('RESTHandler target url missing')
+        if (params && params.requestType) {
+            this.requestType = params.requestType
+        }
         return new Promise((resolve, reject) => {
             let request = new XMLHttpRequest();
             request.open(this._requestType, this._targetUrl, true);
@@ -85,30 +74,27 @@ class RESTHandler {
                 let resultData
                 if (request.readyState !== 4)
                     return;
-                try {
-                    if (this._responseIsJSONEncoded === true) {
-                        resultData = JSON.parse(request.responseText);
-                    } else
-                        resultData = request.responseText;
-                } catch (e) {
-                    resultData = request.responseText;
-                }
                 if (request.status !== 200 && request.status !== 304) {
                     try {
                         let resp = JSON.parse(request.response);
-                        AlertPopup.showAlert(resp.errorMessage);
-                        if (resp.errorMessage === 'AUTHERROR') {
-                            AuthService.onLogout()
-                            window.location.reload()
-                        }
-                        reject(resp.errorMessage)
+                        Messenger.showAlert(resp.errorMessage);
+                        // if (resp.errorMessage === 'AUTHERROR') {
+                        //     AuthService.onLogout()
+                        //     window.location.reload()
+                        // }
+                        reject()
                     } catch (e) {
-                        AlertPopup.showAlert(request.response === '' ? request.statusText : request.response);
-                        reject(request.response)
+                        Messenger.showAlert(request.response === '' ? request.statusText : request.response);
+                        reject()
                     }
-                    return;
+                } else {
+                    try {
+                        resultData = JSON.parse(request.responseText);
+                    } catch (e) {
+                        resultData = request.responseText;
+                    }
+                    resolve(resultData);
                 }
-                resolve(resultData);
             };
             if (request.readyState === 4)
                 return;

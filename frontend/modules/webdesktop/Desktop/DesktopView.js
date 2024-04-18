@@ -4,12 +4,6 @@ class DesktopView {
      * @type {HTMLDivElement|HTMLBodyElement}
      */
     _mainContainer = document.getElementsByTagName('body')[0]
-    _deskTopDOMElement
-    /**
-     * a fül sáv DOM elementje
-     * @type HTMLDivElement
-     */
-    _tabsBarDOMElement
 
     get mainContainer() {
         return this._mainContainer;
@@ -19,6 +13,8 @@ class DesktopView {
         this._mainContainer = value;
     }
 
+    _deskTopDOMElement
+
     get deskTopDOMElement() {
         return this._deskTopDOMElement;
     }
@@ -26,6 +22,12 @@ class DesktopView {
     set deskTopDOMElement(value) {
         this._deskTopDOMElement = value;
     }
+
+    /**
+     * a fül sáv DOM elementje
+     * @type HTMLDivElement
+     */
+    _tabsBarDOMElement
 
     get tabsBarDOMElement() {
         return this._tabsBarDOMElement;
@@ -36,7 +38,6 @@ class DesktopView {
     }
 
     createMainDOMElements() {
-
         this._mainContainer.style.height = '100%'
         this._mainContainer.style.width = '100%'
         this._mainContainer.style.display = 'table'
@@ -46,7 +47,6 @@ class DesktopView {
         this._deskTopDOMElement = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'desktop', id: 'desktop'
         })
-
         this._deskTopDOMElement.addEventListener('mouseup', (event) =>
             DesktopEventHandlers.endMove(event))
         this._mainContainer.addEventListener('mousemove', (event) => {
