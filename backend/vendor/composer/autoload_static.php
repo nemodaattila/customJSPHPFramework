@@ -4,12 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit136c1a7a4a0f5c2bd944452628369518
+class ComposerStaticInit1dc46621a8f2f50f3bcb36af11d3d5e0
 {
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
-            'simpleDatabaseProcessor\\' => 24,
             'service\\' => 8,
         ),
         'r' => 
@@ -17,41 +16,13 @@ class ComposerStaticInit136c1a7a4a0f5c2bd944452628369518
             'routes\\' => 7,
             'rest\\' => 5,
         ),
-        'i' => 
+        'm' => 
         array (
-            'interfaces\\' => 11,
-        ),
-        'h' => 
-        array (
-            'helper\\' => 7,
-        ),
-        'e' => 
-        array (
-            'exception\\' => 10,
-        ),
-        'd' => 
-        array (
-            'database\\' => 9,
-            'databaseSource\\' => 15,
-        ),
-        'c' => 
-        array (
-            'controller\\' => 11,
-            'complexDatabaseProcessor\\' => 25,
-            'classModel\\' => 11,
-            'classDbHandler\\' => 15,
-        ),
-        'b' => 
-        array (
-            'bookDataManipulator\\' => 20,
+            'model\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'simpleDatabaseProcessor\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/database/queryProcessor/simple',
-        ),
         'service\\' => 
         array (
             0 => __DIR__ . '/../..' . '/service',
@@ -64,45 +35,9 @@ class ComposerStaticInit136c1a7a4a0f5c2bd944452628369518
         array (
             0 => __DIR__ . '/../..' . '/rest',
         ),
-        'interfaces\\' => 
+        'model\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/interfaces',
-        ),
-        'helper\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/helper',
-        ),
-        'exception\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/exception',
-        ),
-        'database\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/database',
-        ),
-        'databaseSource\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/database/querySource',
-        ),
-        'controller\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/controller',
-        ),
-        'complexDatabaseProcessor\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/database/queryProcessor/complex',
-        ),
-        'classModel\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/model/class',
-        ),
-        'classDbHandler\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/model/classDBHandler',
-        ),
-        'bookDataManipulator\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/controller/BookDataManipulator',
+            0 => __DIR__ . '/../..' . '/model',
         ),
     );
 
@@ -113,9 +48,9 @@ class ComposerStaticInit136c1a7a4a0f5c2bd944452628369518
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit136c1a7a4a0f5c2bd944452628369518::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit136c1a7a4a0f5c2bd944452628369518::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit136c1a7a4a0f5c2bd944452628369518::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1dc46621a8f2f50f3bcb36af11d3d5e0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1dc46621a8f2f50f3bcb36af11d3d5e0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1dc46621a8f2f50f3bcb36af11d3d5e0::$classMap;
 
         }, null, ClassLoader::class);
     }
