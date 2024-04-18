@@ -26,11 +26,49 @@ class ModuleLoader {
             }]
         );
         await Includer.startLoad()
-        await Includer.loadFileSource(module)
         //
         let moduleFiles = Includer.getIncludableFileSource(module)
-
         console.log(moduleFiles)
+        let fileName
+        let directory
+        let className
+        let temp = await this.getComponent(moduleFiles, 'Controller')
+        if (!temp) {
+            Messenger.showAlert('controller file missing: ' + className)
+            return false
+        }
+        // let controllerName =
+        // console.log(controllerName)
+        let controller =  new (eval ( await this.loadFile(temp)))()
+        let serviceModel = undefined
+        temp = await this.getComponent(moduleFiles, 'ServiceModel')
+        if (temp) {
+            serviceModel =  new (eval ( await this.loadFile(temp)))()
+        }
+
+        temp = await this.getComponent(moduleFiles, 'Service')
+        if (temp) {
+
+            let service = new (eval ( await this.loadFile(temp)))() //DO nicer solution?
+            service.init()
+            if (serviceModel !== undefined)
+                service.model = serviceModel
+            controller.service =service
+
+        }
+        console.dir(controller)
+        // let index = moduleFiles.findIndex(file => file.includes('Service'))
+        //
+        // let controllerFile = moduleFiles[index]
+        //
+        //
+        // index = moduleFiles.findIndex(file => file.includes('Service'))
+        // console.log(index)
+        // if (index !== -1)
+        // {
+        //     let serviceFile = moduleFiles[index]
+        //
+        // }
         //
         // let moduleName = module.module
         // if (!moduleName.includes('Service'))
@@ -82,5 +120,35 @@ class ModuleLoader {
         // let controller = this.initiator.initController(module.window, connectedParams)
         // App.addSubModule(controller)
         // return true
+    }
+
+    static async loadFile(tempData)
+    {
+        let [directory, fileName] = tempData
+        Includer.addFilesToLoad(
+            [{
+                directory: directory,
+                fileNames: [fileName]
+            }]
+        )
+        await Includer.startLoad()
+        console.log(fileName)
+        return  fileName.split('.')[0]
+    }
+
+    static getComponent(files, componentName) {
+        let fileIndex
+        let groupIndex = files.findIndex((group) => {
+            fileIndex = group.fileNames.findIndex((file) => {
+                console.log(file)
+                return file.includes(componentName)
+            })
+            return fileIndex >= 0
+        })
+        if (groupIndex === -1) return false
+        let data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
+        delete files[groupIndex].fileNames[fileIndex];
+        console.log(files)
+        return data
     }
 }

@@ -2,7 +2,21 @@
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
 class ServiceParent {
-    static async init() {
+    set model(value) {
+        this._model = value;
+    }
+
+    static _instance
+
+    _model
+
+    constructor(){
+        if(self._instance){
+            self._instance = this;
+        }
+        return self._instance;
+    }
+    async init() {
         return new Promise(async (resolve) => {
             resolve(true)
         })

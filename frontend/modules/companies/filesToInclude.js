@@ -4,6 +4,7 @@ Includer.setIncludableFileSource(
             directory: MODULE_FILE_DIR+'companies',
             fileNames: [
                 'CompanyService.js',
+                'CompanyServiceModel.js',
             ]
         },
         {

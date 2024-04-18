@@ -1,5 +1,25 @@
 
-class CompanyService{ // extends ServiceParent {
+class CompanyService extends ServiceParent {
+
+    companyTypes = null;
+
+    async init() {
+        return new Promise(async (resolve) => {
+            if (this.tableAttributeParams !== undefined) {
+                resolve(true)
+                return
+            }
+            this.tableAttributeParams = await this.getTableAttributeParamsFromServer(['companies'])
+            await this.getAttributeValuesFromServer()
+            resolve(true)
+        })
+    }
+    static async getMetaParameters() {
+        CompanyService.companyTypes = {0: 'Nem vevő'}
+        CompanyService.supplierCompanyTypes = {0: 'Nem beszállító', 1: 'Beszállító'}
+        Object.values(await this.createAndSendRequest('getCompanyMeta')).forEach(type =>
+            CompanyService.companyTypes[type.id] = type.name)
+    }
 
     // static requiredFiles = {
     //     listAllCompany: 'MC',
@@ -148,27 +168,12 @@ class CompanyService{ // extends ServiceParent {
     // static selectedRecord = null
     // static getUrl = 'getCompanies'
     //
-    // static async init() {
-    //     return new Promise(async (resolve) => {
-    //         if (this.tableAttributeParams !== undefined) {
-    //             resolve(true)
-    //             return
-    //         }
-    //         this.tableAttributeParams = await this.getTableAttributeParamsFromServer(['companies'])
-    //         await this.getAttributeValuesFromServer()
-    //         resolve(true)
-    //     })
-    // }
+
     //
     // /**
     //  * cégekkel kapcsolatos meta-paraméterek lekérése szerverről - típusok
     //  */
-    // static async getAttributeValuesFromServer() {
-    //     CompanyService.companyTypes = {0: 'Nem vevő'}
-    //     CompanyService.supplierCompanyTypes = {0: 'Nem beszállító', 1: 'Beszállító'}
-    //     Object.values(await this.createAndSendRequest('getCompanyMeta')).forEach(type =>
-    //         CompanyService.companyTypes[type.id] = type.name)
-    // }
+
     //
     // /**
     //  * új cég beküldése
