@@ -3,7 +3,6 @@
 namespace service;
 
 use classModel\RequestParameters;
-use Error;
 use Exception;
 use exception\HttpResponseTriggerException;
 use helper\VariableHelper;
@@ -21,20 +20,18 @@ class RESTHandler
      * e.g. www.example.com/user/123 -> user/123
      */
     private string $routeBase = '';
-
     /**
      * @var RouteAnalyser instance of the RouteAnalyser
      */
     private RouteAnalyser $routeAnalyser;
-
     /**
      * @var RequestParameters parameters from http request
      */
     private RequestParameters $parameters;
 
     //DO authentication
-    public function __construct()
-    {
+    public function __construct() {
+//        var_dump($_SERVER);
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
                 $this->addCorsHeaders();
@@ -43,17 +40,21 @@ class RESTHandler
                 $this->setRootConstant();
                 $this->getRouteBaseFromRequest();
                 $this->searchForExistingRoute();
-                $this->getHttpRequestData();
-                $this->authenticateUser();
-                $this->authenticationTaskGuard();
-                $this->loadRestClass();
+//                $this->getHttpRequestData();
+//                $this->authenticateUser();
+//                $this->authenticationTaskGuard();
+//                [$class,$functionName] = $this->loadRestClass();
+//                $class->$functionName($this->parameters);
+//                $this->addTokenExpirationTimeToHeader();
+//                header($_SERVER['SERVER_PROTOCOL'] . ' 200');
+//                echo json_encode($class->getResult());
+                var_dump($this);
+                echo json_encode('success');
+                die();
             }
-
         } catch (HttpResponseTriggerException $e) {
             $this->sendResponseBasedOnTriggerException($e);
-        } catch (Exception $e) {
-            $this->sendResponseBasedOnError($e->getMessage(), $e->getFile(), $e->getLine());
-        } catch (Error $e) {
+        } catch (\Throwable $e) {
             $this->sendResponseBasedOnError($e->getMessage(), $e->getFile(), $e->getLine());
         }
     }
@@ -61,9 +62,7 @@ class RESTHandler
     /**
      * sends cors headers
      */
-    private function addCorsHeaders()
-    {
-
+    private function addCorsHeaders() {
         //DO expand cors handling
 //        header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Origin: http://localhost:4200');
@@ -71,11 +70,9 @@ class RESTHandler
         header('Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE');
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Expose-Headers: TokenExpirationTime');
-
     }
 
-    private function addCorsOriginHeader()
-    {
+    private function addCorsOriginHeader() {
         header('Access-Control-Allow-Origin: http://localhost:4200');
 //        header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Credentials: true');
@@ -86,47 +83,39 @@ class RESTHandler
      * determines the root of project from url
      * @example www.example.com/user/123 -> www.example.com
      */
-    private function setRootConstant()
-    {
+    private function setRootConstant() {
         $filename = str_replace('/', '\\', $_SERVER['SCRIPT_NAME']);
-        $root = str_replace('index.php', '', strtolower($filename));
-        DEFINE('ROOT', $root);
+        DEFINE('ROOT', str_replace('index.php', '', strtolower($filename)));
     }
 
     /**
      * determines the route path form the request url
      * @example www.example.com/user/123 -> user/123
      */
-    private function getRouteBaseFromRequest()
-    {
+    private function getRouteBaseFromRequest() {
         $request = strtolower($_SERVER['REQUEST_URI']);
         $urlStripper = str_replace($_SERVER['CONTEXT_DOCUMENT_ROOT'], '', ROOT);
         $request = str_replace(['//', '/'], '\\', $request);
-        $request = str_replace($urlStripper, '', $request);
-        $this->routeBase = $request;
+        $this->routeBase == str_replace($urlStripper, '', $request);
     }
 
     /**
      * determines the appropriate route for the url
      * @throws Exception if there is no url connected to the url
      */
-    private function searchForExistingRoute()
-    {
-        $this->routeAnalyser = new RouteAnalyser($this->routeBase);
-        $routeExists = $this->routeAnalyser->processGivenRoute();
-        if (!$routeExists) {
+    private function searchForExistingRoute() {
+        $routeExists = (new RouteAnalyser($this->routeBase))->processGivenRoute();
+        if (!$routeExists)
             throw new Exception('Route not exists: ' . $this->routeBase);
-        }
+
     }
 
     /**
      * collects data from http request body, converts it if necessary
      * @throws Exception if the data is in an inappropriate format
      */
-    private function getHttpRequestData()
-    {
+    private function getHttpRequestData() {
         $this->parameters = $this->routeAnalyser->getParameters();
-
         if (isset($_SERVER['CONTENT_TYPE'])) {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':
@@ -144,7 +133,6 @@ class RESTHandler
                     $requestData = file_get_contents('php://input');
                     $decodedData = json_decode($requestData);
 //                    print_r($decodedData);
-
                     if ($decodedData === null) {
                         $this->parameters->setRequestData([$requestData]);
                     } else {
@@ -164,8 +152,7 @@ class RESTHandler
     /**
      * checks user authentication
      */
-    private function authenticateUser()
-    {
+    private function authenticateUser() {
         if (isset(getallheaders()['Authorization'])) {
             $token = filter_var(getallheaders()['Authorization'], FILTER_SANITIZE_STRING);
             if ($token !== null) {
@@ -179,12 +166,10 @@ class RESTHandler
      * checks if user is entitled to use the given function
      * @throws HttpResponseTriggerException
      */
-    private function authenticationTaskGuard()
-    {
+    private function authenticationTaskGuard() {
         //TODO
         $as = Authentication::getInstance();
         $token = $as->getTokenObj();
-
         ['authentication' => $authenticationLevel] = $this->routeAnalyser->getRestData();
         if (($authenticationLevel !== 'A' && $authenticationLevel !== 'NL') && $token === null) {
             throw new HttpResponseTriggerException(false, ['errorCode' => 'TAF', 'type' => 1]);
@@ -208,20 +193,17 @@ class RESTHandler
     /**
      * loads a http request processor class based on url
      */
-    private function loadRestClass()
-    {
+    private function loadRestClass() {
         ['className' => $restClass, 'functionName' => $functionName] = $this->routeAnalyser->getRestData();
         $restClass = '\\rest\\' . $restClass;
-        $class = new $restClass();
-        $class->$functionName($this->parameters);
+        return [new $restClass(), $functionName];
     }
 
     /**
      * send a http response based on a HttpResponseTriggerException
      * @param HttpResponseTriggerException $e specific exception for responses
      */
-    private function sendResponseBasedOnTriggerException(HttpResponseTriggerException $e)
-    {
+    private function sendResponseBasedOnTriggerException(HttpResponseTriggerException $e) {
         $this->addTokenExpirationTimeToHeader();
         header($_SERVER['SERVER_PROTOCOL'] . ' ' . $e->getHttpCode());
         $data = ['success' => $e->isSuccess(), 'data' => $e->getData()];
@@ -229,29 +211,26 @@ class RESTHandler
         die();
     }
 
-    private function addTokenExpirationTimeToHeader()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
-            $as = Authentication::getInstance();
-            $state = $as->getTokenState();
-            if ($state[0] === true) {
-                header('TokenExpirationTime: ' . $as->getTokenObj()->getExpirationTime());
-            }
-        }
-    }
-
+//    private function addTokenExpirationTimeToHeader()
+//    {
+//        if ($_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
+//            $as = Authentication::getInstance();
+//            $state = $as->getTokenState();
+//            if ($state[0] === true) {
+//                header('TokenExpirationTime: ' . $as->getTokenObj()->getExpirationTime());
+//            }
+//        }
+//    }
     /**
      * sends a http response based on error parameters
      * @param string $message error message
      * @param string $file filename from which the error was thrown
      * @param int $line line from which the error was thrown
      */
-    private function sendResponseBasedOnError(string $message, string $file, int $line)
-    {
+    private function sendResponseBasedOnError(string $message, string $file, int $line) {
         //DO save message to log instead of echo
-        $this->addTokenExpirationTimeToHeader();
+//        $this->addTokenExpirationTimeToHeader();
         header($_SERVER['SERVER_PROTOCOL'] . ' ' . 500);
         echo $message . ' - ' . $file . ':' . $line;
     }
-
 }
