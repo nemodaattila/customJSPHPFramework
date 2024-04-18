@@ -13,9 +13,21 @@ class Includer {
         return this._model.getIncludableFileSource(name);
     }
 
+    static getIncludableFileSourceFileNamesOnly(name) {
+        let files =  this._model.getIncludableFileSource(name);
+        let fileNames = []
+        files.forEach((group) => {
+            group.fileNames.forEach((file) => {
+                fileNames.push(file)
+            })
+        })
+        return fileNames;
+    }
+
     static setIncludableFileSource(name, value) {
         this._model.setIncludableFileSource(name, value);
     }
+
 
     static async loadFileSource(name) {
         console.log(name)
@@ -24,6 +36,7 @@ class Includer {
     }
 
     static addFilesToLoad(filesToLoad) {
+        console.log(filesToLoad)
         if (filesToLoad === undefined) {
             Messenger.showAlert('file load error - addFilesToLoad param undefined')
             return

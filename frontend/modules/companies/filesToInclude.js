@@ -1,13 +1,13 @@
 Includer.setIncludableFileSource(
     'companyLister',[
         {
-            directory: MODULE_FILE_DIR+'/companies',
+            directory: MODULE_FILE_DIR+'companies',
             fileNames: [
                 'CompanyService.js',
             ]
         },
         {
-        directory: MODULE_FILE_DIR+'/companies/CompanyLister',
+        directory: MODULE_FILE_DIR+'companies/CompanyLister',
         fileNames: [
             'CompanyListerController.js',
             // 'CompanyListerView.js',
