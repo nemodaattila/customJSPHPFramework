@@ -2,6 +2,7 @@
 
 namespace service;
 
+use builder\DatabaseBuilder;
 use Exception;
 //use exception\HttpResponseTriggerException;
 //use helper\VariableHelper;
@@ -31,6 +32,8 @@ class RESTHandler
      */
     private RequestParameters $parameters;
 
+
+
     //DO authentication
     public function __construct() {
 //        var_dump($_SERVER);
@@ -42,6 +45,7 @@ class RESTHandler
                 $this->setRootConstant();
                 $this->getRouteBaseFromRequest();
                 $this->searchForExistingRoute();
+                $this->setDatabase('customPDO');
                 $this->getHttpRequestData();
 //                $this->authenticateUser();
 //                $this->authenticationTaskGuard();
@@ -235,5 +239,10 @@ class RESTHandler
                     throw new HttpResponseTriggerException(false, ['errorCode' => 'TAF', 'type' => 4]);
                 break;
         }
+    }
+
+    private function setDatabase($databaseHandlerClassName) {
+       DatabaseBuilder::createDatabaseConnection($databaseHandlerClassName);
+
     }
 }
