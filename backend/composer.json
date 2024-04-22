@@ -4,6 +4,8 @@
       "rest\\": "rest/",
       "service\\": "service/",
       "model\\": "model/",
+      "builder\\": "builder/",
+      "databse\\": "database/",
       "routes\\": "routes/"
     }
   },
