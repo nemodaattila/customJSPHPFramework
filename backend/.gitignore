@@ -1,3 +1,4 @@
 /.idea
 /vendor
-/config/PDOConfig.php
+/database/PDOConfig.php
+
