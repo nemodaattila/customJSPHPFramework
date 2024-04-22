@@ -5,7 +5,7 @@
       "service\\": "service/",
       "model\\": "model/",
       "builder\\": "builder/",
-      "databse\\": "database/",
+      "database\\": "database/",
       "routes\\": "routes/"
     }
   },
