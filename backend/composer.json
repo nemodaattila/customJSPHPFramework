@@ -6,7 +6,8 @@
       "model\\": "model/",
       "builder\\": "builder/",
       "database\\": "database/",
-      "routes\\": "routes/"
+      "routes\\": "routes/",
+      "interface\\": "interface/"
     }
   },
   "require": {
