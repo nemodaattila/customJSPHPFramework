@@ -45,17 +45,17 @@ class RESTHandler
                 $this->setRootConstant();
                 $this->getRouteBaseFromRequest();
                 $this->searchForExistingRoute();
-                $this->setDatabase('customPDO');
+                $this->setDatabase('CustomPDO');
                 $this->getHttpRequestData();
 //                $this->authenticateUser();
 //                $this->authenticationTaskGuard();
                 [$class, $functionName] = $this->loadRestClass();
-//                $class->$functionName($this->parameters);
+                $class->$functionName($this->parameters);
 //                $this->addTokenExpirationTimeToHeader();
 //                header($_SERVER['SERVER_PROTOCOL'] . ' 200');
-//                echo json_encode($class->getResult());
-                var_dump($this);
-                echo json_encode('success');
+                echo json_encode($class->getResult());
+//                var_dump($this);
+//                echo json_encode('success');
                 die();
             }
         } catch (HttpResponseTriggerException $e) {

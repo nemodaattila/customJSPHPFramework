@@ -4,17 +4,16 @@ namespace rest;
 use builder\DatabaseBuilder;
 use database\CustomPDO;
 
-class MetaDataHandler
+class MetaDataHandler extends RestParent
 {
-    private CustomPDO $dbConnection;
-    public function __construct() {
-        $this->dbConnection = DatabaseBuilder::getDatabaseConnectorInstance();
 
-    }
 
     public function getCompanyMeta() {
-        $this->dbConnection->simpleFetchTable('company_categories');
-
+        $categories = [];
+        $temp = $this->dbConnection->simpleFetchTable('company_categories');
+        foreach ($temp as $category)
+            $categories[$category['id']] =$category['name'];
+       $this->result = $categories;
    }
 
 }
