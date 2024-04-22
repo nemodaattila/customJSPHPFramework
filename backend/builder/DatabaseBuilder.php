@@ -1,17 +1,19 @@
 <?php
 
 namespace builder;
+use interface\DatabaseConnectionInterface;
+
 class DatabaseBuilder
 {
-    private static $databaseConnectorInstance = null;
+    private static DatabaseConnectionInterface|null $databaseConnectorInstance = null;
 
-    public static function getDatabaseConnectorInstance(): null {
+    public static function getDatabaseConnectorInstance(): DatabaseConnectionInterface {
 
         if (self::$databaseConnectorInstance !== null) {
             return self::$databaseConnectorInstance;
         }
         else{
-            throw new \Exception('database connector instance not exoists');
+            throw new \Exception('database connector instance not exists');
         }
     }
 

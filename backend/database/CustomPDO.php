@@ -5,9 +5,11 @@
  */
 
 namespace database;
+use interface\DatabaseConnectionInterface;
+use PDO;
 use PDOStatement;
 
-class CustomPDO
+class CustomPDO implements DatabaseConnectionInterface
 {
 //    /**
 //     * @var mixed user id
@@ -23,11 +25,13 @@ class CustomPDO
 
     protected ?PDOConnection $connection;
 
+
+
     public function __construct() {
         $this->connection = new PDOConnection();
 
         $this->connection->createPDO();
-        $this->startTransaction();
+//        $this->startTransaction();
 //        PDOConnection::beginTransaction();
 //        $this->user = filter_input(INPUT_POST, 'userId', FILTER_VALIDATE_INT);
         $this->query =& $this->connection->query;
@@ -37,6 +41,15 @@ class CustomPDO
         $this->connection->beginTransaction();
     }
 
+    public function simpleFetchTable($tableName) {
+        $record=[];
+        $this->executeQuery('select * from '.$tableName);
+
+        return $this->query->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+    
     /**
      * entitások/rekordok lekérdezése szerverről szűrésekkel, paramterek jöhetnek függvényparaméterként, vagy $_POST-ból
      * @param string $tableName tábla neve
@@ -74,7 +87,7 @@ class CustomPDO
      * @throws Exception mysql hiba
      */
     protected function executeQuery(string $queryString, array $parameters = []): bool {
-        return PDOConnection::executeQuery($queryString, $parameters);
+        return $this->connection->executeQuery($queryString, $parameters);
     }
 
     /**
