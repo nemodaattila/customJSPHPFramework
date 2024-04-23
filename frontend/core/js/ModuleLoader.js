@@ -49,6 +49,7 @@ class ModuleLoader {
             controller.service = service
         }
         console.dir(controller)
+        controller.init();
         // let index = moduleFiles.findIndex(file => file.includes('Service'))
         //
         // let controllerFile = moduleFiles[index]
@@ -112,6 +113,7 @@ class ModuleLoader {
         // let controller = this.initiator.initController(module.window, connectedParams)
         // App.addSubModule(controller)
         // return true
+        return controller
     }
 
     static async loadFile(tempData) {
