@@ -1,59 +1,33 @@
 class DesktopWindowTabView {
-    /**
-     * az ablakkezelő DOM elementje
-     * @type {HTMLDivElement|HTMLBodyElement}
-     */
-    _mainContainer = document.getElementsByTagName('body')[0]
 
-    get mainContainer() {
-        return this._mainContainer;
-    }
+    createElements(container)
+    {
 
-    set mainContainer(value) {
-        this._mainContainer = value;
-    }
-
-    _deskTopDOMElement
-
-    get deskTopDOMElement() {
-        return this._deskTopDOMElement;
-    }
-
-    set deskTopDOMElement(value) {
-        this._deskTopDOMElement = value;
-    }
-
-    /**
-     * a fül sáv DOM elementje
-     * @type HTMLDivElement
-     */
-    _tabsBarDOMElement
-
-    get tabsBarDOMElement() {
-        return this._tabsBarDOMElement;
-    }
-
-    set tabsBarDOMElement(value) {
-        this._tabsBarDOMElement = value;
-    }
-
-    createMainDOMElements() {
-        this._mainContainer.style.height = '100%'
-        this._mainContainer.style.width = '100%'
-        this._mainContainer.style.display = 'table'
-        this._tabsBarDOMElement = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
-            class: 'tabsBar', id: 'tabsBar'
+        this.windowTab = HtmlElementCreator.createHtmlElement('div', container, {
+            class: 'windowTab',
         })
-        this._deskTopDOMElement = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
-            class: 'desktop', id: 'desktop'
+        this.windowTab.addEventListener('mousedown', () => Desktop.switchActiveWindow(this))
+        HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+            class: 'titleDiv'
         })
-        this._deskTopDOMElement.addEventListener('mouseup', (event) =>
-            DesktopEventHandlers.endMove(event))
-        this._mainContainer.addEventListener('mousemove', (event) => {
-            if (event.buttons === 1)
-                DesktopEventHandlers.move(event)
+        let resetIcon = HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+            title: 'Ablak alapméretre állítása', class: 'resetWindowIcon'
         })
+        resetIcon.addEventListener('click', () => {
+            if (this.windowSize !== undefined)
+                this.maximalizeWindow()
+            this.windowDiv.style.left = '0'
+            this.windowDiv.style.top = '25px'
+            this.windowDiv.style.width = '500px'
+            this.windowDiv.style.height = '250px'
+            this.contentObject.setTableZoom('1', false)
+            this.zoomWindow('1')
+        })
+        let closeIcon = HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+            title: 'Bezárás', class: 'close'
+        })
+        closeIcon.addEventListener('click', () => this.closeWindow())
+        closeIcon.style.top = '0'
     }
-
 
 }
