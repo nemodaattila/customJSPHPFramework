@@ -67,13 +67,50 @@
     background-image: url(zoom.png);
     text-align: center
 }
-.close, .zoomIcon, .maximize, .miniaturise, .pin, .resetWindowIcon {
+
+.zoomInput {
+    width: 100px;
+    display: none;
+    left: 15px;
+    top: 3px;
+    position: absolute
+
+}
+
+
+
+.close, .zoomIcon, .maximise, .miniaturise, .pin {
     width: 25px;
     background-size: cover;
     position: absolute;
     height: 25px
 }
 
-.close:hover,  .zoomIcon:hover, .maximize:hover, .miniaturise:hover, .zoom:hover {
+.close:hover,  .zoomIcon:hover, .maximise:hover, .miniaturise:hover, .zoom:hover {
     cursor: pointer
+}
+
+
+
+.close {
+    right: 10px;
+    top: 5px;
+    background-image: url(close.png)
+}
+
+.maximise {
+    right: 40px;
+    top: 5px;
+    background-image: url(maximise.png)
+}
+
+.miniaturise {
+    right: 70px;
+    top: 5px;
+    background-image: url(minimalise.png)
+}
+.pin {
+    right: 100px;
+    top: 5px;
+    background-image: url(pin_icon.png)
 }

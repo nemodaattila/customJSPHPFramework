@@ -62,7 +62,7 @@ class DesktopWindowView {
             this.miniaturiseWindow()
         })
         let maximalizer = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
-            class: 'maximize', title: 'Teljes méret',
+            class: 'maximise', title: 'Teljes méret',
         })
         maximalizer.addEventListener('click', () => this.maximizeWindow())
         let closer = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
