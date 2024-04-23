@@ -16,7 +16,7 @@ class WindowOpener {
             let window = new DesktopWindowController(DesktopController.getWindowContainer())
             tab.windowPointer = window
             window.tabPointer = tab
-            DesktopController.save
+            DesktopController.addNewWindow(windowName, window, tab)
             console.log('window')
             console.dir(window)
 

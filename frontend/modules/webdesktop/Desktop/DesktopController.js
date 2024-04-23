@@ -18,6 +18,11 @@ class DesktopController {
         return this._view.deskTopDOMElement
     }
 
+    static getTaskBarContainer()
+    {
+        return this._view.tabsBarDOMElement
+    }
+
     static openWindow(moduleGroupName, moduleName,windowName = undefined) {
         WindowOpener.openWindow(moduleGroupName, moduleName,windowName)
 
@@ -28,6 +33,12 @@ class DesktopController {
 
     static isWindowOpen(windowId) {
        return  this._model.searchForWindowById(windowId)
+    }
+
+    static addNewWindow(windowName, window, tab)
+    {
+        this._model.addNewWindow(windowName, window, tab);
+        console.dir(this)
     }
 
     // /**

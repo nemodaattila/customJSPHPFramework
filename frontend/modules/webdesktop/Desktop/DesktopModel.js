@@ -2,6 +2,8 @@ class DesktopModel {
 
     _windows = {}
 
+    _tabs = {}
+
     /**
      * aktív ablak objektuma
      * @type {DesktopWindow | undefined}
@@ -37,5 +39,12 @@ class DesktopModel {
     searchForWindowById(id)
     {
         return this._windows[id] !== undefined;
+    }
+
+    addNewWindow(name, window, tab)
+    {
+        this._windows[name]=window
+        this._tabs[name]=tab
+
     }
 }
