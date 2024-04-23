@@ -1,10 +1,30 @@
-class Class {
+class DesktopWindowModel {
 
-// /**
-//  * ablak sorszáma, elhelyezéshez kell
-//  * @type {number}
-//  */
-// static count = -1
+
+/**
+ * ablak sorszáma, elhelyezéshez kell
+ * @type {number}
+ */
+    static _count = -1
+
+
+
+    increaseCount()
+    {
+        DesktopWindowModel._count++;
+    }
+
+    _id
+
+    setIdToCount()
+    {
+        this._id = DesktopWindowModel._count
+    }
+
+    get id() {
+        return this._id;
+    }
+
 // /**
 //  * az ablakhoz tartozó modul controllere mutató pointer
 //  * @type {ControllerParent}

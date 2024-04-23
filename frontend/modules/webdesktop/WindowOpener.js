@@ -1,5 +1,5 @@
 class WindowOpener {
-   static openWindow(moduleGroupName, moduleName,windowName = undefine)
+   static async openWindow(moduleGroupName, moduleName,windowName = undefined)
     {
         if (windowName === undefined)
             windowName=moduleName
@@ -9,9 +9,12 @@ class WindowOpener {
         }
         else
         {
-            DesktopController.openWindow(moduleGroupName, moduleName,windowName)
-            let controller = ModuleLoader.loadModule(moduleGroupName, moduleName)
-
+            // DesktopController.openWindow(moduleGroupName, moduleName,windowName)
+            let controller = await ModuleLoader.loadModule(moduleGroupName, moduleName)
+            console.log('controller')
+            let window = new DesktopWindowController(DesktopController.getWindowContainer())
+            console.log('window')
+            console.dir(window)
         }
     }
 }

@@ -13,6 +13,11 @@ class DesktopController {
         console.dir(this)
     }
 
+    static getWindowContainer()
+    {
+        return this._view.deskTopDOMElement
+    }
+
     static openWindow(moduleGroupName, moduleName,windowName = undefined) {
         WindowOpener.openWindow(moduleGroupName, moduleName,windowName)
 

@@ -1,7 +1,51 @@
 /**
  * grafikus (Windows-szerű) ablak objektuma
  */
-class DesktopWindow {
+class DesktopWindowController {
+
+
+    _model
+
+    _view
+
+
+    constructor(container) {
+        //     this.parentInit(new ListAllCompanyModel())
+        //     this.windowContentPointer.hideEntityHandlerIcons(['delete'])
+        this._model=new DesktopWindowModel();
+        this._view=new DesktopWindowView();
+        this._model.increaseCount();
+        this._model.setIdToCount()
+        this._view.displayWindow(container)
+        this.countDefaultParameters()
+
+    }
+
+    countDefaultParameters()
+    {
+        let top,left
+        let id =parseInt(this._model.id)
+        console.log(id)
+        switch (id % 4) {
+                    case 0:
+                        top = '25px'
+                        left = 0
+                        break
+                    case 1:
+                        top = '25px'
+                        left = '50%'
+                        break
+                    case 2:
+                        top = '51%'
+                        left = 0
+                        break
+                    case 3:
+                        top = '51%'
+                        left = '50%'
+                        break
+                }
+                this._view.setLeftAndTopParameters(left,top)
+    }
 
     //
     // /**
@@ -13,45 +57,10 @@ class DesktopWindow {
     //  * @param connectedParams {{}} kapcsolt/meghívó object paraméterei
     //  */
     // constructor(id, params, service, moduleGroupName, connectedParams = null) {
-    //     DesktopWindow.count++;
-    //     this.id = id
     //     this.containerElement = Desktop.desktopElement;
     //     this.connectedParams = connectedParams
     //     this.moduleGroupName = moduleGroupName
-    //     this.windowDiv = HtmlElementCreator.createHtmlElement('div', this.containerElement, {class: 'window'})
-    //     this.windowDiv['windowObject'] = this
-    //     this.windowDiv.style.zIndex = "100"
-    //     this.windowBody = HtmlElementCreator.createHtmlElement('div', this.windowDiv, {class: 'windowBody'})
-    //     let top, left
-    //     switch (DesktopWindow.count % 4) {
-    //         case 0:
-    //             top = '25px'
-    //             left = 0
-    //             break
-    //         case 1:
-    //             top = '25px'
-    //             left = '50%'
-    //             break
-    //         case 2:
-    //             top = '51%'
-    //             left = 0
-    //             break
-    //         case 3:
-    //             top = '51%'
-    //             left = '50%'
-    //             break
-    //     }
-    //     this.windowDiv.style.left = left
-    //     this.windowDiv.style.top = top
-    //     this.windowTitleDiv = HtmlElementCreator.createHtmlElement('div', this.windowDiv, {class: 'windowTitle'})
-    //     this.titleDiv = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'title'
-    //     })
-    //     this.windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
-    //     this.titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this.windowDiv))
-    //     this.displayWindowIcons()
-    //     this.displayWindowTab()
-    //     this.displayMainElements(params, service)
+
     // }
     //
     // /**
@@ -163,48 +172,7 @@ class DesktopWindow {
     // /**
     //  * ablak jobb felső sarkában lévő ikonok megjelenítése, eventek hozzáadása (zoom, miinimize, maximize, close)
     //  */
-    // displayWindowIcons() {
-    //     this.zoomDiv = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'zoom', title: 'Nagyítás',
-    //     })
-    //     this.zoomDiv.addEventListener('mousedown', (event) => event.stopPropagation())
-    //     let zoomChanger = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
-    //         type: 'range', step: "0.1", min: "0.5", max: "2", class: "zoomInput", value: "1"
-    //     })
-    //     zoomChanger.addEventListener('change', () => this.zoomWindow(zoomChanger.value))
-    //     let zoomIconDiv = HtmlElementCreator.createHtmlElement('div', this.zoomDiv, {
-    //         class: "ico2"
-    //     })
-    //     zoomIconDiv.addEventListener('click', () => {
-    //         zoomChanger.value = 1
-    //         zoomChanger.dispatchEvent(new window.Event('change', {bubbles: true}))
-    //     })
-    //     let pinner = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'pinner', title: 'Rögzítés mint legfelső ablak',
-    //     })
-    //     pinner.addEventListener('click', (event) => {
-    //         event.stopPropagation()
-    //         this.windowDiv.classList.toggle('pinned')
-    //     })
-    //     let miniaturizer = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'miniaturize', title: 'kis méret',
-    //     })
-    //     miniaturizer.addEventListener('click', (event) => {
-    //         event.stopPropagation()
-    //         this.miniaturizeWindow()
-    //     })
-    //     let maximalizer = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'maximalize', title: 'Teljes méret',
-    //     })
-    //     maximalizer.addEventListener('click', () => this.maximalizeWindow())
-    //     let closer = HtmlElementCreator.createHtmlElement('div', this.windowTitleDiv, {
-    //         class: 'close', title: 'Bezárás',
-    //     })
-    //     closer.addEventListener('click', (event) => {
-    //         event.stopPropagation()
-    //         this.closeWindow()
-    //     })
-    // }
+
     //
     // /**
     //  * ablak fülének megjelenítése a fülsávon, záróesemény hozzáadása
