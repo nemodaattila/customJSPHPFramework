@@ -13,7 +13,16 @@ class DesktopController {
         console.dir(this)
     }
 
-    static openWindow(moduleGroupName, moduleName) {
+    static openWindow(moduleGroupName, moduleName,windowName = undefined) {
+        WindowOpener.openWindow(moduleGroupName, moduleName,windowName)
+
+
+
+
+    }
+
+    static isWindowOpen(windowId) {
+       return  this._model.searchForWindowById(windowId)
     }
 
     // /**
@@ -87,7 +96,5 @@ class DesktopController {
     //  * @param {string} windowId ablak megnevezése
     //  * @returns {boolean}
     //  */
-    // static isWindowOpen(windowId) {
-    //     return this.windows[windowId] !== undefined
-    // }
+
 }

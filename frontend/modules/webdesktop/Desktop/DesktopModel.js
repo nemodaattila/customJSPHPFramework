@@ -1,6 +1,6 @@
 class DesktopModel {
 
-    _windows = []
+    _windows = {}
 
     /**
      * aktív ablak objektuma
@@ -31,6 +31,11 @@ class DesktopModel {
     }
 
     openNewWindow() {
-        this._windows.push(new Window());
+        // this._windows.push(new Window());
+    }
+
+    searchForWindowById(id)
+    {
+        return this._windows[id] !== undefined;
     }
 }
