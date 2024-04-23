@@ -29,11 +29,12 @@ class Main {
         await Includer.loadFileSource('alertPopup')
         Messenger.setObject(new AlertPopup())
         await Includer.loadFileSource('desktop')
+        await Includer.loadFileSource('desktopWindow')
         console.dir(Includer)
     }
 
     static initComponents() {
         DesktopController.init()
-        ModuleLoader.loadModule('companies', 'companyLister')
+        DesktopController.openWindow('companies', 'companyLister')
     }
 }
