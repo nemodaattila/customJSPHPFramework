@@ -19,8 +19,10 @@ class ServiceParent {
 
     async init() {
         return new Promise(async (resolve) => {
+            this._model.setAttributeOrder();
             resolve(true)
         })
+
     }
 
     getTitle(name)
@@ -30,7 +32,7 @@ class ServiceParent {
 
     getEnabledOperations()
     {
-        this._model.getEnabledOperations()
+       return  this._model.getEnabledOperations()
     }
 
     // /**

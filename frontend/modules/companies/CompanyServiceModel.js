@@ -35,11 +35,11 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         deletable: true
     }
-    restName = 'company'
-    entityTriggerName = 'company'
-    onClickEventAttribs = ['id', 'name']
-    defaultOrder = 'name'
-    attributes = {
+    _restName = 'company'
+    _entityTriggerName = 'company'
+    _onClickEventAttribs = ['id', 'name']
+    _defaultOrder = 'name'
+    _attributes = {
         id: {label: 'Azonosító', type: 'string'},
         name: {label: 'Név', type: 'string'},
         address: {label: 'cím', type: 'string'},
@@ -50,7 +50,7 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         comment: {label: 'Megjegyzés'}
     }
-    editSubMenuParams = {
+    _editSubMenuParams = {
         editCompany: {
             label: 'Cég szerkesztése',
             moduleGroupName: 'companies',
