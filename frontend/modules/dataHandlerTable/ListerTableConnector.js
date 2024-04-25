@@ -12,6 +12,7 @@ class ListerTableConnector{
         this._listerTable = new ListerTable(container)
 
         this._listerTable.displayTableIcons(this.serviceModelPointer.getEnabledOperations())
+        controller.        setOrdering(this.serviceModelPointer.defaultOrder ?? 'id', 'ASC')
         this._listerTable.drawHeaders(
             this.serviceModelPointer.tableHeaderAttributeOrder,
             this.serviceModelPointer.tableHeaderAttributes,

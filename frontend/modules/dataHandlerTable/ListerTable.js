@@ -24,7 +24,7 @@ class ListerTable{
     drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder)
     {
         this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
-        this._view.setOrdering(defaultOrder ?? 'id', 'ASC')
+
         this._view.displayFilters()
         this._view.addFilterEvents()
         this._view.hideDefaultColumns()
@@ -99,12 +99,7 @@ class ListerTable{
 //      * adatlekérésnél az eltolás (offset) mennyisége
 //      * @type {number}
 //      */
-//     offset = 0;
-//     /**
-//      * sorrendezési paraméterek
-//      * @type {[string,number]} - 1 : ASC, -1 DESC
-//      */
-//     actualSort = ['', 1];
+//
 //     /**
 //      * az aktív sorrendezési HTML elem (nem a fejléc, a nyíl)
 //      * @type {null|HTMLDivElement}
@@ -241,13 +236,7 @@ class ListerTable{
 //      * @param attr {string} paraméter
 //      * @param dir {string|number} irány ASC/DESC
 //      */
-//     setOrdering(attr, dir) {
-//         if (dir === 1)
-//             dir = 'ASC'
-//         if (dir === -1)
-//             dir = 'DESC'
-//         this.actualSort = [attr, (dir === 1 || dir.trim() === 'ASC' ? 1 : -1)]
-//     }
+
 //
 //     /**
 //      * szürőinputok hozzáadása - fejlécnevek alatt

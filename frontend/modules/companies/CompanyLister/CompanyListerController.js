@@ -15,10 +15,11 @@ class CompanyListerController extends ControllerParent {
 
     _tableConnector
 
-
+    _searchAndOrderParameters
 
     init() {
         console.log(this)
+        this._searchAndOrderParameters = new SearchAndOrderParameters()
     //     this.parentInit(new ListAllCompanyModel())
     //     this.windowContentPointer.hideEntityHandlerIcons(['delete'])
     //     this._model=new CompanyListerModel();
