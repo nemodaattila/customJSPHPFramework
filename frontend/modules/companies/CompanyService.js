@@ -6,11 +6,12 @@ class CompanyService extends ServiceParent {
 
     async init() {
         console.log('init')
+        console.log(this)
         return new Promise(async (resolve) => {
             if (this._model.loaded)
                 resolve(true)
             await this.getMetaParameters()
-            resolve(true)
+            resolve(await super.init())
         })
     }
 

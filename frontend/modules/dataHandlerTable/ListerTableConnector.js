@@ -7,5 +7,7 @@ class ListerTableConnector{
     constructor(controller, container) {
        this._controller = container
         this._listerTable = new ListerTable(container)
+        this._listerTable.displayTableIcons(controller.getEnabledOperations())
+        this._listerTable.drawHeaders(controller.getTableHeaderOrder())
     }
 }

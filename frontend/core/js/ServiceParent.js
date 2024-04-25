@@ -13,13 +13,17 @@ class ServiceParent {
 
     _model
 
+
     set model(value) {
         this._model = value;
     }
 
     async init() {
+        console.log('initSp')
         return new Promise(async (resolve) => {
-            this._model.setAttributeOrder();
+
+            console.log('init')
+            this._model.setTableHeaderAttributeOrder();
             resolve(true)
         })
 
@@ -33,6 +37,11 @@ class ServiceParent {
     getEnabledOperations()
     {
        return  this._model.getEnabledOperations()
+    }
+
+    getTableHeaderOrder()
+    {
+        return  this._model.tableHeaderAttributeOrder
     }
 
     // /**

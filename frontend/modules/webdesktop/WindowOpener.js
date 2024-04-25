@@ -17,7 +17,7 @@ class WindowOpener {
             tab.windowPointer = window
             window.tabPointer = tab
             DesktopController.addNewWindow(windowName, window, tab)
-            controller.init()
+            // await controller.init()
             window.displayContent(controller)
             console.log('window')
             console.dir(window)

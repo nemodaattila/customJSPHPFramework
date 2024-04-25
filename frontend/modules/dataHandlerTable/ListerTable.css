@@ -25,7 +25,8 @@
 }
 
 .view_field img {
-    vertical-align: bottom
+    vertical-align: bottom;
+    display: inline;
 }
 
 .tableContainer {
@@ -35,4 +36,26 @@
     left: 0;
     bottom: 0;
     position: absolute
+}
+
+.tableIcon {
+    height: 25px;
+    padding-right: 3px
+}
+
+.tableIcon:hover{
+    cursor: pointer
+}
+
+.columnHiderDiv {
+    display: none;
+    border: 1px solid #fff;
+    position: fixed;
+    width: 200px;
+    background: #566575;
+    right: 0;
+    top: 30px
+}
+.columnHiderDiv > span {
+    display: block
 }

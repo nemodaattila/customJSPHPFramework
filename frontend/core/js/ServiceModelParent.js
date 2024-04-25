@@ -5,11 +5,18 @@ class ServiceModelParent {
         this._loaded = value;
     }
 
-    _attributeOrder = undefined
+    _tableHeaderAttributeOrder = undefined
 
-    setAttributeOrder() {
-        if (this._attributes !== undefined) {
-            this.attributeOrder = Object.keys(this._attributes)
+    setTableHeaderAttributeOrder() {
+        console.log('setTableHeaderAttributeOrder')
+        console.log(this._tableHeaderAttributes)
+        if (this._tableHeaderAttributes !== undefined) {
+            this._tableHeaderAttributeOrder = Object.keys(this._tableHeaderAttributes)
         }
+        console.log(this)
+    }
+
+    get tableHeaderAttributeOrder() {
+        return this._tableHeaderAttributeOrder
     }
 }

@@ -6,14 +6,26 @@ class ListerTable{
 
     _intervalInSeconds = 60000;
 
+    static _id = -1
+
     constructor(container) {
-         this._view=new ListerTableView(container)
+        ListerTable._id++
+         this._view=new ListerTableView(ListerTable._id, container)
 
         this._view.displayTableElements()
-        this._view.displayOperationIcons(container.getEnabledOperations())
 
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
+    displayTableIcons(enabledOperations){
+        this._view.displayOperationIcons(enabledOperations)
+        this._view.addColumnMoveEnabler()
+    }
+
+    drawHeaders(tableAttributeOrder)
+    {
+        console.log(tableAttributeOrder)
+    }
+
 //     /**
 //      * számláló WindowContentTable id megadásához
 //      * @type {number}
@@ -186,51 +198,7 @@ class ListerTable{
 //      * rekord kezelő elemek/ikonok (add,del, modify, print) hozzáadása - tábla fölött, eventek hozzáadása
 //      * @param operationDiv {HTMLDivElement } html DOM konténer
 //      */
-//     addEntityHandlerIcons(operationDiv) {
-//         this.windowIconContainer = HtmlElementCreator.createHtmlElement('div', operationDiv)
-//         this.entityHandlerIcons['add'] = HtmlElementCreator.createHtmlElement('img', this.windowIconContainer, {
-//             src: './image/icons/add_new_icon.png', class: 'columnMoveIcon', title: 'Új rekord felvétele'
-//         })
-//         if (this.content.addModule !== undefined)
-//             this.entityHandlerIcons['add'].addEventListener('click', async (event) => {
-//                 event.stopPropagation()
-//                 await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
-//             })
-//         this.entityHandlerIcons['edit'] = HtmlElementCreator.createHtmlElement('img', this.windowIconContainer, {
-//             src: './image/icons/edit_icon.png', class: 'columnMoveIcon', title: 'Rekord kezelés'
-//         })
-//         this.entityHandlerIcons['edit'].addEventListener('click', (event) => {
-//             event.stopPropagation()
-//             this.showDetailed()
-//         })
-//         this.entityHandlerIcons['delete'] = HtmlElementCreator.createHtmlElement('img', this.windowIconContainer, {
-//             src: './image/icons/del_icon.png', class: 'columnMoveIcon', title: 'Kijelölt rekord(ok) törlése'
-//         })
-//         this.entityHandlerIcons['delete'].addEventListener('click', (event) => {
-//             event.stopPropagation()
-//             this.service.sendDeleteRequest(this.selectedRows.map(row => row.connectedObjectId))
-//         })
-//         this.entityHandlerIcons['print'] = HtmlElementCreator.createHtmlElement('img', this.windowIconContainer, {
-//             src: './image/icons/print_icon.png',
-//             class: 'columnMoveIcon',
-//             title: 'Megjelenített rekordok exportálása csv-be'
-//         })
-//         this.entityHandlerIcons['print'].addEventListener('click', (event) => {
-//             event.stopPropagation()
-//             this.printTableContent()
-//         })
-//         this.entityHandlerIcons['refresh'] = HtmlElementCreator.createHtmlElement('img', this.windowIconContainer, {
-//             src: './image/icons/refresh_icon.png',
-//             class: 'columnMoveIcon',
-//             title: 'Tábla tartalom frissítése'
-//         })
-//         this.entityHandlerIcons['refresh'].addEventListener('click', (event) => {
-//             event.stopPropagation()
-//             this.refreshRows()
-//             clearInterval(this.interval)
-//             this.interval = setInterval(() => this.refreshRows(), 60000)
-//         })
-//     }
+
 //
 //     async refreshRows() {
 //         let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
@@ -251,41 +219,12 @@ class ListerTable{
 //      * oszlopozgatást engedélyező checkbox (jobb felső sarok) megjelenítése, event hozzáadása
 //      * @param operationDiv {HTMLDivElement} iconkonténer
 //      */
-//     addColumnMoveEnabler(operationDiv) {
-//         let columnMoveEnablerDiv = HtmlElementCreator.createHtmlElement('div', operationDiv)
-//         this.moveEnablerCB = HtmlElementCreator.createHtmlElement('input', columnMoveEnablerDiv, {
-//             type: 'checkbox', id: "enableColumnMove" + this.id
-//         })
-//         let moveLabel = HtmlElementCreator.createHtmlElement('label', columnMoveEnablerDiv, {
-//             for: "enableColumnMove" + this.id
-//         })
-//         HtmlElementCreator.createHtmlElement('img', moveLabel, {
-//             src: './image/icons/column_mover.png', class: 'columnMoveIcon', title: 'Oszlop mozgatás engedélyezése'
-//         })
-//         this.moveEnablerCB.addEventListener('change', () => this.changeCursor())
-//         let columnHiderParent = HtmlElementCreator.createHtmlElement('span', columnMoveEnablerDiv, {})
-//         let columnHider = HtmlElementCreator.createHtmlElement('img', columnHiderParent, {
-//             src: './image/icons/columneditor.png',
-//             class: 'columnMoveIcon',
-//             title: 'Oszlopok megjelenítése/elrejtése'
-//         })
-//         this.columnHiderDiv = HtmlElementCreator.createHtmlElement('span', columnHiderParent, {
-//             id: 'columnHiderDiv'
-//         })
-//         columnHider.addEventListener('click', () => this.columnHiderDiv.style.display = this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
-//     }
+
 //
 //     /**
 //      * tábla header sor újrarajzolása
 //      */
-//     redrawHeaders() {
-//         this.collectHeaderNames()
-//         this.displayHeaders()
-//         this.setOrdering(this.content.defaultOrder ?? 'id', this.content.defaultOrderDir ?? 'ASC')
-//         this.displayFilters()
-//         this.addFilterEvents()
-//         this.hideDefaultColumns()
-//     }
+
 //
 //     /**
 //      * tábla atribűtumnevek lekérés

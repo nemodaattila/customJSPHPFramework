@@ -39,7 +39,7 @@ class CompanyServiceModel extends ServiceModelParent {
     _entityTriggerName = 'company'
     _onClickEventAttribs = ['id', 'name']
     _defaultOrder = 'name'
-    _attributes = {
+    _tableHeaderAttributes = {
         id: {label: 'Azonosító', type: 'string'},
         name: {label: 'Név', type: 'string'},
         address: {label: 'cím', type: 'string'},
