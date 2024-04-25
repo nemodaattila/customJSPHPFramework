@@ -1,0 +1,38 @@
+.view_field {
+
+    overflow: hidden;
+    user-select: none;
+    justify-content: space-between;
+
+
+    position: sticky;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 30px;
+    background: #566575;
+    color: #fff;
+    z-index: 109;
+    display: flex
+}
+
+.view_field > div {
+    text-align: center;
+    display: table-cell;
+    margin-left: 3px;
+    vertical-align: middle;
+    height: 30px
+}
+
+.view_field img {
+    vertical-align: bottom
+}
+
+.tableContainer {
+    overflow: scroll;
+    width: 100%;
+    top: 25px;
+    left: 0;
+    bottom: 0;
+    position: absolute
+}

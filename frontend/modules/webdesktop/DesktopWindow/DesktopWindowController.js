@@ -18,7 +18,10 @@ class DesktopWindowController {
         this._model.increaseCount();
         this._model.setIdToCount()
         this._view.displayWindow(container)
-        this.countDefaultParameters()
+        this.calcDefaultParameters()
+        // this.observer = new ResizeObserver(DesktopEventHandlers.onWindowResize)
+        // this.observer.observe(this._view.windowDiv);
+
 
     }
 
@@ -27,7 +30,7 @@ class DesktopWindowController {
         this._tabPointer = value;
     }
 
-    countDefaultParameters()
+    calcDefaultParameters()
     {
         let top,left
         let id =parseInt(this._model.id)
@@ -57,7 +60,7 @@ class DesktopWindowController {
     {
         this._view.setTitle(controller.getTitle())
         this._tabPointer.setTitle(controller.getTitle())
-        controller.displayView();
+        controller.displayView(this._view.windowBody);
     }
 
     //

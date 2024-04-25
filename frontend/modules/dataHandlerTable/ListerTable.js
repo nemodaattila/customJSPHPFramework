@@ -1,4 +1,19 @@
-class WindowContentTable extends WindowContentParent {
+class ListerTable{
+
+    _view
+
+    _interval
+
+    _intervalInSeconds = 60000;
+
+    constructor(container) {
+         this._view=new ListerTableView(container)
+
+        this._view.displayTableElements()
+        this._view.displayOperationIcons(container.getEnabledOperations())
+
+        // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
+    }
 //     /**
 //      * számláló WindowContentTable id megadásához
 //      * @type {number}
@@ -165,71 +180,7 @@ class WindowContentTable extends WindowContentParent {
 //      * eventek, observer timoutok létrehozása
 //      * további függvényhívások
 //      */
-//     init(service) {
-//         this.service = service
-//         this.id = ++WindowContentTable.idNumCounter
-//         this.container.classList.add("wideTable")
-//         this.tableDiv = HtmlElementCreator.createHtmlElement('div', this.container, {
-//             class: 'windowContent'
-//         })
-//         let operationDiv = HtmlElementCreator.createHtmlElement('div', this.tableDiv, {
-//             class: 'view_field'
-//         })
-//         this.addEntityHandlerIcons(operationDiv)
-//         this.addColumnMoveEnabler(operationDiv)
-//         this.tableContainer = HtmlElementCreator.createHtmlElement('div', this.tableDiv, {class: 'tableContainer'})
-//         this.imageContainer = HtmlElementCreator.createHtmlElement('div', this.tableDiv, {class: 'imageContainer'})
-//         let tableInnerContainer = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'dataTable'})
-//         this.dataTable = HtmlElementCreator.createHtmlElement('table', tableInnerContainer, {class: 'scrollTable'})
-//         this.pageScrollData.scrollDiv = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'scrollHeight'})
-//         this.pageScrollData.scrollDiv.style.height = this.defaultScrollHeight + "px"
-//         this.tHead = HtmlElementCreator.createHtmlElement('thead', this.dataTable, {})
-//         this.redrawHeaders()
-//         this.tBody = HtmlElementCreator.createHtmlElement('tbody', this.dataTable, {tabindex: 100 + this.id})
-//         this.tBody.addEventListener('keydown', (event) => {
-//             this.showImage()
-//             clearTimeout(this.imageTimer)
-//             let index = this.rows.indexOf(this.selectedRows[0])
-//             if (event.key === 'ArrowUp')
-//                 if (index !== 0) {
-//                     index--;
-//                     this.setSelectedRow(this.rows[index], index)
-//                     this.imageTimer = setTimeout(() => this.showImage(this.controllerPointer.model.serverData[index]), 200)
-//                 }
-//             if (event.key === 'ArrowDown')
-//                 if (index !== this.rows.length - 1) {
-//                     index++;
-//                     this.setSelectedRow(this.rows[index], index)
-//                     this.imageTimer = setTimeout(() => this.showImage(this.controllerPointer.model.serverData[index]), 200)
-//                 }
-//             if (event.key === 'PageDown' && event.shiftKey)
-//                 this.setSelectedRowWithPageJump(0)
-//             if (event.key === 'PageUp' && event.shiftKey)
-//                 this.setSelectedRowWithPageJump(1)
-//         })
-//         let lastScrollTop = 0;
-//         let newScrollTop
-//         this.tableContainer.addEventListener('scroll', () => {
-//             newScrollTop = this.tableContainer.scrollTop
-//             if (newScrollTop === lastScrollTop)
-//                 return
-//             this.scrollRows()
-//             if (newScrollTop > lastScrollTop) {
-//                 let scrollPercent = this.getScrollPercent()
-//                 if (isNaN(scrollPercent))
-//                     scrollPercent = 100
-//                 if (scrollPercent > 80) {
-//                     clearTimeout(this.scrollTimer);
-//                     this.scrollTimer = setTimeout(() => this.controllerPointer.collectSearchParamsForRequest('next'), 100)
-//                 }
-//             }
-//             lastScrollTop = newScrollTop
-//         })
-//         this.overlay = HtmlElementCreator.createSimpleHtmlElement('div', this.container, {class: 'overlay'})
-//         this.observer = new ResizeObserver(DesktopEventHandlers.onWindowResize)
-//         this.observer.observe(this.container.parentElement.parentElement);
-//         this.interval = setInterval(() => this.refreshRows(), 60000)
-//     }
+
 //
 //     /**
 //      * rekord kezelő elemek/ikonok (add,del, modify, print) hozzáadása - tábla fölött, eventek hozzáadása
