@@ -32,7 +32,7 @@
 .tableContainer {
     overflow: scroll;
     width: 100%;
-    top: 25px;
+    top: 30px;
     left: 0;
     bottom: 0;
     position: absolute
@@ -80,4 +80,34 @@ table {
 td, th {
     font-size: 13px;
     width: 170px;
+}
+
+
+.order{
+    position: absolute;
+    width: 30px;
+    top: 0
+}
+
+.order {
+    height: 20px
+}
+
+.order {
+    left: 0
+}
+
+
+.order.ordered.reversed:hover:after, .order.ordered:after, .order:hover:after {
+    display: initial;
+    content: "\2193"
+}
+
+.order.ordered:hover:after, .order.reversed:after {
+    display: initial;
+    content: "\2191"
+}
+
+ .filterRow > td > * {
+    display: block
 }

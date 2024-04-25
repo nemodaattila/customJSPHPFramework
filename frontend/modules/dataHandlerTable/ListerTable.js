@@ -25,9 +25,36 @@ class ListerTable{
     {
         this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
 
-        this._view.displayFilters()
-        this._view.addFilterEvents()
+        this._view.displayFilters(tableAttributeOrder, tableAttributeParams)
+        this._view.addFilterEvents(tableAttributeOrder, tableAttributeParams)
         this._view.hideDefaultColumns()
+    }
+
+    addFilterEvents(tableAttributeOrder, tableAttributeParams) {
+        tableAttributeOrder.forEach(id => {
+            let type = tableAttributeParams[id]?.type
+            if (type === 'none')
+                return
+            let filters = this._view.getFilterInput(id)
+            filters[0].addEventListener('input', (event) => {
+                clearTimeout(this.timeOut)
+                this.timeOut = setTimeout(() => {
+                    this.filters[id] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
+                    this.controllerPointer.collectSearchParamsForRequest('reset')
+                }, 300);
+                if (event.target.value === 'null' || event.target.value === 'notnull') {
+                    event.target.nextElementSibling.value = '';
+                    event.target.nextElementSibling.disabled = true;
+                } else event.target.nextElementSibling.disabled = false;
+            })
+            filters[1].addEventListener('input', (event) => {
+                clearTimeout(this.timeOut)
+                this.timeOut = setTimeout(() => {
+                    this.filters[id] = [event.target.previousElementSibling.value.trim(), event.target.value.trim()];
+                    this.controllerPointer.collectSearchParamsForRequest('reset')
+                }, 300);
+            })
+        })
     }
 
 //     /**
@@ -241,136 +268,12 @@ class ListerTable{
 //     /**
 //      * szürőinputok hozzáadása - fejlécnevek alatt
 //      */
-//     displayFilters() {
-//         this.filterRow = HtmlElementCreator.createSimpleHtmlElement('tr', this.tHead, {'class': 'filterRow'})
-//         this.columnNames.forEach(id => {
-//             let modelParams = this.content.headers[id]
-//             let serviceParams = this.service.tableAttributeParams[this.content.serviceTable][id]
-//             let td = HtmlElementCreator.createSimpleHtmlElement('td', this.filterRow)
-//             let filter = modelParams?.filterType ?? serviceParams['DATA_TYPE']
-//             switch (filter) {
-//                 case 'number':
-//                 case 'bigint':
-//                 case 'decimal':
-//                 case 'double':
-//                 case 'float':
-//                 case 'int':
-//                 case 'smallint':
-//                 case 'tinyint':
-//                 case 'year':
-//                 case 'string':
-//                 case 'char':
-//                 case 'longtext':
-//                 case 'mediumtext':
-//                 case 'text':
-//                 case 'tinytext':
-//                 case 'varchar':
-//                     this.filterInputs[id] = [
-//                         HtmlElementCreator.createSelectWithOptions(td, {}, {
-//                             cont: 'Tartalmaz',
-//                             start: 'Kezdődik',
-//                             end: 'Végződik',
-//                             eq: 'Egyenlő',
-//                             neq: 'Nem egyenlő',
-//                             sm: 'Kissebb mint',
-//                             sme: 'Kissebb-egyenlő mint',
-//                             gr: 'Nagyobb mint',
-//                             gre: 'Nagyobb-egyenlő mint',
-//                             null: 'Üres',
-//                             notnull: 'Nem üres'
-//                         }, true),
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {
-//                             type: (['string', 'char', 'longtext', 'mediumtext', 'text', 'tinytext', 'varchar'].findIndex(
-//                                 value => filter === value) === -1) ? "number" : 'text',
-//                             min: 0,
-//                             size: 20,
-//                         })
-//                     ]
-//                     if (serviceParams && serviceParams['CHARACTER_MAXIMUM_LENGTH'] !== undefined && serviceParams['CHARACTER_MAXIMUM_LENGTH'] !== null)
-//                         this.filterInputs[id][1].maxLength = Math.min(parseInt(serviceParams['CHARACTER_MAXIMUM_LENGTH']), 524288);
-//                     if (serviceParams && serviceParams['NUMERIC_PRECISION'] !== undefined && serviceParams['NUMERIC_PRECISION'] !== null)
-//                         this.filterInputs[id][1].max = filter === 'float' ?
-//                             (10 ** serviceParams['NUMERIC_PRECISION']) - 1 : (10 ** serviceParams['COLUMN_TYPE'].replace(/[^0-9]/g, '')) - 1;
-//                     break;
-//                 case 'select':
-//                 case 'array':
-//                     this.filterInputs[id] = [
-//                         HtmlElementCreator.createSelectWithOptions(td, {}, {
-//                             eq: 'Egyenlő',
-//                             neq: 'Nem egyenlő',
-//                             null: 'Üres',
-//                             notnull: 'Nem üres',
-//                         }, true),
-//                         HtmlElementCreator.createSelectWithOptions(td, {},
-//                             this.content.headers[id].values, filter === 'select', true)
-//                     ];
-//                     break;
-//                 case 'date':
-//                     this.filterInputs[id] = [
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'}),
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'})
-//                     ];
-//                     break;
-//                 case 'datetime':
-//                     this.filterInputs[id] = [
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'}),
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'})
-//                     ];
-//                     break;
-//                 case 'time':
-//                     this.filterInputs[id] = [
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'}),
-//                         HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'})
-//                     ];
-//                     break;
-//                 case undefined:
-//                 case 'none':
-//                     break
-//                 default:
-//                     console.log('unkown filtertype: ' + filter)
-//             }
-//             if (modelParams !== undefined && modelParams['defaultValue'] !== undefined && modelParams.hidden !== true)
-//                 this.filterInputs[id][1].value = modelParams['defaultValue']
-//             if (modelParams !== undefined && modelParams['defaultOperator'] !== undefined && modelParams.hidden !== true)
-//                 this.filterInputs[id][0].value = modelParams['defaultOperator']
-//             if (modelParams !== undefined && modelParams['disabled'] === true) {
-//                 this.filterInputs[id][0].disabled = true
-//                 this.filterInputs[id][1].disabled = true
-//             }
-//             if (filter !== undefined && filter !== 'none')
-//                 this.filters[id] = [this.filterInputs[id][0].value, this.filterInputs[id][1].value]
-//         })
-//     }
+
 //
 //     /**
 //      * szűrőesemények hozzáadása
 //      */
-//     addFilterEvents() {
-//         this.columnNames.forEach(id => {
-//             let serviceParams = this.service.tableAttributeParams[this.content.serviceTable][id]
-//             let filterType = this.content.headers[id]?.filterType ?? serviceParams['DATA_TYPE']
-//             if (filterType === 'none')
-//                 return
-//             this.filterInputs[id][0].addEventListener('input', (event) => {
-//                 clearTimeout(this.timeOut)
-//                 this.timeOut = setTimeout(() => {
-//                     this.filters[id] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
-//                     this.controllerPointer.collectSearchParamsForRequest('reset')
-//                 }, 300);
-//                 if (event.target.value === 'null' || event.target.value === 'notnull') {
-//                     event.target.nextElementSibling.value = '';
-//                     event.target.nextElementSibling.disabled = true;
-//                 } else event.target.nextElementSibling.disabled = false;
-//             })
-//             this.filterInputs[id][1].addEventListener('input', (event) => {
-//                 clearTimeout(this.timeOut)
-//                 this.timeOut = setTimeout(() => {
-//                     this.filters[id] = [event.target.previousElementSibling.value.trim(), event.target.value.trim()];
-//                     this.controllerPointer.collectSearchParamsForRequest('reset')
-//                 }, 300);
-//             })
-//         })
-//     }
+
 //
 //     /**
 //      * modelben rejtettként megadott táblák elrejtése

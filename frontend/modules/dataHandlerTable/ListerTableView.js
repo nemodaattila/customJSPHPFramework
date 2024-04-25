@@ -1,46 +1,38 @@
 class ListerTableView {
-
     _mainContainer
-
     _operationDiv
-
     _tableContainer
-
     _tableDiv
-
     _dataTable
-
     _tHead
-
     _tBody
-
     _tableIconContainer
-
     _iconPath = "./modules/dataHandlerTable/"
-
     _id
-
     _headerRow
+    _filterRow
+    _filterInputs = {}
 
-    constructor(id,tableContainer) {
-     this._id = id
+    getFilterInput(name)
+    {
+        return this._filterInputs[name]
+    }
+
+    constructor(id, tableContainer) {
+        this._id = id
         this._mainContainer = tableContainer;
     }
 
-        displayTableElements() {
+    displayTableElements() {
         this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
-                class: 'view_field'
-            })
+            class: 'view_field'
+        })
         this._tableContainer = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'tableContainer'
         })
-            this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer)
-            this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
-            this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
-
-
-
-
+        this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer)
+        this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
+        this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
         // this.addEntityHandlerIcons(operationDiv)
         // this.addColumnMoveEnabler(operationDiv)
         // let tableInnerContainer = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'dataTable'})
@@ -90,13 +82,11 @@ class ListerTableView {
         //
     }
 
-    displayOperationIcons(enabledOperations)
-    {
+    displayOperationIcons(enabledOperations) {
         console.log(enabledOperations)
-
         this._tableIconContainer = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
         let adder = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath+'/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
+            src: this._iconPath + '/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
         })
         if (enabledOperations.add)
             adder.addEventListener('click', async (event) => {
@@ -104,25 +94,23 @@ class ListerTableView {
                 await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
             })
         let editor = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath+'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
+            src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
         })
         if (enabledOperations.edit)
-
-        editor.addEventListener('click', (event) => {
-            event.stopPropagation()
-            this.showDetailed()
-        })
+            editor.addEventListener('click', (event) => {
+                event.stopPropagation()
+                this.showDetailed()
+            })
         let eraser = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath+'del_icon.png', class: 'tableIcon', title: 'Kijelölt rekord(ok) törlése'
+            src: this._iconPath + 'del_icon.png', class: 'tableIcon', title: 'Kijelölt rekord(ok) törlése'
         })
         if (enabledOperations.deletable)
-
-        eraser.addEventListener('click', (event) => {
-            event.stopPropagation()
-            this.service.sendDeleteRequest(this.selectedRows.map(row => row.connectedObjectId))
-        })
+            eraser.addEventListener('click', (event) => {
+                event.stopPropagation()
+                this.service.sendDeleteRequest(this.selectedRows.map(row => row.connectedObjectId))
+            })
         let printer = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath+'print_icon.png',
+            src: this._iconPath + 'print_icon.png',
             class: 'tableIcon',
             title: 'Megjelenített rekordok exportálása csv-be'
         })
@@ -131,7 +119,7 @@ class ListerTableView {
             this.printTableContent()
         })
         let refresher = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath+'refresh_icon.png',
+            src: this._iconPath + 'refresh_icon.png',
             class: 'tableIcon',
             title: 'Tábla tartalom frissítése'
         })
@@ -152,12 +140,12 @@ class ListerTableView {
             for: "enableColumnMove" + this._id
         })
         HtmlElementCreator.createHtmlElement('img', moveLabel, {
-            src: this._iconPath+'column_mover.png', class: 'tableIcon', title: 'Oszlop mozgatás engedélyezése'
+            src: this._iconPath + 'column_mover.png', class: 'tableIcon', title: 'Oszlop mozgatás engedélyezése'
         })
         this.moveEnablerCB.addEventListener('change', () => this.changeCursor())
         let columnHiderParent = HtmlElementCreator.createHtmlElement('span', columnMoveEnablerDiv, {})
         let columnHider = HtmlElementCreator.createHtmlElement('img', columnHiderParent, {
-            src: this._iconPath+'column_editor.png',
+            src: this._iconPath + 'column_editor.png',
             class: 'tableIcon',
             title: 'Oszlopok megjelenítése/elrejtése'
         })
@@ -166,8 +154,6 @@ class ListerTableView {
         })
         columnHider.addEventListener('click', () => this.columnHiderDiv.style.display = this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
     }
-
-
 
     displayTableHeaders(attributeOrder, attributeParams) {
         if (this._tHead.hasChildNodes())
@@ -219,4 +205,102 @@ class ListerTableView {
         })
     }
 
+    displayFilters(attributeOrder, attributeParams) {
+        this._filterRow = HtmlElementCreator.createSimpleHtmlElement('tr', this._tHead, {'class': 'filterRow'})
+        attributeOrder.forEach(id => {
+            let modelParams = attributeParams[id]
+            let td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
+            let filter = modelParams?.type ?? 'string'
+            switch (filter) {
+                case 'number':
+                case 'bigint':
+                case 'decimal':
+                case 'double':
+                case 'float':
+                case 'int':
+                case 'smallint':
+                case 'tinyint':
+                case 'year':
+                case 'string':
+                case 'char':
+                case 'longtext':
+                case 'mediumtext':
+                case 'text':
+                case 'tinytext':
+                case 'varchar':
+                    this._filterInputs[id] = [
+                        HtmlElementCreator.createSelectWithOptions(td, {}, {
+                            cont: 'Tartalmaz',
+                            start: 'Kezdődik',
+                            end: 'Végződik',
+                            eq: 'Egyenlő',
+                            neq: 'Nem egyenlő',
+                            sm: 'Kissebb mint',
+                            sme: 'Kissebb-egyenlő mint',
+                            gr: 'Nagyobb mint',
+                            gre: 'Nagyobb-egyenlő mint',
+                            null: 'Üres',
+                            notnull: 'Nem üres'
+                        }, true),
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {
+                            type: (['string', 'char', 'longtext', 'mediumtext', 'text', 'tinytext', 'varchar'].findIndex(
+                                value => filter === value) === -1) ? "number" : 'text',
+                            min: 0,
+                            size: 20,
+                        })
+                    ]
+                    if (modelParams.maxLength !== undefined)
+                        this._filterInputs[id][1].maxLength = Math.min(parseInt(modelParams.maxLength), 524288);
+                    if (modelParams.precision !== undefined)
+                        this._filterInputs[id][1].max = (10 ** modelParams.precision) - 1
+                    break;
+                case 'select':
+                case 'array':
+                    this._filterInputs[id] = [
+                        HtmlElementCreator.createSelectWithOptions(td, {}, {
+                            eq: 'Egyenlő',
+                            neq: 'Nem egyenlő',
+                            null: 'Üres',
+                            notnull: 'Nem üres',
+                        }, true),
+                        HtmlElementCreator.createSelectWithOptions(td, {},
+                            modelParams.values, filter === 'select', true)
+                    ];
+                    break;
+                case 'date':
+                    this._filterInputs[id] = [
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'}),
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'})
+                    ];
+                    break;
+                case 'datetime':
+                    this._filterInputs[id] = [
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'}),
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'})
+                    ];
+                    break;
+                case 'time':
+                    this._filterInputs[id] = [
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'}),
+                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'})
+                    ];
+                    break;
+                case undefined:
+                case 'none':
+                    break
+                default:
+                    console.log('unkown filtertype: ' + filter)
+            }
+            if (modelParams !== undefined && modelParams['defaultValue'] !== undefined && modelParams.hidden !== true)
+                this._filterInputs[id][1].value = modelParams['defaultValue']
+            if (modelParams !== undefined && modelParams['defaultOperator'] !== undefined && modelParams.hidden !== true)
+                this._filterInputs[id][0].value = modelParams['defaultOperator']
+            if (modelParams !== undefined && modelParams['disabled'] === true) {
+                this._filterInputs[id][0].disabled = true
+                this._filterInputs[id][1].disabled = true
+            }
+            // if (filter !== undefined && filter !== 'none')
+            //     this._filters[id] = [this.filterInputs[id][0].value, this.filterInputs[id][1].value]
+        })
+    }
 }

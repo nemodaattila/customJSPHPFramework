@@ -5,8 +5,8 @@ Includer.setIncludableFileSource(
             fileNames: [
                 'ListerTable.js',
                 'ListerTableView.js',
-                'ListerTableConnector.js',
-                'ListerTable.css'
+                'ListerTable.css',
+                'SearchAndOrderParameters.js'
 
                 // 'CompanyListerView.js',
                 // 'CompanyListerModel.js',
