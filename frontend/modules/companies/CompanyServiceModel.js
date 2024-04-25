@@ -10,23 +10,28 @@ class CompanyServiceModel extends ServiceModelParent {
 
     selectedRecord = null
 
+    getTitle(name)
+    {
+        return this._moduleParams[name].title
+    }
+
     _moduleParams = {
         list: {
-            'module': 'companyLister',
-            'title': 'Cégek'
+            module: 'companyLister',
+            title: 'Cégek'
         },
         edit: {
-            'module': 'companyEditor',
-            'title': 'Cég szerkesztése',
-            'windowName': 'companyEditor'
+            module: 'companyEditor',
+            title: 'Cég szerkesztése',
+            windowName: 'companyEditor'
         },
         multiEdit: {
-            'module': 'multipleCompanyEditor',
-            'title': 'Cégek szerkesztése'
+            module: 'multipleCompanyEditor',
+            title: 'Cégek szerkesztése'
         },
         add: {
-            'module': 'companyAdder',
-            'title': 'Cég felvétele'
+            module: 'companyAdder',
+            title: 'Cég felvétele'
         },
         deletable: true
     }
@@ -87,6 +92,17 @@ class CompanyServiceModel extends ServiceModelParent {
                 value: this._selectedId,
                 operator: 'eq'
             }],
+        }
+    }
+
+    getEnabledOperations()
+    {
+        return {
+            list: this._moduleParams.list !== undefined,
+            edit: this._moduleParams.edit !== undefined,
+            multiEdit: this._moduleParams.multiEdit !== undefined,
+            add: this._moduleParams.add !== undefined,
+            deletable: this._moduleParams.deletable
         }
     }
 }

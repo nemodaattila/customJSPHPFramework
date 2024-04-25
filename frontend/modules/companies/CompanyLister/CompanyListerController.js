@@ -10,6 +10,13 @@ class CompanyListerController extends ControllerParent {
 
     _type='list'
 
+    // _pageTurnerType = 'infinity'
+    _pageTurnerType = 'pageTurner'
+
+    _tableConnector
+
+
+
     init() {
         console.log(this)
     //     this.parentInit(new ListAllCompanyModel())
@@ -23,8 +30,13 @@ class CompanyListerController extends ControllerParent {
         return this.service.getTitle(this._type)
     }
 
-    displayView()
+    displayView(windowBody)
     {
+        this._tableConnector = new ListerTableConnector(this, windowBody)
+    }
 
+    getEnabledOperations()
+    {   //DO rethink with AUTH in mind
+        return this.service.getEnabledOperations()
     }
 }

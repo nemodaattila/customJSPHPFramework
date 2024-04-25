@@ -19,10 +19,7 @@ class CompanyService extends ServiceParent {
         this._model.loaded = true
     }
 
-    getTitle(name)
-    {
-        return this._model.getTitle(name)
-    }
+
 
     // /**
     //  * új cég beküldése

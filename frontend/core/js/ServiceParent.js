@@ -23,6 +23,16 @@ class ServiceParent {
         })
     }
 
+    getTitle(name)
+    {
+        return this._model.getTitle(name)
+    }
+
+    getEnabledOperations()
+    {
+        this._model.getEnabledOperations()
+    }
+
     // /**
     //  * különböző modulokhoz tartozó betöltendő fájlok: C: controller, M: model, V:View
     //  * @type {{}}
