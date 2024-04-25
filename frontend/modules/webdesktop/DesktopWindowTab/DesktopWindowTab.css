@@ -14,6 +14,16 @@
     border-left: 0 solid #000
 }
 
+.windowTab .titleDiv {
+    left: 32px;
+    right: 170px;
+    position: absolute;
+    /*top: 50%;*/
+    white-space: nowrap;
+    text-align: center
+
+}
+
 .resetWindowIcon {
     width: 25px;
     background-size: cover;

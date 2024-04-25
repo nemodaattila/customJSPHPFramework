@@ -8,6 +8,7 @@ class DesktopWindowController {
 
     _view
 
+    _tabPointer
 
     constructor(container) {
         //     this.parentInit(new ListAllCompanyModel())
@@ -19,6 +20,11 @@ class DesktopWindowController {
         this._view.displayWindow(container)
         this.countDefaultParameters()
 
+    }
+
+    set tabPointer(value)
+    {
+        this._tabPointer = value;
     }
 
     countDefaultParameters()
@@ -45,6 +51,13 @@ class DesktopWindowController {
                         break
                 }
                 this._view.setLeftAndTopParameters(left,top)
+    }
+
+    displayContent(controller)
+    {
+        this._view.setTitle(controller.getTitle())
+        this._tabPointer.setTitle(controller.getTitle())
+        controller.displayView();
     }
 
     //

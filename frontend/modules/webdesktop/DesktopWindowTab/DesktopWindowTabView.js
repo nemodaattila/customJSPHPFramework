@@ -1,16 +1,20 @@
 class DesktopWindowTabView {
 
+    _windowTab
+
+    _labelDiv
+
     createElements(container)
     {
 
-        this.windowTab = HtmlElementCreator.createHtmlElement('div', container, {
+        this._windowTab = HtmlElementCreator.createHtmlElement('div', container, {
             class: 'windowTab',
         })
-        this.windowTab.addEventListener('mousedown', () => Desktop.switchActiveWindow(this))
-        HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+        this._windowTab.addEventListener('mousedown', () => Desktop.switchActiveWindow(this))
+        this._labelDiv=HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             class: 'titleDiv'
         })
-        let resetIcon = HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+        let resetIcon = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             title: 'Ablak alapméretre állítása', class: 'resetWindowIcon'
         })
         resetIcon.addEventListener('click', () => {
@@ -23,11 +27,16 @@ class DesktopWindowTabView {
             this.contentObject.setTableZoom('1', false)
             this.zoomWindow('1')
         })
-        let closeIcon = HtmlElementCreator.createHtmlElement('div', this.windowTab, {
+        let closeIcon = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             title: 'Bezárás', class: 'close'
         })
         closeIcon.addEventListener('click', () => this.closeWindow())
         closeIcon.style.top = '0'
+    }
+
+    setTitle(title)
+    {
+        this._labelDiv.innerHTML=title
     }
 
 }

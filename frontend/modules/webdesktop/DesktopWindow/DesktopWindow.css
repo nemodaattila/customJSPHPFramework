@@ -22,7 +22,7 @@
     background: #d0d8e0;
 }
 
-.windowTitleDiv{
+.windowHeaderDiv{
     position: absolute;
     top: 0;
     left: 0;
@@ -35,13 +35,15 @@
     font-size: 23px;
 }
 
-.titleDiv {
+.windowHeaderDiv .titleDiv {
     left: 32px;
-    right: 120px;
+    right: 170px;
     overflow: hidden;
     position: absolute;
-    top: 50%;
-    white-space: nowrap
+    /*top: 50%;*/
+    white-space: nowrap;
+    text-align: center
+
 }
 
 .zoom {

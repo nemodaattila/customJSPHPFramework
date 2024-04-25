@@ -3,7 +3,7 @@ class DesktopWindowView {
 
     _windowBody
 
-    _windowTitleDiv
+    _windowHeaderDiv
 
     _titleDiv
 
@@ -14,12 +14,12 @@ class DesktopWindowView {
         this._windowDiv            .style.zIndex = "100"
         this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
 
-        this._windowTitleDiv = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowTitleDiv'})
-        this.titleDiv = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        this._windowHeaderDiv = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowHeaderDiv'})
+        this._titleDiv = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'titleDiv'
         })
         this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
-        this.titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
+        this._titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
         ))
         this.displayWindowIcons()
         // this.displayWindowTab()
@@ -32,7 +32,7 @@ class DesktopWindowView {
             this._windowDiv.style.top = top
     }
     displayWindowIcons() {
-        this.zoomDiv = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        this.zoomDiv = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'zoom', title: 'Nagyítás',
         })
         this.zoomDiv.addEventListener('mousedown', (event) => event.stopPropagation())
@@ -47,31 +47,36 @@ class DesktopWindowView {
             zoomChanger.value = 1
             zoomChanger.dispatchEvent(new window.Event('change', {bubbles: true}))
         })
-        let pinner = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        let pinner = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'pin', title: 'Rögzítés mint legfelső ablak',
         })
         pinner.addEventListener('click', (event) => {
             event.stopPropagation()
             this.windowDiv.classList.toggle('pinned')
         })
-        let miniaturizer = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        let miniaturizer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'miniaturise', title: 'kis méret',
         })
         miniaturizer.addEventListener('click', (event) => {
             event.stopPropagation()
             this.miniaturiseWindow()
         })
-        let maximalizer = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        let maximalizer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'maximise', title: 'Teljes méret',
         })
         maximalizer.addEventListener('click', () => this.maximizeWindow())
-        let closer = HtmlElementCreator.createHtmlElement('div', this._windowTitleDiv, {
+        let closer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'close', title: 'Bezárás',
         })
         closer.addEventListener('click', (event) => {
             event.stopPropagation()
             this.closeWindow()
         })
+    }
+
+    setTitle(title)
+    {
+        this._titleDiv.innerHTML=title
     }
 
 }

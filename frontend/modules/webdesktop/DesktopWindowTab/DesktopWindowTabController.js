@@ -16,6 +16,10 @@ class DesktopWindowTabController {
         this._view.createElements(container)
     }
 
+    setTitle(title)
+    {
+        this._view.setTitle(title)
+    }
 
 
 

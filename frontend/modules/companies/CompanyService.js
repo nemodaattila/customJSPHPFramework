@@ -19,29 +19,11 @@ class CompanyService extends ServiceParent {
         this._model.loaded = true
     }
 
+    getTitle(name)
+    {
+        return this._model.getTitle(name)
+    }
 
-    // /**
-    //  * cég-típusok pl: viszonteladó
-    //  * @type {Object | null}
-    //  */
-    // static companyTypes = null;
-    // /**
-    //  * beszállító cég-típusok beszállitó / nem beszállító
-    //  * @type {Object | null}
-    //  */
-    // static supplierCompanyTypes = null
-    // /**
-    //  * kiválasztott rekord
-    //  * @type {Object|null}
-    //  */
-
-    // static getUrl = 'getCompanies'
-    //
-    //
-    // /**
-    //  * cégekkel kapcsolatos meta-paraméterek lekérése szerverről - típusok
-    //  */
-    //
     // /**
     //  * új cég beküldése
     //  * @param data {Object} cégadatok

@@ -2,6 +2,7 @@
  * controllerek ősosztálya
  */
 class ControllerParent {
+
     _model
 
     set model(value) {
@@ -15,6 +16,10 @@ class ControllerParent {
     }
 
     _service
+
+    get service() {
+        return this._service;
+    }
 
     set service(value) {
         this._service = value;
