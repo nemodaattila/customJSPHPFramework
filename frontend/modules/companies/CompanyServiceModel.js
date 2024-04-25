@@ -1,4 +1,43 @@
 class CompanyServiceModel extends ServiceModelParent {
+    get companyTypes() {
+        return this._companyTypes;
+    }
+
+    get selectedId() {
+        return this._selectedId;
+    }
+
+    get selectedRecord() {
+        return this._selectedRecord;
+    }
+
+    get moduleParams() {
+        return this._moduleParams;
+    }
+
+    get restName() {
+        return this._restName;
+    }
+
+    get entityTriggerName() {
+        return this._entityTriggerName;
+    }
+
+    get onClickEventAttribs() {
+        return this._onClickEventAttribs;
+    }
+
+    get defaultOrder() {
+        return this._defaultOrder;
+    }
+
+    get tableHeaderAttributes() {
+        return this._tableHeaderAttributes;
+    }
+
+    get editSubMenuParams() {
+        return this._editSubMenuParams;
+    }
     _companyTypes = {0: 'Nem vevő'}
     set companyTypes(types) {
         console.log(types)
@@ -8,7 +47,7 @@ class CompanyServiceModel extends ServiceModelParent {
 
     _selectedId
 
-    selectedRecord = null
+    _selectedRecord = null
 
     getTitle(name)
     {

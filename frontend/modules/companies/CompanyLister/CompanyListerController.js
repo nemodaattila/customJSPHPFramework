@@ -39,4 +39,10 @@ class CompanyListerController extends ControllerParent {
     {   //DO rethink with AUTH in mind
         return this.service.getEnabledOperations()
     }
+
+    getTableHeaderOrder()
+    {   //DO rethink with AUTH in mind
+        return this.service.getTableHeaderOrder()
+    }
+
 }

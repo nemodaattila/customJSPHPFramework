@@ -2,6 +2,9 @@
  * controllerek ősosztálya
  */
 class ControllerParent {
+    get model() {
+        return this._model;
+    }
 
     _model
 

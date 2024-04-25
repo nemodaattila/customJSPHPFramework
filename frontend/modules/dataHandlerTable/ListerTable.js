@@ -21,9 +21,13 @@ class ListerTable{
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder)
+    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder)
     {
-        console.log(tableAttributeOrder)
+        this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
+        this._view.setOrdering(defaultOrder ?? 'id', 'ASC')
+        this._view.displayFilters()
+        this._view.addFilterEvents()
+        this._view.hideDefaultColumns()
     }
 
 //     /**
@@ -225,67 +229,12 @@ class ListerTable{
 //      * tábla header sor újrarajzolása
 //      */
 
-//
-//     /**
-//      * tábla atribűtumnevek lekérés
-//      */
-//     collectHeaderNames() {
-//         this.columnNames = Object.keys(this.content.headers)
-//     }
+
 //
 //     /**
 //      * tábla header-ök hozzáadása theadbe
 //      */
-//     displayHeaders() {
-//         if (this.tHead.hasChildNodes())
-//             HtmlElementCreator.emptyDOMElement(this.tHead)
-//         this.headerRow = HtmlElementCreator.createHtmlElement('tr', this.tHead, {})
-//         this.columnNames.forEach((id) => {
-//             let modelParams = this.content.headers[id]
-//             let serviceParams = this.service.tableAttributeParams[this.content.serviceTable][id]
-//             let th = HtmlElementCreator.createHtmlElement('th', this.headerRow, {})
-//             th.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveTh(event, th, this))
-//             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
-//             if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
-//                 orderDiv.classList.add('order')
-//                 orderDiv.addEventListener('click', () => {
-//                     this.initSorting(id, orderDiv)
-//                 })
-//             }
-//             HtmlElementCreator.createHtmlElement('div', th, {class: 'text', innerHTML: modelParams?.label ?? id})
-//             let resizeElement = HtmlElementCreator.createHtmlElement('div', th, {class: 'resize'})
-//             resizeElement.addEventListener('mousedown', (event) => {
-//                 event.stopPropagation()
-//                 DesktopEventHandlers.startResize(event, th, this.dataTable, this)
-//             })
-//             resizeElement.addEventListener('dblclick', (event) => {
-//                 event.stopImmediatePropagation()
-//                 DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(id))
-//             })
-//             let span = HtmlElementCreator.createSimpleHtmlElement('span', this.columnHiderDiv,)
-//             let hcb = HtmlElementCreator.createSimpleHtmlElement('input', span, {
-//                 type: 'checkbox',
-//                 id: 'hcb-' + this.id + "-" + id,
-//                 checked: 'checked'
-//             })
-//             HtmlElementCreator.createSimpleHtmlElement('label', span, {
-//                 for: 'hcb-' + this.id + "-" + id,
-//                 innerHTML: modelParams?.label ?? serviceParams['COLUMN_NAME']
-//             })
-//             hcb.addEventListener('click', (event) => {
-//                 event.stopPropagation()
-//                 if (hcb.checked) {
-//                     DesktopEventHandlers.reDisplayColumn(th, this.dataTable)
-//                     if (this.autoHeaderSetting === false)
-//                         this.saveHeaderParams()
-//                 } else {
-//                     DesktopEventHandlers.hideColumn(th, this.dataTable, this, id)
-//                     if (this.autoHeaderSetting === false)
-//                         this.saveHeaderParams()
-//                 }
-//             })
-//         })
-//     }
+
 //
 //     /**
 //      * sorrendezési paraméterek beállítása

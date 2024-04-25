@@ -20,6 +20,8 @@ class ListerTableView {
 
     _id
 
+    _headerRow
+
     constructor(id,tableContainer) {
      this._id = id
         this._mainContainer = tableContainer;
@@ -165,13 +167,56 @@ class ListerTableView {
         columnHider.addEventListener('click', () => this.columnHiderDiv.style.display = this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
     }
 
-    drawHeaders(attributeOrder) {
-        this.collectHeaderNames()
-        this.displayHeaders()
-        this.setOrdering(this.content.defaultOrder ?? 'id', this.content.defaultOrderDir ?? 'ASC')
-        this.displayFilters()
-        this.addFilterEvents()
-        this.hideDefaultColumns()
+
+
+    displayTableHeaders(attributeOrder, attributeParams) {
+        if (this._tHead.hasChildNodes())
+            HtmlElementCreator.emptyDOMElement(this._tHead)
+        this.headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
+        attributeOrder.forEach((id) => {
+            let modelParams = attributeParams[id]
+            let th = HtmlElementCreator.createHtmlElement('th', this.headerRow, {})
+            th.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveTh(event, th, this))
+            let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
+            if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
+                orderDiv.classList.add('order')
+                orderDiv.addEventListener('click', () => {
+                    this.initSorting(id, orderDiv)
+                })
+            }
+            HtmlElementCreator.createHtmlElement('div', th, {class: 'text', innerHTML: modelParams?.label ?? id})
+            let resizeElement = HtmlElementCreator.createHtmlElement('div', th, {class: 'resize'})
+            resizeElement.addEventListener('mousedown', (event) => {
+                event.stopPropagation()
+                DesktopEventHandlers.startResize(event, th, this.dataTable, this)
+            })
+            resizeElement.addEventListener('dblclick', (event) => {
+                event.stopImmediatePropagation()
+                DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(id))
+            })
+            let span = HtmlElementCreator.createSimpleHtmlElement('span', this.columnHiderDiv,)
+            let hcb = HtmlElementCreator.createSimpleHtmlElement('input', span, {
+                type: 'checkbox',
+                id: 'hcb-' + this._id + "-" + id,
+                checked: 'checked'
+            })
+            HtmlElementCreator.createSimpleHtmlElement('label', span, {
+                for: 'hcb-' + this._id + "-" + id,
+                innerHTML: modelParams?.label
+            })
+            hcb.addEventListener('click', (event) => {
+                event.stopPropagation()
+                if (hcb.checked) {
+                    DesktopEventHandlers.reDisplayColumn(th, this.dataTable)
+                    if (this.autoHeaderSetting === false)
+                        this.saveHeaderParams()
+                } else {
+                    DesktopEventHandlers.hideColumn(th, this.dataTable, this, id)
+                    if (this.autoHeaderSetting === false)
+                        this.saveHeaderParams()
+                }
+            })
+        })
     }
 
 }

@@ -1,8 +1,5 @@
 class CompanyService extends ServiceParent {
-    _model
-    set model(value) {
-        this._model = value;
-    }
+
 
     async init() {
         console.log('init')

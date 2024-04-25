@@ -44,6 +44,11 @@ class ServiceParent {
         return  this._model.tableHeaderAttributeOrder
     }
 
+    get model()
+    {
+        return this._model;
+    }
+
     // /**
     //  * különböző modulokhoz tartozó betöltendő fájlok: C: controller, M: model, V:View
     //  * @type {{}}
