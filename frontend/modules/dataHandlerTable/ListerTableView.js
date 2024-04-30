@@ -1,4 +1,8 @@
 class ListerTableView {
+    get id() {
+        return this._id;
+    }
+    _columnMoveEnablerCB
     _mainContainer
     _operationDiv
     _tableContainer
@@ -12,6 +16,12 @@ class ListerTableView {
     _headerRow
     _filterRow
     _filterInputs = {}
+    _rows
+    _selectedRows = []
+    _lastClickedRow = undefined
+    _actualSortElement = null
+
+
 
     getFilterInput(name)
     {
@@ -33,9 +43,6 @@ class ListerTableView {
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer)
         this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
         this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
-        // this.addEntityHandlerIcons(operationDiv)
-        // this.addColumnMoveEnabler(operationDiv)
-        // let tableInnerContainer = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'dataTable'})
         // this.pageScrollData.scrollDiv = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'scrollHeight'})
         // this.pageScrollData.scrollDiv.style.height = this.defaultScrollHeight + "px"
         // this.redrawHeaders()
@@ -133,7 +140,7 @@ class ListerTableView {
 
     addColumnMoveEnabler() {
         let columnMoveEnablerDiv = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
-        this.moveEnablerCB = HtmlElementCreator.createHtmlElement('input', columnMoveEnablerDiv, {
+        this._columnMoveEnablerCB = HtmlElementCreator.createHtmlElement('input', columnMoveEnablerDiv, {
             type: 'checkbox', id: "enableColumnMove" + this._id
         })
         let moveLabel = HtmlElementCreator.createHtmlElement('label', columnMoveEnablerDiv, {
@@ -142,7 +149,7 @@ class ListerTableView {
         HtmlElementCreator.createHtmlElement('img', moveLabel, {
             src: this._iconPath + 'column_mover.png', class: 'tableIcon', title: 'Oszlop mozgatás engedélyezése'
         })
-        this.moveEnablerCB.addEventListener('change', () => this.changeCursor())
+        this._columnMoveEnablerCB.addEventListener('change', () => this.changeCursor())
         let columnHiderParent = HtmlElementCreator.createHtmlElement('span', columnMoveEnablerDiv, {})
         let columnHider = HtmlElementCreator.createHtmlElement('img', columnHiderParent, {
             src: this._iconPath + 'column_editor.png',

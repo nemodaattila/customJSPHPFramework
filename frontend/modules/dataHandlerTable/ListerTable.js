@@ -2,11 +2,16 @@ class ListerTable{
 
     _view
 
-    _interval
+    _interval // refreshInterval
 
     _intervalInSeconds = 60000;
 
     static _id = -1
+
+    autoHeaderSetting = false
+
+
+     dblClickTimer = false
 
     constructor(container) {
         ListerTable._id++
@@ -26,8 +31,7 @@ class ListerTable{
         this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
 
         this._view.displayFilters(tableAttributeOrder, tableAttributeParams)
-        this._view.addFilterEvents(tableAttributeOrder, tableAttributeParams)
-        this._view.hideDefaultColumns()
+        this.addFilterEvents(tableAttributeOrder, tableAttributeParams)
     }
 
     addFilterEvents(tableAttributeOrder, tableAttributeParams) {
@@ -37,6 +41,7 @@ class ListerTable{
                 return
             let filters = this._view.getFilterInput(id)
             filters[0].addEventListener('input', (event) => {
+                event.stopPropagation()
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
                     this.filters[id] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
@@ -54,140 +59,21 @@ class ListerTable{
                     this.controllerPointer.collectSearchParamsForRequest('reset')
                 }, 300);
             })
+            if (tableAttributeParams[id]?.hidden === true)
+                document.getElementById('hcb-' + this._view.id + "-" + id).click()
         })
     }
 
-//     /**
-//      * számláló WindowContentTable id megadásához
-//      * @type {number}
-//      */
-//     static idNumCounter = -1
-//     /**
-//      * WindowContentTable id
-//      * @type {number}
-//      */
-//     id
-//     /**
-//      * a táblát tartalmazó és a műveletikonokat tartalmazó div
-//      * @type HTMLDivElement
-//      */
-//     tableDiv
-//     /**
-//      * a tábla dom elementje
-//      * @type HTMLTableElement
-//      */
-//     dataTable
-//     /**
-//      * tábla fejléc DOM element
-//      * @type {HTMLTableSectionElement}
-//      */
-//     tHead
-//     /**
-//      * rekordok DOM elementje
-//      * @type {HTMLTableSectionElement}
-//      */
-//     tBody
-//     /**
-//      * a tábla oszlopmozgatását engedélyező checkbox DOM-ja
-//      * @type {HTMLInputElement}
-//      */
-//     moveEnablerCB
-//     /**
-//      * megjelenített sorok DOM gyüjteménye
-//      * @type {HTMLTableRowElement[]}
-//      */
-//     rows = []
-//     /**
-//      * kiválasztott sorok DOM gyüjteménye
-//      * @type {HTMLTableRowElement[]}
-//      */
-//     selectedRows = []
-//     /**
-//      * szűrők gyüjteménye - input párok - művelet+érték
-//      * @type {HTMLInputElement|HTMLSelectElement[][]}
-//      */
-//     filterInputs = []
-//     /**
-//      * szűrők értékei - művelet+érték
-//      * @type {string[][]}
-//      */
-//     filters = []
-//     /**
-//      * attribútum/szűrő nevek
-//      * @type {string[]}
-//      */
-//     columnNames = []
-//     /**
-//      * zoom
-//      * @type {number|string}
-//      */
-//     zoom = 1;
-//     /**
-//      * adatlekérésnél az eltolás (offset) mennyisége
-//      * @type {number}
-//      */
-//
-//     /**
-//      * az aktív sorrendezési HTML elem (nem a fejléc, a nyíl)
-//      * @type {null|HTMLDivElement}
-//      */
-//     actualSortElement = null
-//     /**
-//      * rekordkezelő ikonok - add,delete, modify, stb
-//      * @type {{}}
-//      */
-//     entityHandlerIcons = {}
-//     /**
-//      * ikonokat tartalmazó container
-//      * @type {HTMLDivElement}
-//      */
-//     windowIconContainer
-//     /**
-//      * tábla oszlop megjelenítő/elrejtő konténere
-//      * @type {HTMLDivElement}
-//      */
-//     columnHiderDiv
-//     /**
-//      * automatikus header paraméter mentés altív-e?
-//      * @type {boolean}
-//      */
-//     autoHeaderSetting = false
-//     /**
-//      * a táblát tartalmazó div
-//      * @type HTMLDivElement
-//      */
-//     tableContainer
-//     /**
-//      * képet tartalmazó div pl: számlák sorra kattintva oldalt
-//      * @type HTMLDivElement
-//      */
-//     imageContainer
-//     /**
-//      * kapcsolódó modul service
-//      */
-//     service
-//     /**
+
+
+
+
+
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
 //      */
 //     scrollTimer
-//     /**
-//      * timer a kép betöltéséhez, ne legyen minden kattintásra feleslegesen request
-//      */
-//     imageTimer
-//     /**
-//      * observer az ablak méretének figyeléséhez
-//      */
-//     observer
-//     /**
-//      * utoljára kattintott sor DOM elementje
-//      * @type {HTMLTableRowElement| undefined}
-//      */
-//     lastClickedRow = undefined
-//     /**
-//      * duplakattintás kezelése - kétszer kattintott e a user
-//      * @type {boolean|number}
-//      */
-//     dblClickTimer = false
+
+
 //     /**
 //      * szürke "fedél" ha a tábla frissít, megjelenik ilyemkor nem lehet kattintani
 //      */
@@ -212,20 +98,7 @@ class ListerTable{
 //         this.observer.unobserve(this.container.parentElement.parentElement)
 //         clearInterval(this.interval)
 //     }
-//
-//     /**
-//      * DOM elemek létrehozása - konténer, tábla
-//      * eventek, observer timoutok létrehozása
-//      * további függvényhívások
-//      */
-
-//
-//     /**
-//      * rekord kezelő elemek/ikonok (add,del, modify, print) hozzáadása - tábla fölött, eventek hozzáadása
-//      * @param operationDiv {HTMLDivElement } html DOM konténer
-//      */
-
-//
+ű
 //     async refreshRows() {
 //         let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
 //         this.selectedRows = []
@@ -240,51 +113,7 @@ class ListerTable{
 //                 this.lastClickedRow = row
 //         })
 //     }
-//
-//     /**
-//      * oszlopozgatást engedélyező checkbox (jobb felső sarok) megjelenítése, event hozzáadása
-//      * @param operationDiv {HTMLDivElement} iconkonténer
-//      */
 
-//
-//     /**
-//      * tábla header sor újrarajzolása
-//      */
-
-
-//
-//     /**
-//      * tábla header-ök hozzáadása theadbe
-//      */
-
-//
-//     /**
-//      * sorrendezési paraméterek beállítása
-//      * @param attr {string} paraméter
-//      * @param dir {string|number} irány ASC/DESC
-//      */
-
-//
-//     /**
-//      * szürőinputok hozzáadása - fejlécnevek alatt
-//      */
-
-//
-//     /**
-//      * szűrőesemények hozzáadása
-//      */
-
-//
-//     /**
-//      * modelben rejtettként megadott táblák elrejtése
-//      */
-//     hideDefaultColumns() {
-//         Object.values(this.service.tableAttributeParams[this.content.serviceTable]).forEach((serviceParams) => {
-//             if (this.content.headers[serviceParams['COLUMN_NAME']]?.hidden === true)
-//                 document.getElementById('hcb-' + this.id + "-" + serviceParams['COLUMN_NAME']).click()
-//         })
-//     }
-//
 //     /**
 //      * egyedi ikon hozzáadása az ikonsorhoz
 //      * @param params {Object} az icon paraméterei
