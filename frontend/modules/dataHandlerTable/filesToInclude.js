@@ -6,7 +6,8 @@ Includer.setIncludableFileSource(
                 'ListerTable.js',
                 'ListerTableView.js',
                 'ListerTable.css',
-                'SearchAndOrderParameters.js'
-                    'PageTurnerController.js'
+                'SearchAndOrderParameters.js',
+                    'PageTurnerController.js',
+                'ListerControllerParent.js'
             ]
         }])
