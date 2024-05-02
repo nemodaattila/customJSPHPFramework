@@ -40,7 +40,7 @@ class SearchAndOrderParameters {
         return {
             offset: this.offset,
             order: this.actualSort[0],
-            orderDir: this.actualSort[1],
+            orderDir: this.actualSort[1] === 1 ?'ASC':"DESC",
             limit: this.limit
         }
     }

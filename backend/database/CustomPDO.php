@@ -1,10 +1,10 @@
 <?php
-
 /**
  * http request kezelő osztályok ősosztálya
  */
 
 namespace database;
+
 use interface\DatabaseConnectionInterface;
 use PDO;
 use PDOStatement;
@@ -22,14 +22,10 @@ class CustomPDO implements DatabaseConnectionInterface
      * @var PDOStatement|null
      */
     protected ?PDOStatement $query;
-
     protected ?PDOConnection $connection;
-
-
 
     public function __construct() {
         $this->connection = new PDOConnection();
-
         $this->connection->createPDO();
 //        $this->startTransaction();
 //        PDOConnection::beginTransaction();
@@ -42,83 +38,14 @@ class CustomPDO implements DatabaseConnectionInterface
     }
 
     public function simpleFetchTable($tableName) {
-        $record=[];
-        $this->executeQuery('select * from '.$tableName);
-
-        return $this->query->fetchAll(PDO::FETCH_ASSOC);
-
-
-    }
-    
-    /**
-     * entitások/rekordok lekérdezése szerverről szűrésekkel, paramterek jöhetnek függvényparaméterként, vagy $_POST-ból
-     * @param string $tableName tábla neve
-     * @param null $orderParams rendezési paraméterek
-     * @param array|null $connectedTableParams - kapcsoladó táblákból származó
-     * @param array|false|null $filterParams szűrési feltételek
-     * @return array|bool|null [paramétereknek megfelelő rekordok (limit-tel), a paramétereknek megfelelő ÖSSZES rekord száma]
-     * @throws Exception mysql hiba
-     */
-    protected function getRecordsFromServer(string $tableName, $orderParams = null, ?array $connectedTableParams = null, array|false|null $filterParams = null): array|bool|null {
-        $filter = ($filterParams === false) ? filter_input(INPUT_POST, 'filters') :
-            (($filterParams === null) ? '' : json_encode($filterParams, JSON_UNESCAPED_UNICODE));
-        if ($orderParams === null) {
-            $orderParams = [];
-        } else if ($orderParams === false)
-            $orderParams = (array)json_decode(filter_input(INPUT_POST, 'orderLimit'));
-        $this->executeQuery('call epm_getRecordsFromTableFiltered2(?,?,?,?,?,?,?)', [
-            $tableName,
-            $orderParams['limit'] ?? '',
-            $orderParams['offset'] ?? '',
-            $orderParams['order'] ?? '',
-            $orderParams['orderDir'] ?? '',
-            ($filter !== '[]' && $filter !== '') ? $filter : '[]',
-            ($connectedTableParams !== null) ?
-                json_encode($connectedTableParams, JSON_UNESCAPED_UNICODE) : '[]'
-        ]);
+        $record = [];
+        $this->executeQuery('select * from ' . $tableName);
         return $this->query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
-     * @param string $queryString query string
-     * @param array $parameters paraméterek
-     * @return bool sikeresség
-     * @throws Exception mysql hiba
-     */
-    protected function executeQuery(string $queryString, array $parameters = []): bool {
-        return $this->connection->executeQuery($queryString, $parameters);
-    }
-
-    /**
-     * entitások/rekordok lekérdezése szerverről szűrésekkel, új verzió, db fügvény nélkül
-     * @param array $params szűrési és rendezési paraméterek:
-     * tableName => táblanév
-     * attributes => táblaattribútumok neve, amiket visszaad,
-     * excludeAttributes => azon attribúumok melyeket nem kell visszaadni
-     * innerWhere => feltételek
-     * connectedTableParams => más táblákkal való kapcsolatok (left Join))
-     * filterParameters => szűrőparaméterek
-     * orderLimit => limit, offset, order, orderDir
-     * @return array|bool|null rekordok
-     * @throws Exception
-     * @example $res = $this->getRecordsFromServerNew(
-     * ['tableName' => 'areas',
-     * 'attributes' => ['id', 'name', 'enteredToArea', 'stayInArea'],
-     * 'innerWhere' => [[
-     * 'leftParameter' => ['table' => 'users', 'attribute' => 'enteredToArea'],
-     * 'operator' => '!=',
-     * 'rightParameter' => ['table' => 'users', 'attribute' => 'stayInArea'],
-     * ]],
-     * 'connectedTableParams' =>
-     * [['table' => 'areas', 'foreignKey' => 'id', 'connectedAttribute' => 'enteredToArea', 'targetAttributes' => ['name' => 'enteredAreaName']],
-     * ['table' => 'areas', 'foreignKey' => 'id', 'connectedAttribute' => 'stayInArea', 'targetAttributes' => ['name' => 'stayAreaName']]
-     * ]
-     * ]);
-     */
-    protected function getRecordsFromServerNew(array $params): array|bool|null {
-        $orderParams = $params['orderLimit'] ?? (array)json_decode(filter_input(INPUT_POST, 'orderLimit')) ?? [];
-        $filters = $params['filterParameters'] ?? (array)json_decode(filter_input(INPUT_POST, 'filters')) ?? [];
+    public function getRecordsFromServer(array $params): array|bool|null {
+        $orderParams = $params['orderLimit']??[];
+        $filters = $params['filterParameters']??[];
         $tables = [];
         if (!str_contains($params['tableName'], '.')) {
             [$databaseName, $tableName] = ['everlink_projectmanager', $params['tableName']];
@@ -129,6 +56,7 @@ class CustomPDO implements DatabaseConnectionInterface
         }
         if (isset($params['attributes'])) {
             $attributes = $params['attributes'];
+
         } elseif (isset($params['excludeAttributes'])) {
             $sql = "SELECT column_name FROM  information_schema.columns	WHERE table_schema='" . $databaseName . "' and table_name = '" . $tableName . "'";
             $this->executeQuery($sql);
@@ -136,10 +64,18 @@ class CustomPDO implements DatabaseConnectionInterface
             $attributes = array_diff($attributes, $params['excludeAttributes']);
         } else
             $attributes = ['*'];
+        $conditionalAttributes=[];
+        if (isset($params['conditionalAttributes']))
+            $conditionalAttributes = $params['conditionalAttributes'];
         $tableName = $params['tableName'];
         $what = [];
-        foreach ($attributes as $key => $value)
-            $what[$key] = 't1.' . $value;
+        $outerWhat = [];
+        foreach ($attributes as  $value) {
+            $what[] = 't1.' . $value;
+            $outerWhat[] = $value;
+        }
+        foreach ($conditionalAttributes as  $value)
+            $what[] = 't1.' . $value;
         $joins = '';
         $id = 2;
         if (isset($params['connectedTableParams'])) {
@@ -190,7 +126,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $innerWhere = " WHERE " . implode(' AND ', $innerWhere);
         }
         $innerFrom = (count($innerFrom) === 0 ? '' : ' ' . implode(', ', $innerFrom) . ', ');
-        $sql = 'SELECT * FROM (SELECT ' . implode(", ", $what) . ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
+        $sql = 'SELECT '.implode(", ", $outerWhat).' FROM (SELECT ' . implode(", ", $what) .  ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
         $where = [];
         foreach ($filters as $filter) {
             [$attrName, $filterType, $filterValue] = $filter;
@@ -215,9 +151,74 @@ class CustomPDO implements DatabaseConnectionInterface
             $sql .= ' LIMIT ' . $orderParams['limit'] . " OFFSET " . ($orderParams['offset'] ?? '0');
 //        var_dump($sql);
         $this->executeQuery($sql);
-        return $this->query->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query->fetchAll($params['fetchType']??PDO::FETCH_ASSOC);
     }
 
+//    /**
+//     * entitások/rekordok lekérdezése szerverről szűrésekkel, paramterek jöhetnek függvényparaméterként, vagy $_POST-ból
+//     * @param string $tableName tábla neve
+//     * @param null $orderParams rendezési paraméterek
+//     * @param array|null $connectedTableParams - kapcsoladó táblákból származó
+//     * @param array|false|null $filterParams szűrési feltételek
+//     * @return array|bool|null [paramétereknek megfelelő rekordok (limit-tel), a paramétereknek megfelelő ÖSSZES rekord száma]
+//     * @throws Exception mysql hiba
+//     */
+//    protected function getRecordsFromServer(string $tableName, $orderParams = null, ?array $connectedTableParams = null, array|false|null $filterParams = null): array|bool|null {
+//        $filter = ($filterParams === false) ? filter_input(INPUT_POST, 'filters') :
+//            (($filterParams === null) ? '' : json_encode($filterParams, JSON_UNESCAPED_UNICODE));
+//        if ($orderParams === null) {
+//            $orderParams = [];
+//        } else if ($orderParams === false)
+//            $orderParams = (array)json_decode(filter_input(INPUT_POST, 'orderLimit'));
+//        $this->executeQuery('call epm_getRecordsFromTableFiltered2(?,?,?,?,?,?,?)', [
+//            $tableName,
+//            $orderParams['limit'] ?? '',
+//            $orderParams['offset'] ?? '',
+//            $orderParams['order'] ?? '',
+//            $orderParams['orderDir'] ?? '',
+//            ($filter !== '[]' && $filter !== '') ? $filter : '[]',
+//            ($connectedTableParams !== null) ?
+//                json_encode($connectedTableParams, JSON_UNESCAPED_UNICODE) : '[]'
+//        ]);
+//        return $this->query->fetchAll(PDO::FETCH_ASSOC);
+//    }
+    /**
+     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
+     * @param string $queryString query string
+     * @param array $parameters paraméterek
+     * @return bool sikeresség
+     * @throws Exception mysql hiba
+     */
+    protected function executeQuery(string $queryString, array $parameters = []): bool {
+        return $this->connection->executeQuery($queryString, $parameters);
+    }
+
+    /**
+     * entitások/rekordok lekérdezése szerverről szűrésekkel, új verzió, db fügvény nélkül
+     * @param array $params szűrési és rendezési paraméterek:
+     * tableName => táblanév
+     * attributes => táblaattribútumok neve, amiket visszaad,
+     * excludeAttributes => azon attribúumok melyeket nem kell visszaadni
+     * innerWhere => feltételek
+     * connectedTableParams => más táblákkal való kapcsolatok (left Join))
+     * filterParameters => szűrőparaméterek
+     * orderLimit => limit, offset, order, orderDir
+     * @return array|bool|null rekordok
+     * @throws Exception
+     * @example $res = $this->getRecordsFromServerNew(
+     * ['tableName' => 'areas',
+     * 'attributes' => ['id', 'name', 'enteredToArea', 'stayInArea'],
+     * 'innerWhere' => [[
+     * 'leftParameter' => ['table' => 'users', 'attribute' => 'enteredToArea'],
+     * 'operator' => '!=',
+     * 'rightParameter' => ['table' => 'users', 'attribute' => 'stayInArea'],
+     * ]],
+     * 'connectedTableParams' =>
+     * [['table' => 'areas', 'foreignKey' => 'id', 'connectedAttribute' => 'enteredToArea', 'targetAttributes' => ['name' => 'enteredAreaName']],
+     * ['table' => 'areas', 'foreignKey' => 'id', 'connectedAttribute' => 'stayInArea', 'targetAttributes' => ['name' => 'stayAreaName']]
+     * ]
+     * ]);
+     */
     /**
      * rekord/entitás lekérése attributum alapján
      * @param string $tableName táblanév
@@ -402,5 +403,4 @@ class CustomPDO implements DatabaseConnectionInterface
         $this->executeQuery('call epm_insertARecord(?,?)', [$tableName, json_encode($params, JSON_UNESCAPED_UNICODE)]);
         return $this->query->fetch(PDO::FETCH_COLUMN);
     }
-
 }
