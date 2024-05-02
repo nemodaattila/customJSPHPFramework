@@ -84,7 +84,7 @@ class CompanyServiceModel extends ServiceModelParent {
         address: {label: 'cím', type: 'string'},
         vat_number: {label: 'Adószám'},
         category: {
-            label: 'Kapcsolat-típus', filterType: 'select',
+            label: 'Kapcsolat-típus', type: 'select',
             values: this._companyTypes
         },
         comment: {label: 'Megjegyzés'}

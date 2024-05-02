@@ -4,20 +4,13 @@
  * POST és GET
  */
 class RESTHandler {
-    /**
-     * fejlesztő által generált egyedi header-ök, pl: auth hash
-     * @type {[]}
-     * @private
-     */
     static _customHeader = [];
-
     /**
      * backend szerver url-je
      * @type {string}
      * @private
      */
     static _targetUrl = '../backend/';
-
     static set targetUrl(value) {
         this._targetUrl += value;
     }
@@ -28,7 +21,6 @@ class RESTHandler {
      * @private
      */
     static _requestType = 'POST';
-
     static set requestType(value) {
         this._requestType = value.toUpperCase();
     }
@@ -39,7 +31,6 @@ class RESTHandler {
      * @private
      */
     static _postFields;
-
     static get postFields() {
         return this._postFields
     }
@@ -57,14 +48,24 @@ class RESTHandler {
      * válasz fogadása,
      * callback metódus meghívása, hiba esetén hibaüzenet megjelenítése
      */
-    static send(params = {}) {
+    static async send(params = {}) {
+        console.log(params);
+        console.trace()
+        this._customHeader = []
+        this._targetUrl = '../backend/';
         if (params && params.url) {
             this.targetUrl = params.url
         } else Messenger.showAlert('RESTHandler target url missing')
         if (params && params.requestType) {
             this.requestType = params.requestType
         }
-        return new Promise((resolve, reject) => {
+        if (params && params.customHeader)
+            Object.entries(params.customHeader).forEach(([name, header]) => {
+
+                this.addCustomHeader(name, header)
+            })
+        console.dir(this)
+        return new Promise(async (resolve, reject) => {
             let request = new XMLHttpRequest();
             request.open(this._requestType, this._targetUrl, true);
             if (this._customHeader !== [])
@@ -108,7 +109,7 @@ class RESTHandler {
                         param += "&"
                     }
                 param = (param.substring(0, param.length - 1));
-                request.send(param);
+                await request.send(param);
             }
         })
     }

@@ -1,5 +1,6 @@
 class CompanyService extends ServiceParent {
 
+    _restParameter = 'company'
 
     async init() {
         console.log('init')

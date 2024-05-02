@@ -13,6 +13,7 @@ class ServiceParent {
 
     _model
 
+    _restParameter = undefined
 
     set model(value) {
         this._model = value;
@@ -49,6 +50,37 @@ class ServiceParent {
         return this._model;
     }
 
+    async getRecordsFromServer(searchAndOrderParams) {
+        // if (data.offset < 0 || data.limit < 1)
+        //     return false
+
+        console.log(searchAndOrderParams)
+        let recordIds = await RESTHandler.send({url: this._restParameter, requestType: 'GET',
+        customHeader:{"search-And-Order-Params":JSON.stringify(searchAndOrderParams)},
+        })
+
+        let ac = new AjaxCaller()
+        ac.targetUrl = '?task=' + this.getUrl
+        ac.postFields = {
+            userId: Cookie.getCookie('userId'),
+            filters: JSON.stringify(searchAndOrderParams.filters),
+            orderLimit: JSON.stringify({
+                offset: searchAndOrderParams.offset,
+                limit: searchAndOrderParams.limit,
+                order: searchAndOrderParams.order,
+                orderDir: searchAndOrderParams.orderDir
+            })
+        }
+        if (additionalParams !== null)
+            ac.postFields.additionalParams = JSON.stringify(additionalParams)
+        ac.addCustomHeader('Content-type', 'application/x-www-form-urlencoded');
+        try {
+            return await ac.send(false)
+        } catch (e) {
+            return false
+        }
+    }
+
     // /**
     //  * különböző modulokhoz tartozó betöltendő fájlok: C: controller, M: model, V:View
     //  * @type {{}}
@@ -70,30 +102,7 @@ class ServiceParent {
     //  * @param data {Object} szűrőparaméterek
     //  * @param additionalParams {Object} egyéb paraméterek
     //  */
-    // static async getRecordsFromServer(data, additionalParams = null) {
-    //     if (data.offset < 0 || data.limit < 1)
-    //         return false
-    //     let ac = new AjaxCaller()
-    //     ac.targetUrl = '?task=' + this.getUrl
-    //     ac.postFields = {
-    //         userId: Cookie.getCookie('userId'),
-    //         filters: JSON.stringify(data.filters),
-    //         orderLimit: JSON.stringify({
-    //             offset: data.offset,
-    //             limit: data.limit,
-    //             order: data.order,
-    //             orderDir: data.orderDir
-    //         })
-    //     }
-    //     if (additionalParams !== null)
-    //         ac.postFields.additionalParams = JSON.stringify(additionalParams)
-    //     ac.addCustomHeader('Content-type', 'application/x-www-form-urlencoded');
-    //     try {
-    //         return await ac.send(false)
-    //     } catch (e) {
-    //         return false
-    //     }
-    // }
+
     //
     // /**
     //  * http request gyors összeálítása

@@ -3,6 +3,7 @@ class ListerControllerParent extends ControllerParent {
     _searchAndOrderParameters
     _pageTurnerType = 'infinity'
     _serviceModelPointer
+    _rowHeight = 20
 
     init() {
         console.log(this)
@@ -18,7 +19,7 @@ class ListerControllerParent extends ControllerParent {
         let listerTable = new ListerTable(windowBody)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
-        this._searchAndOrderParameters.setOrdering(this._serviceModelPointer.defaultOrder ?? 'id', 'ASC')
+        this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
             this._serviceModelPointer.tableHeaderAttributeOrder,
             this._serviceModelPointer.tableHeaderAttributes,
@@ -31,7 +32,7 @@ class ListerControllerParent extends ControllerParent {
         }
         this._view.addComponent(pageTurner)
        console.dir(windowBody)
-       this._searchAndOrderParameters.limit= listerTable.getTBodyHeight()
+       this._searchAndOrderParameters.limit= Math.floor(parseInt(listerTable.getTBodyHeight())/this._rowHeight)
 
        await this.collectSearchParamsForRequest("refresh")
     }
@@ -41,10 +42,12 @@ class ListerControllerParent extends ControllerParent {
             alert('please set controllor `service` property');
             return;
         }
-        let additionalParams = null
+        let searchParams = {}
+        searchParams.additionalParams = null
         if (typeof this.getConnectedSearchParams === "function")
-            additionalParams = this.getConnectedSearchParams()
-        let res = await this.service.getRecordsFromServer(this.windowContentPointer.getSearchParams(type), additionalParams)
+            searchParams.additionalParams = this.getConnectedSearchParams()
+        searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
+        let res = await this.service.getRecordsFromServer(searchParams)
         if (res !== false) {
             if (type === 'reset' || type === 'refresh') {
                 this.displayTableData(res)
