@@ -15,7 +15,8 @@ class Routes
      */
     private array $routes = [
         ['GET', 'company/meta', 'MetaDataHandler', 'getCompanyMeta', 'A'],
-        ['GET', 'company', 'CompanyHandler', 'getCompanyIds', 'A']
+        ['GET', 'company', 'CompanyHandler', 'getCompanyIds', 'A'],
+        ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A']
 //
 //        ['POST', 'addquickdata', 'BookDataHandler', 'addQuickData', 'M'],
 //        ['DELETE', 'deletebook/$1', 'BookDataHandler', 'deleteBook', 'M'],

@@ -154,6 +154,17 @@ class CustomPDO implements DatabaseConnectionInterface
         return $this->query->fetchAll($params['fetchType']??PDO::FETCH_ASSOC);
     }
 
+    /**
+     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
+     * @param string $queryString query string
+     * @param array $parameters paraméterek
+     * @return bool sikeresség
+     * @throws Exception mysql hiba
+     */
+    protected function executeQuery(string $queryString, array $parameters = []): bool {
+        return $this->connection->executeQuery($queryString, $parameters);
+    }
+
 //    /**
 //     * entitások/rekordok lekérdezése szerverről szűrésekkel, paramterek jöhetnek függvényparaméterként, vagy $_POST-ból
 //     * @param string $tableName tábla neve
@@ -182,16 +193,7 @@ class CustomPDO implements DatabaseConnectionInterface
 //        ]);
 //        return $this->query->fetchAll(PDO::FETCH_ASSOC);
 //    }
-    /**
-     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
-     * @param string $queryString query string
-     * @param array $parameters paraméterek
-     * @return bool sikeresség
-     * @throws Exception mysql hiba
-     */
-    protected function executeQuery(string $queryString, array $parameters = []): bool {
-        return $this->connection->executeQuery($queryString, $parameters);
-    }
+
 
     /**
      * entitások/rekordok lekérdezése szerverről szűrésekkel, új verzió, db fügvény nélkül
@@ -287,6 +289,71 @@ class CustomPDO implements DatabaseConnectionInterface
         return $this->executeQuery('call epm_updateARecordByAttribute(?,?,?,?,?)', [$tableName, $keyName, $keyValue, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
     }
 
+    protected function getARecord(array $params) {
+        if ($params['value'] === null) return null;
+        $tables = [];
+        if (strpos($params['tableName'], '.') === false) {
+            [$databaseName, $tableName] = ['everlink_client', $params['tableName']];
+        } else
+            [$databaseName, $tableName] = explode('.', $params['tableName']);
+        if (isset($params['attributes'])) {
+            $attributes = $params['attributes'];
+        } elseif (isset($params['excludeAttributes'])) {
+            $sql = "SELECT column_name FROM  information_schema.columns	WHERE table_schema='" . $databaseName . "' and table_name = '" . $tableName . "'";
+            $this->executeQuery($sql);
+            $attributes = $this->query->fetchAll(PDO::FETCH_COLUMN);
+            $attributes = array_diff($attributes, $params['excludeAttributes']);
+        } else
+            $attributes = ['*'];
+        $what = [];
+        foreach ($attributes as $key => $value) {
+            $what[$key] = 't1.' . $value;
+        }
+        $joins = '';
+        if (isset($params['connectedTableParams'])) {
+            $id = 2;
+            $joins = [];
+            foreach ($params['connectedTableParams'] as $join) {
+                $tables[$join['table']] = 't' . $id;
+                if (strpos($join['connectedAttribute'], '.') === false) {
+                    [$leftDatabaseName, $leftTableName] = ['t1', $join['connectedAttribute']];
+                } else {
+                    $temp = explode('.', $join['connectedAttribute']);
+                    [$leftDatabaseName, $leftTableName] = [$tables[$temp[0]], $temp[1]];
+                }
+                foreach ($join['targetAttributes'] as $key => $value) {
+                    $what[] = 't' . $id . '.' . $key . ' AS ' . $value;
+                }
+                $joins[] = "LEFT JOIN " . $join['table'] . " as t" . $id . " ON t" . $id . "." . $join['foreignKey'] . "=" . $leftDatabaseName . '.' . $leftTableName;
+                $id++;
+            }
+            $joins = implode(' ', $joins);
+        }
+        $sql = 'SELECT * FROM (SELECT ' . implode(", ", $what) . ' FROM ' . $tableName . ' AS t1 ' . $joins . ') as fi';
+        if (!isset($params['attribute']))
+            $params['attribute'] = 'id';
+        $sql .= ' WHERE ' . $params['attribute'] . ' = \'' . $params['value'] . '\'';
+        $this->executeQuery($sql);
+        $res = $this->query->fetch(PDO::FETCH_ASSOC);
+        if ($res === false) $res = null;
+        return $res;
+    }
+
+    /**
+     * egy entitás/rekord lekérdezése
+     * @param string $tableName táblanév
+     * @param int|null $id rekord id
+     * @return array|null rekord
+     * @throws Exception mysql hiba
+     */
+    public function getARecordByID(string $tableName, int $id = null): ?array {
+        if ($id === null) return null;
+        $this->executeQuery('call epm_getARecordFromTableById(?,?)', [$tableName, $id]);
+        $res = $this->query->fetch(PDO::FETCH_ASSOC);
+        if ($res === false) $res = null;
+        return $res;
+    }
+
     /**
      * record/entitás törlése id alapján
      * @param string $tableName táblanév
@@ -330,20 +397,7 @@ class CustomPDO implements DatabaseConnectionInterface
         return [$newData, $changeForEvents];
     }
 
-    /**
-     * egy entitás/rekord lekérdezése
-     * @param string $tableName táblanév
-     * @param int|null $id rekord id
-     * @return array|null rekord
-     * @throws Exception mysql hiba
-     */
-    protected function getARecordByID(string $tableName, int $id = null): ?array {
-        if ($id === null) return null;
-        $this->executeQuery('call epm_getARecordFromTableById(?,?)', [$tableName, $id]);
-        $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if ($res === false) $res = null;
-        return $res;
-    }
+
 
     protected function addPropertyToCommentJSON($json, $key, $value = null, $value2 = null): bool|string {
         $json = json_decode($json);
