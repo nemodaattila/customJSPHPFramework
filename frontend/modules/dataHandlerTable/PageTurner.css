@@ -1,0 +1,17 @@
+.pagerNavContainer {
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+.pagerNavContainer > input {
+    width: 50px;
+    height: 23px;
+}
+
+.pagerNavContainer > * {
+    display: inline;
+    margin-right: 5px;
+    margin-left: 5px;
+}

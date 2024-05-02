@@ -1,7 +1,5 @@
 class ListerTableView {
-    get id() {
-        return this._id;
-    }
+
     _columnMoveEnablerCB
     _mainContainer
     _operationDiv
@@ -21,8 +19,13 @@ class ListerTableView {
     _lastClickedRow = undefined
     _actualSortElement = null
 
-
-
+    _tableFooter
+    get tableFooter() {
+        return this._tableFooter;
+    }
+    get id() {
+        return this._id;
+    }
     getFilterInput(name)
     {
         return this._filterInputs[name]
@@ -31,16 +34,32 @@ class ListerTableView {
     constructor(id, tableContainer) {
         this._id = id
         this._mainContainer = tableContainer;
+        this._mainContainer.style.display='table';
+
+    }
+
+    getComponentsHeight()
+    {
+        // return this.
     }
 
     displayTableElements() {
-        this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        let tableHeader = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+            class: 'listerTableHeader'
+        })
+        let tableBody = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+            class: 'listerTableBody'
+        })
+        this._tableFooter = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+            class: 'listerTableFooter'
+        })
+        this._operationDiv = HtmlElementCreator.createHtmlElement('div', tableHeader, {
             class: 'view_field'
         })
-        this._tableContainer = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableContainer = HtmlElementCreator.createHtmlElement('div', tableBody, {
             class: 'tableContainer'
         })
-        this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer)
+        this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
         this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
         this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
         // this.pageScrollData.scrollDiv = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'scrollHeight'})

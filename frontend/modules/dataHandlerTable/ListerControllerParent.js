@@ -13,7 +13,7 @@ class ListerControllerParent extends ControllerParent {
         return this.service.getTitle(this._type)
     }
 
-    displayView(windowBody) {
+   async displayView(windowBody) {
         this._serviceModelPointer = this.service.model
         let listerTable = new ListerTable(windowBody)
         this._view.addComponent('listerTable', listerTable)
@@ -24,8 +24,12 @@ class ListerControllerParent extends ControllerParent {
             this._serviceModelPointer.tableHeaderAttributes,
             this._serviceModelPointer.defaultOrder
         )
-        if (this._pageTurnerType === 'pageTurner')
-            let pageTurner = new PageTurnerController(windowBody)
+        let pageTurner
+        if (this._pageTurnerType === 'pageTurner') {
+            await Includer.loadFileSource('pageTurner')
+            pageTurner = new PageTurnerController(listerTable.getTableFooter())
+        }
+        this._view.addComponent(pageTurner)
     }
 
     // getEnabledOperations() {   //DO rethink with AUTH in mind

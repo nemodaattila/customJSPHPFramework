@@ -7,7 +7,15 @@ Includer.setIncludableFileSource(
                 'ListerTableView.js',
                 'ListerTable.css',
                 'SearchAndOrderParameters.js',
-                    'PageTurnerController.js',
                 'ListerControllerParent.js'
+            ]
+        }])
+Includer.setIncludableFileSource(
+    'pageTurner', [
+        {
+            directory: MODULE_FILE_DIR + 'dataHandlerTable',
+            fileNames: [
+                'PageTurnerController.js',
+                'PageTurner.css',
             ]
         }])

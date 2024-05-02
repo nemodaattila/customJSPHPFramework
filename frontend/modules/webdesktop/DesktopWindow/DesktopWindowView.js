@@ -1,4 +1,10 @@
 class DesktopWindowView {
+    get windowDiv() {
+        return this._windowDiv;
+    }
+    get windowBody() {
+        return this._windowBody;
+    }
     _windowDiv
 
     _windowBody
@@ -8,16 +14,18 @@ class DesktopWindowView {
     _titleDiv
 
     displayWindow(desktopContainer) {
+
         this._windowDiv = HtmlElementCreator.createHtmlElement('div', desktopContainer, {class: 'window'})
         // this._windowDiv
         //     ['windowObject'] = this
         this._windowDiv            .style.zIndex = "100"
-        this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
-
         this._windowHeaderDiv = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowHeaderDiv'})
         this._titleDiv = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'titleDiv'
         })
+        this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
+
+
         this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
         this._titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
         ))

@@ -1,3 +1,15 @@
+.listerTableHeader, .listerTableBody, .listerTableFooter {
+    display: table-row;
+}
+
+.listerTableHeader {
+    height: 30px;
+}
+
+.listerTableFooter {
+    height: 0;
+}
+
 .view_field {
 
     overflow: hidden;
@@ -9,7 +21,6 @@
     left: 0;
     top: 0;
     right: 0;
-    height: 30px;
     background: #566575;
     color: #fff;
     z-index: 109;
@@ -29,13 +40,11 @@
     display: inline;
 }
 
+
 .tableContainer {
-    overflow: scroll;
+    overflow: auto;
     width: 100%;
-    top: 30px;
-    left: 0;
-    bottom: 0;
-    position: absolute
+    height: 100%;
 }
 
 .tableIcon {
@@ -43,7 +52,7 @@
     padding-right: 3px
 }
 
-.tableIcon:hover{
+.tableIcon:hover {
     cursor: pointer
 }
 
@@ -56,6 +65,7 @@
     right: 0;
     top: 30px
 }
+
 .columnHiderDiv > span {
     display: block
 }
@@ -64,7 +74,7 @@ tr {
     height: 20px;
 }
 
-th{
+th {
     border: 1px solid #000;
 }
 
@@ -83,7 +93,7 @@ td, th {
 }
 
 
-.order{
+.order {
     position: absolute;
     width: 30px;
     top: 0
@@ -108,6 +118,18 @@ td, th {
     content: "\2191"
 }
 
- .filterRow > td > * {
+.filterRow > td > * {
     display: block
+}
+
+
+
+.listTable thead {
+    display: table-cell;
+    height: max-content;
+}
+
+.listTable tbody {
+    display: table-cell;
+    overflow: auto;
 }

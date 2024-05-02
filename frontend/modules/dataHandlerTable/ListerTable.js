@@ -1,35 +1,29 @@
-class ListerTable{
-
+class ListerTable {
     _view
-
     _interval // refreshInterval
-
     _intervalInSeconds = 60000;
-
     static _id = -1
-
     autoHeaderSetting = false
-
-
-     dblClickTimer = false
+    dblClickTimer = false
 
     constructor(container) {
         ListerTable._id++
-         this._view=new ListerTableView(ListerTable._id, container)
-
+        this._view = new ListerTableView(ListerTable._id, container)
         this._view.displayTableElements()
-
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
-    displayTableIcons(enabledOperations){
+
+    getTableFooter() {
+        return this._view.tableFooter
+    }
+
+    displayTableIcons(enabledOperations) {
         this._view.displayOperationIcons(enabledOperations)
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder)
-    {
+    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder) {
         this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
-
         this._view.displayFilters(tableAttributeOrder, tableAttributeParams)
         this.addFilterEvents(tableAttributeOrder, tableAttributeParams)
     }
@@ -64,16 +58,9 @@ class ListerTable{
         })
     }
 
-
-
-
-
-
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
 //      */
 //     scrollTimer
-
-
 //     /**
 //      * szürke "fedél" ha a tábla frissít, megjelenik ilyemkor nem lehet kattintani
 //      */
@@ -98,7 +85,7 @@ class ListerTable{
 //         this.observer.unobserve(this.container.parentElement.parentElement)
 //         clearInterval(this.interval)
 //     }
-ű
+    ű
 //     async refreshRows() {
 //         let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
 //         this.selectedRows = []
@@ -113,7 +100,6 @@ class ListerTable{
 //                 this.lastClickedRow = row
 //         })
 //     }
-
 //     /**
 //      * egyedi ikon hozzáadása az ikonsorhoz
 //      * @param params {Object} az icon paraméterei
