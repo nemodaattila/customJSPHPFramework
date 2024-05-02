@@ -12,7 +12,6 @@ class ServiceParent {
     }
 
     _model
-
     _restParameter = undefined
 
     set model(value) {
@@ -22,63 +21,58 @@ class ServiceParent {
     async init() {
         console.log('initSp')
         return new Promise(async (resolve) => {
-
             console.log('init')
             this._model.setTableHeaderAttributeOrder();
             resolve(true)
         })
-
     }
 
-    getTitle(name)
-    {
+    getTitle(name) {
         return this._model.getTitle(name)
     }
 
-    getEnabledOperations()
-    {
-       return  this._model.getEnabledOperations()
+    getEnabledOperations() {
+        return this._model.getEnabledOperations()
     }
 
-    getTableHeaderOrder()
-    {
-        return  this._model.tableHeaderAttributeOrder
+    getTableHeaderOrder() {
+        return this._model.tableHeaderAttributeOrder
     }
 
-    get model()
-    {
+    get model() {
         return this._model;
     }
 
     async getRecordsFromServer(searchAndOrderParams) {
         // if (data.offset < 0 || data.limit < 1)
         //     return false
-
-        console.log(searchAndOrderParams)
-        let recordIds = await RESTHandler.send({url: this._restParameter, requestType: 'GET',
-        customHeader:{"search-And-Order-Params":JSON.stringify(searchAndOrderParams)},
-        })
-
-        let ac = new AjaxCaller()
-        ac.targetUrl = '?task=' + this.getUrl
-        ac.postFields = {
-            userId: Cookie.getCookie('userId'),
-            filters: JSON.stringify(searchAndOrderParams.filters),
-            orderLimit: JSON.stringify({
-                offset: searchAndOrderParams.offset,
-                limit: searchAndOrderParams.limit,
-                order: searchAndOrderParams.order,
-                orderDir: searchAndOrderParams.orderDir
-            })
-        }
-        if (additionalParams !== null)
-            ac.postFields.additionalParams = JSON.stringify(additionalParams)
-        ac.addCustomHeader('Content-type', 'application/x-www-form-urlencoded');
+        // if (additionalParams !== null)
+        //     ac.postFields.additionalParams = JSON.stringify(additionalParams)
         try {
-            return await ac.send(false)
+            console.log(searchAndOrderParams)
+            let recordIds = await RESTHandler.send({
+                url: this._restParameter, requestType: 'GET',
+                customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
+            })
+            console.log(recordIds)
+           await this.refreshLocalDatabase(recordIds)
+            return true
         } catch (e) {
             return false
         }
+    }
+
+    async refreshLocalDatabase(ids) {
+        for (const id of ids) {
+            if (!this._model.isIdInRecords(id))
+                await this.getOne(id)
+        }
+    }
+
+    async getOne(id) {
+         await RESTHandler.send({
+            url: this._restParameter+"/"+id, requestType: 'GET',
+        })
     }
 
     // /**
@@ -102,7 +96,6 @@ class ServiceParent {
     //  * @param data {Object} szűrőparaméterek
     //  * @param additionalParams {Object} egyéb paraméterek
     //  */
-
     //
     // /**
     //  * http request gyors összeálítása

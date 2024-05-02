@@ -19,4 +19,11 @@ class ServiceModelParent {
     get tableHeaderAttributeOrder() {
         return this._tableHeaderAttributeOrder
     }
+
+    _records = {}
+
+    isIdInRecords(id)
+    {
+        return Object.keys(this._records).findIndex(rId => rId === id) !== -1
+    }
 }
