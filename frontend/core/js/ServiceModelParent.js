@@ -26,4 +26,12 @@ class ServiceModelParent {
     {
         return Object.keys(this._records).findIndex(rId => rId === id) !== -1
     }
+
+    addRecord(id,record) {
+        this._records[id]=record
+    }
+
+    getRecordById(id) {
+        return this._records[id]
+    }
 }

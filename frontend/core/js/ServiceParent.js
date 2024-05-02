@@ -56,6 +56,8 @@ class ServiceParent {
             })
             console.log(recordIds)
            await this.refreshLocalDatabase(recordIds)
+            let records = this.getDataFromLocalDatabase(recordIds)
+            console.log(records)
             return true
         } catch (e) {
             return false
@@ -70,9 +72,13 @@ class ServiceParent {
     }
 
     async getOne(id) {
-         await RESTHandler.send({
+         this._model.addRecord(id, await RESTHandler.send({
             url: this._restParameter+"/"+id, requestType: 'GET',
-        })
+        }))
+    }
+
+    getDataFromLocalDatabase(recordIds) {
+        return recordIds.map(id => this.model.getRecordById(id))
     }
 
     // /**
@@ -188,4 +194,5 @@ class ServiceParent {
     // static async sendGetWindowParams(moduleGroupName) {
     //     return (await this.createAndSendRequest('getWindowParams', moduleGroupName)).params
     // }
+
 }
