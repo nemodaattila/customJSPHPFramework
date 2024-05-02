@@ -10,6 +10,27 @@
     height: 0;
 }
 
+.listTable {
+    table-layout: fixed;
+    white-space: nowrap;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.listTable thead {
+    display: table-row;
+    /*height: max-content;*/
+    height: 20px;
+}
+
+.listTable tbody {
+    display: table-row;
+    overflow: auto;
+}
+
 .view_field {
 
     overflow: hidden;
@@ -78,14 +99,7 @@ th {
     border: 1px solid #000;
 }
 
-table {
-    table-layout: fixed;
-    white-space: nowrap;
-    border-collapse: collapse;
-    border: 1px solid #000;
-    width: 0;
-    background-color: #fff;
-}
+
 
 td, th {
     font-size: 13px;
@@ -124,12 +138,4 @@ td, th {
 
 
 
-.listTable thead {
-    display: table-cell;
-    height: max-content;
-}
 
-.listTable tbody {
-    display: table-cell;
-    overflow: auto;
-}

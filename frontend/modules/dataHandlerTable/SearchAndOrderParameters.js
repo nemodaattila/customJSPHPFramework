@@ -1,15 +1,36 @@
 class SearchAndOrderParameters {
-    offset = 0;
+    get offset() {
+        return this._offset;
+    }
 
-    actualSort = ['', 1];
+    set offset(value) {
+        this._offset = value;
+    }
 
-    limit
+    get actualSort() {
+        return this._actualSort;
+    }
+
+
+    get limit() {
+        return this._limit;
+    }
+
+    set limit(value) {
+        this._limit = value;
+    }
+    _offset = 0;
+
+    _actualSort = ['', 1];
+
+    _limit
+
 
         setOrdering(attr, dir) {
         // if (dir === 1)
         //     dir = 'ASC'
         // if (dir === -1)
         //     dir = 'DESC'
-        this.actualSort = [attr, (dir === 1 || dir.trim() === 'ASC' ? 1 : -1)]
+        this._actualSort = [attr, (dir === 1 || dir.trim() === 'ASC' ? 1 : -1)]
     }
 }

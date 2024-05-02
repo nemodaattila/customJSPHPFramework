@@ -17,6 +17,11 @@ class ListerTable {
         return this._view.tableFooter
     }
 
+    getTBodyHeight()
+    {
+        return this._view.getTBodyHeight()
+    }
+
     displayTableIcons(enabledOperations) {
         this._view.displayOperationIcons(enabledOperations)
         this._view.addColumnMoveEnabler()

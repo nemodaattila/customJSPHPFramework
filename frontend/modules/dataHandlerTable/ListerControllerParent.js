@@ -30,6 +30,29 @@ class ListerControllerParent extends ControllerParent {
             pageTurner = new PageTurnerController(listerTable.getTableFooter())
         }
         this._view.addComponent(pageTurner)
+       console.dir(windowBody)
+       this._searchAndOrderParameters.limit= listerTable.getTBodyHeight()
+
+       await this.collectSearchParamsForRequest("refresh")
+    }
+
+    async collectSearchParamsForRequest(type) {
+        if (this.service === undefined) {
+            alert('please set controllor `service` property');
+            return;
+        }
+        let additionalParams = null
+        if (typeof this.getConnectedSearchParams === "function")
+            additionalParams = this.getConnectedSearchParams()
+        let res = await this.service.getRecordsFromServer(this.windowContentPointer.getSearchParams(type), additionalParams)
+        if (res !== false) {
+            if (type === 'reset' || type === 'refresh') {
+                this.displayTableData(res)
+                this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
+            } else {
+                this.appendTableData(res)
+            }
+        }
     }
 
     // getEnabledOperations() {   //DO rethink with AUTH in mind

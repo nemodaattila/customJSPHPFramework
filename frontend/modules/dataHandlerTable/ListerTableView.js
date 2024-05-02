@@ -20,6 +20,8 @@ class ListerTableView {
     _actualSortElement = null
 
     _tableFooter
+    _tableHeader
+    _tableBody
     get tableFooter() {
         return this._tableFooter;
     }
@@ -38,25 +40,26 @@ class ListerTableView {
 
     }
 
-    getComponentsHeight()
+    getTBodyHeight()
     {
-        // return this.
+        console.dir(this._tBody);
+        return this._tBody.clientHeight
     }
 
     displayTableElements() {
-        let tableHeader = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableHeader =  HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableHeader'
         })
-        let tableBody = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableBody =  HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableBody'
         })
-        this._tableFooter = this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableFooter = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableFooter'
         })
-        this._operationDiv = HtmlElementCreator.createHtmlElement('div', tableHeader, {
+        this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._tableHeader, {
             class: 'view_field'
         })
-        this._tableContainer = HtmlElementCreator.createHtmlElement('div', tableBody, {
+        this._tableContainer = HtmlElementCreator.createHtmlElement('div', this._tableBody, {
             class: 'tableContainer'
         })
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
