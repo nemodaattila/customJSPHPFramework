@@ -1,17 +1,13 @@
 class DesktopWindowTabView {
-
     _windowTab
-
     _labelDiv
 
-    createElements(container)
-    {
-
+    createElements(container) {
         this._windowTab = HtmlElementCreator.createHtmlElement('div', container, {
             class: 'windowTab',
         })
         this._windowTab.addEventListener('mousedown', () => Desktop.switchActiveWindow(this))
-        this._labelDiv=HtmlElementCreator.createHtmlElement('div', this._windowTab, {
+        this._labelDiv = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             class: 'titleDiv'
         })
         let resetIcon = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
@@ -34,9 +30,7 @@ class DesktopWindowTabView {
         closeIcon.style.top = '0'
     }
 
-    setTitle(title)
-    {
-        this._labelDiv.innerHTML=title
+    setTitle(title) {
+        this._labelDiv.innerHTML = title
     }
-
 }

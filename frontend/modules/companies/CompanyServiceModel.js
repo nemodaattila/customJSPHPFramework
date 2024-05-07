@@ -1,44 +1,10 @@
 class CompanyServiceModel extends ServiceModelParent {
+    _companyTypes = {0: 'Nem vevő'}
+
     get companyTypes() {
         return this._companyTypes;
     }
 
-    get selectedId() {
-        return this._selectedId;
-    }
-
-    get selectedRecord() {
-        return this._selectedRecord;
-    }
-
-    get moduleParams() {
-        return this._moduleParams;
-    }
-
-    get restName() {
-        return this._restName;
-    }
-
-    get entityTriggerName() {
-        return this._entityTriggerName;
-    }
-
-    get onClickEventAttribs() {
-        return this._onClickEventAttribs;
-    }
-
-    get defaultOrder() {
-        return this._defaultOrder;
-    }
-
-    get tableHeaderAttributes() {
-        return this._tableHeaderAttributes;
-    }
-
-    get editSubMenuParams() {
-        return this._editSubMenuParams;
-    }
-    _companyTypes = {0: 'Nem vevő'}
     set companyTypes(types) {
         console.log(types)
         Object.values(types).forEach(type =>
@@ -47,11 +13,14 @@ class CompanyServiceModel extends ServiceModelParent {
 
     _selectedId
 
+    get selectedId() {
+        return this._selectedId;
+    }
+
     _selectedRecord = null
 
-    getTitle(name)
-    {
-        return this._moduleParams[name].title
+    get selectedRecord() {
+        return this._selectedRecord;
     }
 
     _moduleParams = {
@@ -74,10 +43,35 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         deletable: true
     }
+
+    get moduleParams() {
+        return this._moduleParams;
+    }
+
     _restName = 'company'
+
+    get restName() {
+        return this._restName;
+    }
+
     _entityTriggerName = 'company'
+
+    get entityTriggerName() {
+        return this._entityTriggerName;
+    }
+
     _onClickEventAttribs = ['id', 'name']
+
+    get onClickEventAttribs() {
+        return this._onClickEventAttribs;
+    }
+
     _defaultOrder = 'name'
+
+    get defaultOrder() {
+        return this._defaultOrder;
+    }
+
     _tableHeaderAttributes = {
         id: {label: 'Azonosító', type: 'int'},
         name: {label: 'Név', type: 'string'},
@@ -89,6 +83,11 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         comment: {label: 'Megjegyzés'}
     }
+
+    get tableHeaderAttributes() {
+        return this._tableHeaderAttributes;
+    }
+
     _editSubMenuParams = {
         editCompany: {
             label: 'Cég szerkesztése',
@@ -134,8 +133,15 @@ class CompanyServiceModel extends ServiceModelParent {
         }
     }
 
-    getEnabledOperations()
-    {
+    get editSubMenuParams() {
+        return this._editSubMenuParams;
+    }
+
+    getTitle(name) {
+        return this._moduleParams[name].title
+    }
+
+    getEnabledOperations() {
         return {
             list: this._moduleParams.list !== undefined,
             edit: this._moduleParams.edit !== undefined,

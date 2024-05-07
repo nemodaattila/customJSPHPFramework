@@ -15,11 +15,11 @@ class ListerControllerParent extends ControllerParent {
         return this.service.getTitle(this._type)
     }
 
-   async displayView(windowBody) {
+    async displayView(windowBody) {
         this._serviceModelPointer = this.service.model
         let listerTable = new ListerTable(windowBody)
-       this._listerTable = listerTable
-       this._view.addComponent('listerTable', listerTable)
+        this._listerTable = listerTable
+        this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
@@ -33,18 +33,16 @@ class ListerControllerParent extends ControllerParent {
             pageTurner = new PageTurnerController(listerTable.getTableFooter())
         }
         this._view.addComponent(pageTurner)
-       console.dir(windowBody)
-       this._searchAndOrderParameters.limit= Math.floor(parseInt(listerTable.getTBodyHeight())/this._rowHeight)
+        console.dir(windowBody)
+        this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
         this.getRecordsFromServer("refresh")
     }
 
-    async getRecordsFromServer(type){
+    async getRecordsFromServer(type) {
         await this.collectSearchParamsForRequest(type)
-
     }
 
-    zoomContent(zoomValue)
-    {
+    zoomContent(zoomValue) {
         this._listerTable.zoomContent(zoomValue)
     }
 
@@ -60,7 +58,6 @@ class ListerControllerParent extends ControllerParent {
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
         let records = await this.service.getRecordsFromServer(searchParams)
         console.trace()
-
         if (records !== false) {
             console.log(records)
             if (type === 'reset' || type === 'refresh') {

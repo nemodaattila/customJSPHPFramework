@@ -3,6 +3,7 @@
  */
 class ServiceParent {
     static _instance
+    _restParameter = undefined
 
     constructor() {
         if (self._instance) {
@@ -12,7 +13,10 @@ class ServiceParent {
     }
 
     _model
-    _restParameter = undefined
+
+    get model() {
+        return this._model;
+    }
 
     set model(value) {
         this._model = value;
@@ -39,10 +43,6 @@ class ServiceParent {
         return this._model.tableHeaderAttributeOrder
     }
 
-    get model() {
-        return this._model;
-    }
-
     async getRecordsFromServer(searchAndOrderParams) {
         // if (data.offset < 0 || data.limit < 1)
         //     return false
@@ -55,10 +55,9 @@ class ServiceParent {
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
             console.log(recordIds)
-           await this.refreshLocalDatabase(recordIds)
-            let records = this.getDataFromLocalDatabase(recordIds)
-            console.log(records)
-            return true
+            await this.refreshLocalDatabase(recordIds)
+            console.log(recordIds)
+            return this.getDataFromLocalDatabase(recordIds);
         } catch (e) {
             return false
         }
@@ -72,13 +71,13 @@ class ServiceParent {
     }
 
     async getOne(id) {
-         this._model.addRecord(id, await RESTHandler.send({
-            url: this._restParameter+"/"+id, requestType: 'GET',
+        this._model.addRecord(id, await RESTHandler.send({
+            url: this._restParameter + "/" + id, requestType: 'GET',
         }))
     }
 
     getDataFromLocalDatabase(recordIds) {
-        return recordIds.map(id => this.model.getRecordById(id))
+        return recordIds.map(id => this.model.getRecordByIdForListTable(id))
     }
 
     // /**
@@ -194,5 +193,4 @@ class ServiceParent {
     // static async sendGetWindowParams(moduleGroupName) {
     //     return (await this.createAndSendRequest('getWindowParams', moduleGroupName)).params
     // }
-
 }

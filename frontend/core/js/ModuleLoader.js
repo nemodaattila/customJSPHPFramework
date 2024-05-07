@@ -12,8 +12,6 @@ class ModuleLoader {
     //  *  @type {ModuleInitiator}
     //  */
     // static initiator
-
-
     static async loadModule(moduleGroupName, module, connectedParams = null) {
         Includer.addFilesToLoad(
             [{
@@ -25,11 +23,9 @@ class ModuleLoader {
         //
         let moduleFiles = Includer.getIncludableFileSource(module)
         console.log(moduleFiles)
-
-        let className
         let temp = await this.getComponent(moduleFiles, 'Controller')
         if (!temp) {
-            Messenger.showAlert('controller file missing: ' + className)
+            Messenger.showAlert('controller file missing from: ' + moduleGroupName)
             return false
         }
         // let controllerName =
@@ -45,9 +41,16 @@ class ModuleLoader {
             let service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
             if (serviceModel !== undefined)
                 service.model = serviceModel
-            service.init()
+            await service.init()
             controller.service = service
         }
+        let view
+        temp = await this.getComponent(moduleFiles, 'View')
+        console.log(temp)
+        if (temp) {
+            view = new (eval(await this.loadFile(temp)))() //DO nicer solution?
+        } else view = new ViewParent()
+        controller.view = view
         console.dir(controller)
         controller.init();
         // let index = moduleFiles.findIndex(file => file.includes('Service'))
@@ -130,8 +133,13 @@ class ModuleLoader {
     }
 
     static getComponent(files, componentName) {
+        console.log(files)
+        console.log(componentName)
         let fileIndex
         let groupIndex = files.findIndex((group) => {
+            console.log(group.fileNames)
+            if (group.fileNames.length === 0)
+                return false
             fileIndex = group.fileNames.findIndex((file) => {
                 console.log(file)
                 return file.includes(componentName)
@@ -141,6 +149,7 @@ class ModuleLoader {
         if (groupIndex === -1) return false
         let data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
         delete files[groupIndex].fileNames[fileIndex];
+        files[groupIndex].fileNames = files[groupIndex].fileNames.filter((val) => val !== null);
         console.log(files)
         return data
     }

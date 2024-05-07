@@ -27,7 +27,7 @@
     height: 20px;
 }
 
-.listTable thead th{
+.listTable thead th {
     display: inline-block;
 }
 
@@ -38,15 +38,13 @@
     background-color: #d0d8e0;
 }
 
-.listTable tbody tr
-{
+.listTable tbody tr {
     display: table-row;
     background-color: white;
 
 }
 
-.listTable td
-{
+.listTable td {
     display: inline-block;
     overflow: hidden;
     padding-left: 2px;
@@ -120,8 +118,7 @@
     display: block
 }
 
-.listTable tbody td
-{
+.listTable tbody td {
     height: 20px;
 
 }

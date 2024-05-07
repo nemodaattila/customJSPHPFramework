@@ -13,30 +13,23 @@ class DesktopController {
         console.dir(this)
     }
 
-    static getWindowContainer()
-    {
+    static getWindowContainer() {
         return this._view.deskTopDOMElement
     }
 
-    static getTaskBarContainer()
-    {
+    static getTaskBarContainer() {
         return this._view.tabsBarDOMElement
     }
 
-    static openWindow(moduleGroupName, moduleName,windowName = undefined) {
-        WindowOpener.openWindow(moduleGroupName, moduleName,windowName)
-
-
-
-
+    static openWindow(moduleGroupName, moduleName, windowName = undefined) {
+        WindowOpener.openWindow(moduleGroupName, moduleName, windowName)
     }
 
     static isWindowOpen(windowId) {
-       return  this._model.searchForWindowById(windowId)
+        return this._model.searchForWindowById(windowId)
     }
 
-    static addNewWindow(windowName, window, tab)
-    {
+    static addNewWindow(windowName, window, tab) {
         this._model.addNewWindow(windowName, window, tab);
         console.dir(this)
     }
@@ -112,5 +105,4 @@ class DesktopController {
     //  * @param {string} windowId ablak megnevezése
     //  * @returns {boolean}
     //  */
-
 }

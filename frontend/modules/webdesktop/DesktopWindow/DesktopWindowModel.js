@@ -1,28 +1,22 @@
 class DesktopWindowModel {
-
-
-/**
- * ablak sorszáma, elhelyezéshez kell
- * @type {number}
- */
+    /**
+     * ablak sorszáma, elhelyezéshez kell
+     * @type {number}
+     */
     static _count = -1
-
-
-
-    increaseCount()
-    {
-        DesktopWindowModel._count++;
-    }
 
     _id
 
-    setIdToCount()
-    {
-        this._id = DesktopWindowModel._count
-    }
-
     get id() {
         return this._id;
+    }
+
+    increaseCount() {
+        DesktopWindowModel._count++;
+    }
+
+    setIdToCount() {
+        this._id = DesktopWindowModel._count
     }
 
 // /**
@@ -105,5 +99,4 @@ class DesktopWindowModel {
 //  * modulcsoportnév
 //  */
 // moduleGroupName
-
 }

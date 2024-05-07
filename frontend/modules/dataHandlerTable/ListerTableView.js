@@ -1,5 +1,4 @@
 class ListerTableView {
-
     _columnMoveEnablerCB
     _mainContainer
     _operationDiv
@@ -10,7 +9,6 @@ class ListerTableView {
     _tBody
     _tableIconContainer
     _iconPath = "./modules/dataHandlerTable/"
-    _id
     _headerRow
     _filterRow
     _filterInputs = {}
@@ -18,41 +16,42 @@ class ListerTableView {
     _selectedRows = []
     _lastClickedRow = undefined
     _actualSortElement = null
-
-    _tableFooter
     _tableHeader
     _tableBody
-    get tableFooter() {
-        return this._tableFooter;
-    }
-    get id() {
-        return this._id;
-    }
-    getFilterInput(name)
-    {
-        return this._filterInputs[name]
-    }
 
     constructor(id, tableContainer) {
         this._id = id
         this._mainContainer = tableContainer;
-        this._mainContainer.style.display='table';
-
-        this._mainContainer.style.tableLayout='fixed';
-
+        this._mainContainer.style.display = 'table';
+        this._mainContainer.style.tableLayout = 'fixed';
     }
 
-    getTBodyHeight()
-    {
+    _id
+
+    get id() {
+        return this._id;
+    }
+
+    _tableFooter
+
+    get tableFooter() {
+        return this._tableFooter;
+    }
+
+    getFilterInput(name) {
+        return this._filterInputs[name]
+    }
+
+    getTBodyHeight() {
         console.dir(this._tBody);
         return this._tBody.clientHeight
     }
 
     displayTableElements() {
-        this._tableHeader =  HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableHeader = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableHeader'
         })
-        this._tableBody =  HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableBody = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableBody'
         })
         this._tableFooter = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
@@ -111,7 +110,6 @@ class ListerTableView {
         // })
         // this.overlay = HtmlElementCreator.createSimpleHtmlElement('div', this.container, {class: 'overlay'})
         //
-        this._tableContainer.style.zoom = 2
     }
 
     displayOperationIcons(enabledOperations) {
@@ -336,37 +334,30 @@ class ListerTableView {
         })
     }
 
-    emptyBody()
-    {
+    emptyBody() {
         this._rows = []
         HtmlElementCreator.emptyDOMElement(this._tBody)
     }
 
-    zoomContent(zoomValue)
-    {
+    zoomContent(zoomValue) {
         console.trace()
         console.log(zoomValue)
         this._tableContainer.style.zoom = zoomValue
     }
-    createRowWithRecord(values, id)
-    {
-            let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
+
+    createRowWithRecord(values, id) {
+        let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
         this._rows.push(row)
-            values.forEach(([value, type, paramName]) =>{
-                let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
-                if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
-                    td.classList.add('rightAlign')
-                if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(dataType => dataType === type) !== -1)
-                    td.classList.add('leftAlign')
-                if (!document.getElementById("hcb-" + this.id + "-" + paramName).checked)
-                    td.style.display = 'none'
-
-
-                //TODO az id-t kértem le de a paraméter neve kell   
-    })
-
-
+        values.forEach(([value, type, paramName]) => {
+            let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+            if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
+                td.classList.add('rightAlign')
+            if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(dataType => dataType === type) !== -1)
+                td.classList.add('leftAlign')
+            if (!document.getElementById("hcb-" + this.id + "-" + paramName).checked)
+                td.style.display = 'none'
+            //TODO az id-t kértem le de a paraméter neve kell
+        })
         return row;
     }
-
 }

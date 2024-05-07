@@ -18,18 +18,6 @@ class CompanyHandler extends RestParent
     }
 
     public function getOne($parameters): void {
-
-        $id = $parameters->getUrlParameters()[1];
-        $this->result = $this->dbConnection->getARecordByID($this->tableName,$id);
-//        $searchParams = json_decode(getallheaders()["Search-And-Order-Params"], true);
-//        $this->result = $this->dbConnection->getRecordsFromServer(
-//            ["tableName" => $this->tableName,
-//                "attributes" => ['id'],
-//                "conditionalAttributes" => ['name'],
-//                "orderLimit" => $searchParams["orderAndLimitParams"],
-//                "fetchType" => 7, //FETCH COLUMN
-//            ]
-//        );
+        $this->result = $this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]);
     }
-
 }

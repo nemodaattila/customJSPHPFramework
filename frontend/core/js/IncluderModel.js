@@ -1,14 +1,11 @@
 class IncluderModel {
     _includableFileSources = [];
-
     _filesToLoad = []
-
     get filesToLoad() {
         return this._filesToLoad;
     }
 
     _loadedFiles = []
-
     set loadedFiles(value) {
         this._loadedFiles.push(value);
     }

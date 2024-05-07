@@ -3,24 +3,20 @@
  * ablakok közti váltás lekezelése
  */
 class DesktopWindowTabController {
-    set windowPointer(value) {
-        this._windowPointer = value;
-    }
-
     _view
-
-    _windowPointer
 
     constructor(container) {
         this._view = new DesktopWindowTabView()
         this._view.createElements(container)
     }
 
-    setTitle(title)
-    {
-        this._view.setTitle(title)
+    _windowPointer
+
+    set windowPointer(value) {
+        this._windowPointer = value;
     }
 
-
-
+    setTitle(title) {
+        this._view.setTitle(title)
+    }
 }

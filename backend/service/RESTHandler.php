@@ -4,11 +4,12 @@ namespace service;
 
 use builder\DatabaseBuilder;
 use Exception;
-//use exception\HttpResponseTriggerException;
-//use helper\VariableHelper;
 use JetBrains\PhpStorm\NoReturn;
 use model\RequestParameters;
 use Throwable;
+
+//use exception\HttpResponseTriggerException;
+//use helper\VariableHelper;
 
 /**
  * loads the corresponding HTTP request processor class
@@ -31,8 +32,6 @@ class RESTHandler
      * @var RequestParameters parameters from http request
      */
     private RequestParameters $parameters;
-
-
 
     //DO authentication
     public function __construct() {
@@ -97,7 +96,7 @@ class RESTHandler
      * determines the route path form the request url
      * @example www.example.com/user/123 -> user/123
      */
-    private function getRouteBaseFromRequest() {
+    private function getRouteBaseFromRequest(): void {
         $request = strtolower($_SERVER['REQUEST_URI']);
         $urlStripper = str_replace($_SERVER['CONTEXT_DOCUMENT_ROOT'], '', ROOT);
         $request = str_replace(['//', '/'], '\\', $request);
@@ -113,6 +112,10 @@ class RESTHandler
         $routeExists = $this->routeAnalyser->processGivenRoute();
         if (!$routeExists)
             throw new Exception('Route not exists: ' . $this->routeBase);
+    }
+
+    private function setDatabase($databaseHandlerClassName): void {
+        DatabaseBuilder::createDatabaseConnection($databaseHandlerClassName);
     }
 
     /**
@@ -188,6 +191,17 @@ class RESTHandler
         echo $message . ' - ' . $file . ':' . $line;
     }
 
+//    private function addTokenExpirationTimeToHeader()
+//    {
+//        if ($_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
+//            $as = Authentication::getInstance();
+//            $state = $as->getTokenState();
+//            if ($state[0] === true) {
+//                header('TokenExpirationTime: ' . $as->getTokenObj()->getExpirationTime());
+//            }
+//        }
+//    }
+
     /**
      * checks user authentication
      */
@@ -200,17 +214,6 @@ class RESTHandler
             }
         }
     }
-
-//    private function addTokenExpirationTimeToHeader()
-//    {
-//        if ($_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
-//            $as = Authentication::getInstance();
-//            $state = $as->getTokenState();
-//            if ($state[0] === true) {
-//                header('TokenExpirationTime: ' . $as->getTokenObj()->getExpirationTime());
-//            }
-//        }
-//    }
 
     /**
      * checks if user is entitled to use the given function
@@ -238,10 +241,5 @@ class RESTHandler
                     throw new HttpResponseTriggerException(false, ['errorCode' => 'TAF', 'type' => 4]);
                 break;
         }
-    }
-
-    private function setDatabase($databaseHandlerClassName) {
-       DatabaseBuilder::createDatabaseConnection($databaseHandlerClassName);
-
     }
 }

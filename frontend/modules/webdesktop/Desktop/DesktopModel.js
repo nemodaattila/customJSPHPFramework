@@ -1,15 +1,11 @@
 class DesktopModel {
-
     _windows = {}
-
     _tabs = {}
-
     /**
      * aktív ablak objektuma
      * @type {DesktopWindow | undefined}
      */
     _activeWindow = undefined
-
     get activeWindow() {
         return this._activeWindow;
     }
@@ -23,7 +19,6 @@ class DesktopModel {
      * @type {DesktopWindow | undefined}
      */
     _previousWindow = undefined
-
     get previousWindow() {
         return this._previousWindow;
     }
@@ -36,15 +31,12 @@ class DesktopModel {
         // this._windows.push(new Window());
     }
 
-    searchForWindowById(id)
-    {
+    searchForWindowById(id) {
         return this._windows[id] !== undefined;
     }
 
-    addNewWindow(name, window, tab)
-    {
-        this._windows[name]=window
-        this._tabs[name]=tab
-
+    addNewWindow(name, window, tab) {
+        this._windows[name] = window
+        this._tabs[name] = tab
     }
 }

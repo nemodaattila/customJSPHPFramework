@@ -4,7 +4,6 @@ class DesktopView {
      * @type {HTMLDivElement|HTMLBodyElement}
      */
     _mainContainer = document.getElementsByTagName('body')[0]
-
     get mainContainer() {
         return this._mainContainer;
     }
@@ -14,7 +13,6 @@ class DesktopView {
     }
 
     _deskTopDOMElement
-
     get deskTopDOMElement() {
         return this._deskTopDOMElement;
     }
@@ -28,7 +26,6 @@ class DesktopView {
      * @type HTMLDivElement
      */
     _tabsBarDOMElement
-
     get tabsBarDOMElement() {
         return this._tabsBarDOMElement;
     }
@@ -54,6 +51,4 @@ class DesktopView {
                 DesktopEventHandlers.move(event)
         })
     }
-
-
 }

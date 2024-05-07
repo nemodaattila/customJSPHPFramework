@@ -1,5 +1,4 @@
 class CompanyService extends ServiceParent {
-
     _restParameter = 'company'
 
     async init() {
@@ -17,8 +16,6 @@ class CompanyService extends ServiceParent {
         this._model.companyTypes = await RESTHandler.send({url: 'company/meta', requestType: 'GET'})
         this._model.loaded = true
     }
-
-
 
     // /**
     //  * új cég beküldése

@@ -3,7 +3,7 @@ class PageTurnerController {
     _lastPageNum = undefined
 
     constructor(container) {
-        container.style.height = parseInt(container.style.height)+ 30 + "px";
+        container.style.height = parseInt(container.style.height) + 30 + "px";
         let navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
         this._navElements['first'] = HtmlElementCreator.createHtmlElement("span", navContainer, {
             "class": "navLink",

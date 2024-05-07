@@ -33,19 +33,29 @@ class CustomPDO implements DatabaseConnectionInterface
         $this->query =& $this->connection->query;
     }
 
-    public function startTransaction() {
+    public function startTransaction(): void {
         $this->connection->beginTransaction();
     }
 
-    public function simpleFetchTable($tableName) {
-        $record = [];
+    public function simpleFetchTable($tableName): false|array {
         $this->executeQuery('select * from ' . $tableName);
         return $this->query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
+     * @param string $queryString query string
+     * @param array $parameters paraméterek
+     * @return bool sikeresség
+     * @throws Exception mysql hiba
+     */
+    protected function executeQuery(string $queryString, array $parameters = []): bool {
+        return $this->connection->executeQuery($queryString, $parameters);
+    }
+
     public function getRecordsFromServer(array $params): array|bool|null {
-        $orderParams = $params['orderLimit']??[];
-        $filters = $params['filterParameters']??[];
+        $orderParams = $params['orderLimit'] ?? [];
+        $filters = $params['filterParameters'] ?? [];
         $tables = [];
         if (!str_contains($params['tableName'], '.')) {
             [$databaseName, $tableName] = ['everlink_projectmanager', $params['tableName']];
@@ -56,7 +66,6 @@ class CustomPDO implements DatabaseConnectionInterface
         }
         if (isset($params['attributes'])) {
             $attributes = $params['attributes'];
-
         } elseif (isset($params['excludeAttributes'])) {
             $sql = "SELECT column_name FROM  information_schema.columns	WHERE table_schema='" . $databaseName . "' and table_name = '" . $tableName . "'";
             $this->executeQuery($sql);
@@ -64,17 +73,17 @@ class CustomPDO implements DatabaseConnectionInterface
             $attributes = array_diff($attributes, $params['excludeAttributes']);
         } else
             $attributes = ['*'];
-        $conditionalAttributes=[];
+        $conditionalAttributes = [];
         if (isset($params['conditionalAttributes']))
             $conditionalAttributes = $params['conditionalAttributes'];
         $tableName = $params['tableName'];
         $what = [];
         $outerWhat = [];
-        foreach ($attributes as  $value) {
+        foreach ($attributes as $value) {
             $what[] = 't1.' . $value;
             $outerWhat[] = $value;
         }
-        foreach ($conditionalAttributes as  $value)
+        foreach ($conditionalAttributes as $value)
             $what[] = 't1.' . $value;
         $joins = '';
         $id = 2;
@@ -126,7 +135,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $innerWhere = " WHERE " . implode(' AND ', $innerWhere);
         }
         $innerFrom = (count($innerFrom) === 0 ? '' : ' ' . implode(', ', $innerFrom) . ', ');
-        $sql = 'SELECT '.implode(", ", $outerWhat).' FROM (SELECT ' . implode(", ", $what) .  ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
+        $sql = 'SELECT ' . implode(", ", $outerWhat) . ' FROM (SELECT ' . implode(", ", $what) . ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
         $where = [];
         foreach ($filters as $filter) {
             [$attrName, $filterType, $filterValue] = $filter;
@@ -151,18 +160,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $sql .= ' LIMIT ' . $orderParams['limit'] . " OFFSET " . ($orderParams['offset'] ?? '0');
 //        var_dump($sql);
         $this->executeQuery($sql);
-        return $this->query->fetchAll($params['fetchType']??PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * sql utasasítás végrehajtása , PDOConnection::executeQuery-t hívja meg
-     * @param string $queryString query string
-     * @param array $parameters paraméterek
-     * @return bool sikeresség
-     * @throws Exception mysql hiba
-     */
-    protected function executeQuery(string $queryString, array $parameters = []): bool {
-        return $this->connection->executeQuery($queryString, $parameters);
+        return $this->query->fetchAll($params['fetchType'] ?? PDO::FETCH_ASSOC);
     }
 
 //    /**
@@ -193,8 +191,6 @@ class CustomPDO implements DatabaseConnectionInterface
 //        ]);
 //        return $this->query->fetchAll(PDO::FETCH_ASSOC);
 //    }
-
-
     /**
      * entitások/rekordok lekérdezése szerverről szűrésekkel, új verzió, db fügvény nélkül
      * @param array $params szűrési és rendezési paraméterek:
@@ -221,6 +217,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * ]
      * ]);
      */
+
     /**
      * rekord/entitás lekérése attributum alapján
      * @param string $tableName táblanév
@@ -292,7 +289,7 @@ class CustomPDO implements DatabaseConnectionInterface
     protected function getARecord(array $params) {
         if ($params['value'] === null) return null;
         $tables = [];
-        if (strpos($params['tableName'], '.') === false) {
+        if (!str_contains($params['tableName'], '.')) {
             [$databaseName, $tableName] = ['everlink_client', $params['tableName']];
         } else
             [$databaseName, $tableName] = explode('.', $params['tableName']);
@@ -315,7 +312,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $joins = [];
             foreach ($params['connectedTableParams'] as $join) {
                 $tables[$join['table']] = 't' . $id;
-                if (strpos($join['connectedAttribute'], '.') === false) {
+                if (!str_contains($join['connectedAttribute'], '.')) {
                     [$leftDatabaseName, $leftTableName] = ['t1', $join['connectedAttribute']];
                 } else {
                     $temp = explode('.', $join['connectedAttribute']);
@@ -334,21 +331,6 @@ class CustomPDO implements DatabaseConnectionInterface
             $params['attribute'] = 'id';
         $sql .= ' WHERE ' . $params['attribute'] . ' = \'' . $params['value'] . '\'';
         $this->executeQuery($sql);
-        $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if ($res === false) $res = null;
-        return $res;
-    }
-
-    /**
-     * egy entitás/rekord lekérdezése
-     * @param string $tableName táblanév
-     * @param int|null $id rekord id
-     * @return array|null rekord
-     * @throws Exception mysql hiba
-     */
-    public function getARecordByID(string $tableName, int $id = null): ?array {
-        if ($id === null) return null;
-        $this->executeQuery('call epm_getARecordFromTableById(?,?)', [$tableName, $id]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
         if ($res === false) $res = null;
         return $res;
@@ -397,7 +379,20 @@ class CustomPDO implements DatabaseConnectionInterface
         return [$newData, $changeForEvents];
     }
 
-
+    /**
+     * egy entitás/rekord lekérdezése
+     * @param string $tableName táblanév
+     * @param int|null $id rekord id
+     * @return array|null rekord
+     * @throws Exception mysql hiba
+     */
+    public function getARecordByID(string $tableName, int $id = null): ?array {
+        if ($id === null) return null;
+        $this->executeQuery('call epm_getARecordFromTableById(?,?)', [$tableName, $id]);
+        $res = $this->query->fetch(PDO::FETCH_ASSOC);
+        if ($res === false) $res = null;
+        return $res;
+    }
 
     protected function addPropertyToCommentJSON($json, $key, $value = null, $value2 = null): bool|string {
         $json = json_decode($json);

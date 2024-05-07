@@ -50,7 +50,6 @@ class RESTHandler {
      */
     static async send(params = {}) {
         console.log(params);
-        console.trace()
         this._customHeader = []
         this._targetUrl = '../backend/';
         if (params && params.url) {
@@ -61,10 +60,8 @@ class RESTHandler {
         }
         if (params && params.customHeader)
             Object.entries(params.customHeader).forEach(([name, header]) => {
-
                 this.addCustomHeader(name, header)
             })
-        console.dir(this)
         return new Promise(async (resolve, reject) => {
             let request = new XMLHttpRequest();
             request.open(this._requestType, this._targetUrl, true);

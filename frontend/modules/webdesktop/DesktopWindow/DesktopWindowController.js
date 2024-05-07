@@ -2,64 +2,55 @@
  * grafikus (Windows-szerű) ablak objektuma
  */
 class DesktopWindowController {
-
-
     _model
-
     _view
-
-    _tabPointer
-
     _contentControllerPointer
 
     constructor(container) {
         //     this.parentInit(new ListAllCompanyModel())
         //     this.windowContentPointer.hideEntityHandlerIcons(['delete'])
-        this._model=new DesktopWindowModel();
-        this._view=new DesktopWindowView(this);
+        this._model = new DesktopWindowModel();
+        this._view = new DesktopWindowView(this);
         this._model.increaseCount();
         this._model.setIdToCount()
         this._view.displayWindow(container)
         this.calcDefaultParameters()
         // this.observer = new ResizeObserver(DesktopEventHandlers.onWindowResize)
         // this.observer.observe(this._view.windowDiv);
-
-
     }
 
-    set tabPointer(value)
-    {
+    _tabPointer
+
+    set tabPointer(value) {
         this._tabPointer = value;
     }
 
-    calcDefaultParameters()
-    {
-        let top,left
-        let id =parseInt(this._model.id)
+    calcDefaultParameters() {
+        let top, left
+        let id = parseInt(this._model.id)
         console.log(id)
         switch (id % 4) {
-                    case 0:
-                        top = '25px'
-                        left = '25px'
-                        break
-                    case 1:
-                        top = '25px'
-                        left = '50%'
-                        break
-                    case 2:
-                        top = '51%'
-                        left = 0
-                        break
-                    case 3:
-                        top = '51%'
-                        left = '50%'
-                        break
-                }
-                this._view.setLeftAndTopParameters(left,top)
+            case 0:
+                top = '25px'
+                left = '25px'
+                break
+            case 1:
+                top = '25px'
+                left = '50%'
+                break
+            case 2:
+                top = '51%'
+                left = 0
+                break
+            case 3:
+                top = '51%'
+                left = '50%'
+                break
+        }
+        this._view.setLeftAndTopParameters(left, top)
     }
 
-    displayContent(controller)
-    {
+    displayContent(controller) {
         this._view.setTitle(controller.getTitle())
         this._tabPointer.setTitle(controller.getTitle())
         controller.displayView(this._view.windowBody);
@@ -88,7 +79,6 @@ class DesktopWindowController {
     //     this.containerElement = Desktop.desktopElement;
     //     this.connectedParams = connectedParams
     //     this.moduleGroupName = moduleGroupName
-
     // }
     //
     // /**
@@ -200,7 +190,6 @@ class DesktopWindowController {
     // /**
     //  * ablak jobb felső sarkában lévő ikonok megjelenítése, eventek hozzáadása (zoom, miinimize, maximize, close)
     //  */
-
     //
     // /**
     //  * ablak fülének megjelenítése a fülsávon, záróesemény hozzáadása

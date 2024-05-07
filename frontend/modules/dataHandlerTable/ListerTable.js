@@ -1,8 +1,8 @@
 class ListerTable {
+    static _id = -1
     _view
     _interval // refreshInterval
     _intervalInSeconds = 60000;
-    static _id = -1
     autoHeaderSetting = false
     dblClickTimer = false
 
@@ -17,8 +17,7 @@ class ListerTable {
         return this._view.tableFooter
     }
 
-    getTBodyHeight()
-    {
+    getTBodyHeight() {
         return this._view.getTBodyHeight()
     }
 
@@ -63,14 +62,12 @@ class ListerTable {
         })
     }
 
-    zoomContent(zoomValue)
-    {
-        this,this._view.zoomContent(zoomValue)
+    zoomContent(zoomValue) {
+        this._view.zoomContent(zoomValue)
         //DO refresh
     }
 
-    beforeRefresh()
-    {
+    beforeRefresh() {
         // let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
 //         this.selectedRows = []
 //         let lastClickedId = this.lastClickedRow?.connectedObjectId
@@ -79,30 +76,22 @@ class ListerTable {
 // //
     }
 
-    afterRefresh()
-    {
+    afterRefresh() {
         // this.overlay.style.display = 'none'
 //         this.rows.filter(row => selectedIds.findIndex(id => id === row.connectedObjectId) !== -1).forEach(row => {
 //             this.addRemoveSelectedRow(row)
 //             if (row.connectedObjectId === lastClickedId)
 //                 this.lastClickedRow = row
 //         })
-
     }
-    displayRecordsInTable(records,  append = false)
-    {
+
+    displayRecordsInTable(records, append = false) {
         if (!append)
             this._view.emptyBody()
         records.forEach(record => {
             console.log(record)
-           let row = this._view.createRowWithRecord(record[1],record[0])
-
+            let row = this._view.createRowWithRecord(record[1], record[0])
         })
-
-
-
-
-
 //         data.forEach(record => {
 //             row.connectedObjectId = record.id
 //             this.rows.push(row)
@@ -129,12 +118,10 @@ class ListerTable {
 //                         break;
 //                 }
 //             })
-
 //
 //             })
 //         })
     }
-
 
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
 //      */
@@ -163,7 +150,6 @@ class ListerTable {
 //         this.observer.unobserve(this.container.parentElement.parentElement)
 //         clearInterval(this.interval)
 //     }
-    ű
 //     async refreshRows() {
 //
 //     }

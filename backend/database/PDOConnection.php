@@ -1,20 +1,21 @@
 <?php
 
 namespace database;
+
 use PDO;
 use PDOStatement;
 
 final class PDOConnection
 {
     /**
-     * @var PDO|null PDO példány
-     */
-    private ?PDO $pdo = null;
-    /**
      * előkészített PDO lekérdezés
      * @var PDOStatement|false|null
      */
     public PDOStatement|null|false $query = null;
+    /**
+     * @var PDO|null PDO példány
+     */
+    private ?PDO $pdo = null;
 
     /**
      * PDO kapcsolat létrehozása, a paramétereket a backend/config/PDOConfig.php fájlból olvasssa be
@@ -22,7 +23,7 @@ final class PDOConnection
     public function createPDO(): void {
         if ($this->pdo === null) {
             $config = parse_ini_file('./database/PDOConfig.php');
-                $this->pdo = new PDO('mysql:host=' . $config['dbHost'] . ';dbname=' . $config['dbName']
+            $this->pdo = new PDO('mysql:host=' . $config['dbHost'] . ';dbname=' . $config['dbName']
                 . ';charset=utf8mb4', $config['dbUser'], $config['dbPassword'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

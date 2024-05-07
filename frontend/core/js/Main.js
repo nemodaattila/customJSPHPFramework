@@ -15,7 +15,7 @@ class Main {
                 {
                     directory: CORE_FILE_DIR,
                     fileNames: ['Messenger.js', 'HtmlElementCreator.js', 'ModuleLoader.js', 'ControllerParent.js'
-                        , 'ServiceParent.js', 'ServiceModelParent.js', 'RESTHandler.js','ViewParent.js'],
+                        , 'ServiceParent.js', 'ServiceModelParent.js', 'RESTHandler.js', 'ViewParent.js'],
                 },
                 {
                     directory: WEB_DESKTOP_DIR,
@@ -23,7 +23,7 @@ class Main {
                 }, {
                 directory: MODULE_FILE_DIR + 'alertPopup',
                 fileNames: ['filesToInclude.js']
-            },, {
+            }, {
                 directory: MODULE_FILE_DIR + 'dataHandlerTable',
                 fileNames: ['filesToInclude.js']
             }]

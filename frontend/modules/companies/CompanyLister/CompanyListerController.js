@@ -8,7 +8,4 @@ class CompanyListerController extends ListerControllerParent {
     // _pageTurnerType = 'infinity'
     _pageTurnerType = 'pageTurner'
     _tableConnector
-
-
-
 }

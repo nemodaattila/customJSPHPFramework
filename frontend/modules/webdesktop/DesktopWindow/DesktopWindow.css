@@ -20,7 +20,7 @@
     width: 100%;
 }
 
-.windowHeaderDiv{
+.windowHeaderDiv {
     width: 100%;
     height: 35px;
     background: #566575;
@@ -50,7 +50,7 @@
     right: 130px;
 }
 
- .zoom:hover .zoomInput {
+.zoom:hover .zoomInput {
     display: block
 }
 
@@ -76,7 +76,6 @@
 }
 
 
-
 .close, .zoomIcon, .maximise, .miniaturise, .pin {
     width: 25px;
     background-size: cover;
@@ -84,10 +83,9 @@
     height: 25px
 }
 
-.close:hover,  .zoomIcon:hover, .maximise:hover, .miniaturise:hover, .zoom:hover {
+.close:hover, .zoomIcon:hover, .maximise:hover, .miniaturise:hover, .zoom:hover {
     cursor: pointer
 }
-
 
 
 .close {
@@ -107,6 +105,7 @@
     top: 5px;
     background-image: url(minimalise.png)
 }
+
 .pin {
     right: 100px;
     top: 5px;

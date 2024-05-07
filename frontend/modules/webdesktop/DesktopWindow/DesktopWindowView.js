@@ -1,37 +1,34 @@
 class DesktopWindowView {
-    get windowDiv() {
-        return this._windowDiv;
-    }
-    get windowBody() {
-        return this._windowBody;
-    }
-    _windowDiv
-
-    _windowBody
-
     _windowHeaderDiv
-
     _titleDiv
-
     _controllerPointer
 
     constructor(controllerPointer) {
-        this._controllerPointer=controllerPointer;
+        this._controllerPointer = controllerPointer;
+    }
+
+    _windowDiv
+
+    get windowDiv() {
+        return this._windowDiv;
+    }
+
+    _windowBody
+
+    get windowBody() {
+        return this._windowBody;
     }
 
     displayWindow(desktopContainer) {
-
         this._windowDiv = HtmlElementCreator.createHtmlElement('div', desktopContainer, {class: 'window'})
         // this._windowDiv
         //     ['windowObject'] = this
-        this._windowDiv            .style.zIndex = "100"
+        this._windowDiv.style.zIndex = "100"
         this._windowHeaderDiv = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowHeaderDiv'})
         this._titleDiv = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'titleDiv'
         })
         this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
-
-
         this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
         this._titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
         ))
@@ -40,11 +37,11 @@ class DesktopWindowView {
         // this.displayMainElements(params, service)
     };
 
-    setLeftAndTopParameters(left,top)
-    {
-            this._windowDiv.style.left = left
-            this._windowDiv.style.top = top
+    setLeftAndTopParameters(left, top) {
+        this._windowDiv.style.left = left
+        this._windowDiv.style.top = top
     }
+
     displayWindowIcons() {
         this.zoomDiv = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'zoom', title: 'Nagyítás',
@@ -91,20 +88,18 @@ class DesktopWindowView {
         })
     }
 
-    setTitle(title)
-    {
-        this._titleDiv.innerHTML=title
+    setTitle(title) {
+        this._titleDiv.innerHTML = title
     }
 
     zoomWindow(zoomValue, save = true) {
         console.log(zoomValue)
-    this._controllerPointer.zoomContent(zoomValue)
+        this._controllerPointer.zoomContent(zoomValue)
         //DO save window params
-            // this.zoom = value
-            // this.pageScrollData.zoom = value
-            // this.tableContainer.style.zoom = value
-            // if (save)
-            //     DesktopEventHandlers.onWindowResize(this.container)
-        }
-
+        // this.zoom = value
+        // this.pageScrollData.zoom = value
+        // this.tableContainer.style.zoom = value
+        // if (save)
+        //     DesktopEventHandlers.onWindowResize(this.container)
+    }
 }
