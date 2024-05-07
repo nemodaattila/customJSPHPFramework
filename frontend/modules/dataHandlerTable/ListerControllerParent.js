@@ -4,6 +4,7 @@ class ListerControllerParent extends ControllerParent {
     _pageTurnerType = 'infinity'
     _serviceModelPointer
     _rowHeight = 20
+    _listerTable
 
     init() {
         console.log(this)
@@ -17,7 +18,8 @@ class ListerControllerParent extends ControllerParent {
    async displayView(windowBody) {
         this._serviceModelPointer = this.service.model
         let listerTable = new ListerTable(windowBody)
-        this._view.addComponent('listerTable', listerTable)
+       this._listerTable = listerTable
+       this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
@@ -33,8 +35,17 @@ class ListerControllerParent extends ControllerParent {
         this._view.addComponent(pageTurner)
        console.dir(windowBody)
        this._searchAndOrderParameters.limit= Math.floor(parseInt(listerTable.getTBodyHeight())/this._rowHeight)
+        this.getRecordsFromServer("refresh")
+    }
 
-       await this.collectSearchParamsForRequest("refresh")
+    async getRecordsFromServer(type){
+        await this.collectSearchParamsForRequest(type)
+
+    }
+
+    zoomContent(zoomValue)
+    {
+        this._listerTable.zoomContent(zoomValue)
     }
 
     async collectSearchParamsForRequest(type) {
@@ -47,13 +58,16 @@ class ListerControllerParent extends ControllerParent {
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
-        let res = await this.service.getRecordsFromServer(searchParams)
-        if (res !== false) {
+        let records = await this.service.getRecordsFromServer(searchParams)
+        console.trace()
+
+        if (records !== false) {
+            console.log(records)
             if (type === 'reset' || type === 'refresh') {
-                this.displayTableData(res)
-                this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
+                this._view.getComponent('listerTable').displayRecordsInTable(records)
+                // this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
             } else {
-                this.appendTableData(res)
+                this.appendTableData(records)
             }
         }
     }

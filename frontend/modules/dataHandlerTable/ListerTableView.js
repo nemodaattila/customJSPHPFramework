@@ -111,6 +111,7 @@ class ListerTableView {
         // })
         // this.overlay = HtmlElementCreator.createSimpleHtmlElement('div', this.container, {class: 'overlay'})
         //
+        this._tableContainer.style.zoom = 2
     }
 
     displayOperationIcons(enabledOperations) {
@@ -341,6 +342,12 @@ class ListerTableView {
         HtmlElementCreator.emptyDOMElement(this._tBody)
     }
 
+    zoomContent(zoomValue)
+    {
+        console.trace()
+        console.log(zoomValue)
+        this._tableContainer.style.zoom = zoomValue
+    }
     createRowWithRecord(values, id)
     {
             let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})

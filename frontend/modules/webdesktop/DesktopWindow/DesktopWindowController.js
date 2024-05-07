@@ -10,11 +10,13 @@ class DesktopWindowController {
 
     _tabPointer
 
+    _contentControllerPointer
+
     constructor(container) {
         //     this.parentInit(new ListAllCompanyModel())
         //     this.windowContentPointer.hideEntityHandlerIcons(['delete'])
         this._model=new DesktopWindowModel();
-        this._view=new DesktopWindowView();
+        this._view=new DesktopWindowView(this);
         this._model.increaseCount();
         this._model.setIdToCount()
         this._view.displayWindow(container)
@@ -38,7 +40,7 @@ class DesktopWindowController {
         switch (id % 4) {
                     case 0:
                         top = '25px'
-                        left = 0
+                        left = '25px'
                         break
                     case 1:
                         top = '25px'
@@ -61,6 +63,16 @@ class DesktopWindowController {
         this._view.setTitle(controller.getTitle())
         this._tabPointer.setTitle(controller.getTitle())
         controller.displayView(this._view.windowBody);
+        this._contentControllerPointer = controller
+    }
+
+    zoomContent(zoomValue) {
+        this._contentControllerPointer.zoomContent(zoomValue)
+        // this.zoom = value
+        // this.pageScrollData.zoom = value
+        // this.tableContainer.style.zoom = value
+        // if (save)
+        //     DesktopEventHandlers.onWindowResize(this.container)
     }
 
     //

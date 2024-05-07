@@ -13,6 +13,12 @@ class DesktopWindowView {
 
     _titleDiv
 
+    _controllerPointer
+
+    constructor(controllerPointer) {
+        this._controllerPointer=controllerPointer;
+    }
+
     displayWindow(desktopContainer) {
 
         this._windowDiv = HtmlElementCreator.createHtmlElement('div', desktopContainer, {class: 'window'})
@@ -49,7 +55,7 @@ class DesktopWindowView {
         })
         zoomChanger.addEventListener('change', (event) => {
             event.stopPropagation()
-            this._zoomWindow(zoomChanger.value)
+            this.zoomWindow(zoomChanger.value)
         })
         let zoomIconDiv = HtmlElementCreator.createHtmlElement('div', this.zoomDiv, {
             class: "zoomIcon"
@@ -91,7 +97,9 @@ class DesktopWindowView {
     }
 
     zoomWindow(zoomValue, save = true) {
-    this.windowBody.style.zoom = zoomValue
+        console.log(zoomValue)
+    this._controllerPointer.zoomContent(zoomValue)
+        //DO save window params
             // this.zoom = value
             // this.pageScrollData.zoom = value
             // this.tableContainer.style.zoom = value

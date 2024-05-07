@@ -63,6 +63,79 @@ class ListerTable {
         })
     }
 
+    zoomContent(zoomValue)
+    {
+        this,this._view.zoomContent(zoomValue)
+        //DO refresh
+    }
+
+    beforeRefresh()
+    {
+        // let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
+//         this.selectedRows = []
+//         let lastClickedId = this.lastClickedRow?.connectedObjectId
+//         this.overlay.style.display = 'block'
+//         this.scrollRows(this.pageScrollData.rowFrom)
+// //
+    }
+
+    afterRefresh()
+    {
+        // this.overlay.style.display = 'none'
+//         this.rows.filter(row => selectedIds.findIndex(id => id === row.connectedObjectId) !== -1).forEach(row => {
+//             this.addRemoveSelectedRow(row)
+//             if (row.connectedObjectId === lastClickedId)
+//                 this.lastClickedRow = row
+//         })
+
+    }
+    displayRecordsInTable(records,  append = false)
+    {
+        if (!append)
+            this._view.emptyBody()
+        records.forEach(record => {
+            console.log(record)
+           let row = this._view.createRowWithRecord(record[1],record[0])
+
+        })
+
+
+
+
+
+//         data.forEach(record => {
+//             row.connectedObjectId = record.id
+//             this.rows.push(row)
+//             row.addEventListener('click', (event) => {
+//                 event.preventDefault()
+//                 if (this.dblClickTimer) {
+//                     clearTimeout(this.dblClickTimer);
+//                     this.dblClickTimer = false;
+//                 }
+//                 switch (event.detail) {
+//                     case 1:
+//                         this.dblClickTimer = setTimeout(() => {
+//                             this.selectRow(row, event, event.detail === 1)
+//                             if (event.button === 1 || this.service.selectedRecord !== null)
+//                                 this.showDetailed(false)
+//                             this.showImage(record)
+//                         }, 200);
+//                         break;
+//                     case 2:
+//                         this.selectRow(row, event, event.detail === 1)
+//                         this.showDetailed()
+//                         break;
+//                     default:
+//                         break;
+//                 }
+//             })
+
+//
+//             })
+//         })
+    }
+
+
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
 //      */
 //     scrollTimer
@@ -92,18 +165,7 @@ class ListerTable {
 //     }
     ű
 //     async refreshRows() {
-//         let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
-//         this.selectedRows = []
-//         let lastClickedId = this.lastClickedRow?.connectedObjectId
-//         this.overlay.style.display = 'block'
-//         await this.controllerPointer.collectSearchParamsForRequest('refresh')
-//         this.scrollRows(this.pageScrollData.rowFrom)
-//         this.overlay.style.display = 'none'
-//         this.rows.filter(row => selectedIds.findIndex(id => id === row.connectedObjectId) !== -1).forEach(row => {
-//             this.addRemoveSelectedRow(row)
-//             if (row.connectedObjectId === lastClickedId)
-//                 this.lastClickedRow = row
-//         })
+//
 //     }
 //     /**
 //      * egyedi ikon hozzáadása az ikonsorhoz
@@ -355,60 +417,7 @@ class ListerTable {
 //      * @param append {boolean} ha append akkor nincs törlés, csak hozzáfűzés
 //      */
 //     displayData(data, append = false) {
-//         if (!append) {
-//             this.rows = []
-//             HtmlElementCreator.emptyDOMElement(this.tBody)
-//         }
-//         data.forEach(record => {
-//             let row = HtmlElementCreator.createHtmlElement('tr', this.tBody, {})
-//             row.connectedObjectId = record.id
-//             this.rows.push(row)
-//             row.addEventListener('click', (event) => {
-//                 event.preventDefault()
-//                 if (this.dblClickTimer) {
-//                     clearTimeout(this.dblClickTimer);
-//                     this.dblClickTimer = false;
-//                 }
-//                 switch (event.detail) {
-//                     case 1:
-//                         this.dblClickTimer = setTimeout(() => {
-//                             this.selectRow(row, event, event.detail === 1)
-//                             if (event.button === 1 || this.service.selectedRecord !== null)
-//                                 this.showDetailed(false)
-//                             this.showImage(record)
-//                         }, 200);
-//                         break;
-//                     case 2:
-//                         this.selectRow(row, event, event.detail === 1)
-//                         this.showDetailed()
-//                         break;
-//                     default:
-//                         break;
-//                 }
-//             })
-//             let tdContent
-//             this.columnNames.forEach(id => {
-//                 let serviceParams = this.service.tableAttributeParams[this.content.serviceTable][id]
-//                 let modelParams = this.content.headers[id]
-//                 let filter = modelParams?.filterType ?? serviceParams['DATA_TYPE']
-//                 if (filter === 'select') {
-//                     tdContent = modelParams.values[record[id]]
-//                 } else {
-//                     try {
-//                         tdContent = record[id] === null || record[id] === undefined ? '' : decodeURIComponent(record[id])
-//                     } catch (e) {
-//                         tdContent = record[id]
-//                     }
-//                 }
-//                 let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: tdContent})
-//                 if (['int', 'number', 'date', 'decimal'].findIndex(type => type === filter) !== -1)
-//                     td.classList.add('rightAlign')
-//                 if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(type => type === filter) !== -1)
-//                     td.classList.add('leftAlign')
-//                 if (!document.getElementById("hcb-" + this.id + "-" + id).checked)
-//                     td.style.display = 'none'
-//             })
-//         })
+//
 //     }
 //
 //     /**
