@@ -38,6 +38,8 @@ class ListerTableView {
         this._mainContainer = tableContainer;
         this._mainContainer.style.display='table';
 
+        this._mainContainer.style.tableLayout='fixed';
+
     }
 
     getTBodyHeight()
@@ -332,4 +334,32 @@ class ListerTableView {
             //     this._filters[id] = [this.filterInputs[id][0].value, this.filterInputs[id][1].value]
         })
     }
+
+    emptyBody()
+    {
+        this._rows = []
+        HtmlElementCreator.emptyDOMElement(this._tBody)
+    }
+
+    createRowWithRecord(values, id)
+    {
+            let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
+        this._rows.push(row)
+            values.forEach(([value, type, paramName]) =>{
+                let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+                if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
+                    td.classList.add('rightAlign')
+                if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(dataType => dataType === type) !== -1)
+                    td.classList.add('leftAlign')
+                if (!document.getElementById("hcb-" + this.id + "-" + paramName).checked)
+                    td.style.display = 'none'
+
+
+                //TODO az id-t kértem le de a paraméter neve kell   
+    })
+
+
+        return row;
+    }
+
 }

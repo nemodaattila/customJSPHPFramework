@@ -15,7 +15,8 @@
     white-space: nowrap;
     border-collapse: collapse;
     border: 1px solid #000;
-    width: 100%;
+    /*width: 100%;*/
+    /*width: 0;*/
     height: 100%;
     background-color: #fff;
 }
@@ -26,9 +27,37 @@
     height: 20px;
 }
 
+.listTable thead th{
+    display: inline-block;
+}
+
+
 .listTable tbody {
     display: table-row;
     overflow: auto;
+    background-color: #d0d8e0;
+}
+
+.listTable tbody tr
+{
+    display: table-row;
+    background-color: white;
+
+}
+
+.listTable td
+{
+    display: inline-block;
+    overflow: hidden;
+    padding-left: 2px;
+}
+
+.listTable td.leftAlign {
+    text-align: left
+}
+
+.listTable td.rightAlign {
+    text-align: right
 }
 
 .view_field {
@@ -91,35 +120,43 @@
     display: block
 }
 
-tr {
+.listTable tbody td
+{
     height: 20px;
+
 }
 
-th {
-    border: 1px solid #000;
-}
-
-
-
-td, th {
+.listTable td, .listTable th {
     font-size: 13px;
     width: 170px;
+    border: 1px solid #000;
+    border-top-width: 0;
+    border-left-width: 0;
+}
+
+
+.listTable tr:nth-child(2n), .listTable th:nth-child(2n) {
+    background: rgba(0, 0, 0, .1);
+}
+
+.listTable td:nth-child(2n) {
+    background: rgba(0, 0, 0, .05);
 }
 
 
 .order {
     position: absolute;
     width: 30px;
-    top: 0
+    /*top: 0*/
 }
 
 .order {
     height: 20px
 }
 
-.order {
-    left: 0
-}
+/*.order {*/
+/*    left: 0*/
+/*}*/
 
 
 .order.ordered.reversed:hover:after, .order.ordered:after, .order:hover:after {
@@ -135,7 +172,4 @@ td, th {
 .filterRow > td > * {
     display: block
 }
-
-
-
 

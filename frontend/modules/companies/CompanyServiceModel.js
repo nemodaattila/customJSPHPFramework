@@ -79,7 +79,7 @@ class CompanyServiceModel extends ServiceModelParent {
     _onClickEventAttribs = ['id', 'name']
     _defaultOrder = 'name'
     _tableHeaderAttributes = {
-        id: {label: 'Azonosító', type: 'string'},
+        id: {label: 'Azonosító', type: 'int'},
         name: {label: 'Név', type: 'string'},
         address: {label: 'cím', type: 'string'},
         vat_number: {label: 'Adószám'},

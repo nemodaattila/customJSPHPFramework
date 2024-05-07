@@ -47,7 +47,10 @@ class DesktopWindowView {
         let zoomChanger = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
             type: 'range', step: "0.1", min: "0.5", max: "2", class: "zoomInput", value: "1"
         })
-        zoomChanger.addEventListener('change', () => this._zoomWindow(zoomChanger.value))
+        zoomChanger.addEventListener('change', (event) => {
+            event.stopPropagation()
+            this._zoomWindow(zoomChanger.value)
+        })
         let zoomIconDiv = HtmlElementCreator.createHtmlElement('div', this.zoomDiv, {
             class: "zoomIcon"
         })
@@ -86,5 +89,14 @@ class DesktopWindowView {
     {
         this._titleDiv.innerHTML=title
     }
+
+    zoomWindow(zoomValue, save = true) {
+    this.windowBody.style.zoom = zoomValue
+            // this.zoom = value
+            // this.pageScrollData.zoom = value
+            // this.tableContainer.style.zoom = value
+            // if (save)
+            //     DesktopEventHandlers.onWindowResize(this.container)
+        }
 
 }
