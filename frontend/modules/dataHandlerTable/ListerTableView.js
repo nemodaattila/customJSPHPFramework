@@ -20,6 +20,7 @@ class ListerTableView {
     _tableBody
     _controllerPointer
     _inMoveTh = undefined
+    reSizeObject
 
     constructor(id, tableContainer, controllerPointer) {
         this._id = id
@@ -48,7 +49,6 @@ class ListerTableView {
     }
 
     getTBodyHeight() {
-        console.dir(this._tBody);
         return this._tBody.clientHeight
     }
 
@@ -71,11 +71,15 @@ class ListerTableView {
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
         this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
         this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
-        this._mainContainer.addEventListener('mouseup', (event) =>
-            this.endMoveTh(event))
+        this._mainContainer.addEventListener('mouseup', (event) => {
+            this.endMoveTh(event)
+            this.endResizeTh(event)
+        })
         this._mainContainer.addEventListener('mousemove', (event) => {
-            if (event.buttons === 1)
+            if (event.buttons === 1) {
                 this.moveTh(event)
+                this.moveResizeTh(event)
+            }
         })
         // this.pageScrollData.scrollDiv = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'scrollHeight'})
         // this.pageScrollData.scrollDiv.style.height = this.defaultScrollHeight + "px"
@@ -124,7 +128,6 @@ class ListerTableView {
     }
 
     displayOperationIcons(enabledOperations) {
-        console.log(enabledOperations)
         this._tableIconContainer = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
         let adder = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + '/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
@@ -209,6 +212,7 @@ class ListerTableView {
         attributeOrder.forEach((columnName) => {
             let modelParams = attributeParams[columnName]
             let th = HtmlElementCreator.createHtmlElement('th', this._headerRow, {})
+            th.setAttribute('moveCheckBoxName', 'hcb-' + this._id + "-" + columnName)
             th.addEventListener('mousedown', (event) =>
                 this.startMoveTh(event, th))
             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
@@ -222,14 +226,16 @@ class ListerTableView {
                 class: 'text',
                 innerHTML: modelParams?.label ?? columnName
             })
-            let resizeElement = HtmlElementCreator.createHtmlElement('div', th, {class: 'resize'})
+            let resizeElement = HtmlElementCreator.createHtmlElement('div', th,
+                {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
-                event.stopPropagation()
-                DesktopEventHandlers.startResize(event, th, this.dataTable, this)
+                event.stopImmediatePropagation()
+                this.startResizeTh(event, th)
             })
             resizeElement.addEventListener('dblclick', (event) => {
                 event.stopImmediatePropagation()
-                DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(columnName))
+                this.resizeThOptimal(event, th)
+                // DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(columnName))
             })
             if (isReDraw)
                 return
@@ -254,11 +260,73 @@ class ListerTableView {
         })
     }
 
+    resizeThOptimal(event, object) {
+        let minAutoWidth = 128;
+        let actWidth
+        let num = object.cellIndex
+        Object.values(this._rows).forEach(row => {
+            actWidth = this.getTextWidth(row.children[num])
+            minAutoWidth = Math.max(actWidth, minAutoWidth)
+        })
+        let columnWith = (minAutoWidth + 10) + "px"
+        object.style.width = columnWith;
+        this._filterRow.children[num].style.width = columnWith
+        Object.values(this._rows).forEach(row => {
+            row.children[num].style.width = columnWith
+        })
+    }
+
+    getTextWidth(element) {
+        let canvas = document.createElement("canvas");
+        let context = canvas.getContext("2d");
+        let fontSize = window.getComputedStyle(element).getPropertyValue("font-size");
+        let fontFamily = window.getComputedStyle(element).getPropertyValue("font-family");
+        context.font = fontSize + " " + fontFamily
+        return context.measureText(element.textContent).width;
+    }
+
+    startResizeTh(event, object) {
+        if (event.button !== 0 || object.getAttribute("data-rooted") === "1")
+            return
+        this.reSizeObject = {}
+        this.reSizeObject.mouseX = event.pageX || event.clientX;
+        this.reSizeObject.objectPos = object.getBoundingClientRect();
+        this.reSizeObject.zoomVal = this.getZoom()
+        this.reSizeObject.object = object;
+        this.reSizeObject.resizeWidth = object.getBoundingClientRect().width;
+    }
+
+    moveResizeTh(event) {
+        if (this.reSizeObject === undefined)
+            return
+        let newX = event.pageX || event.clientX;
+        let newY = event.pageY || event.clientY;
+        this.reSizeObject.resizeWidth = parseInt(this.reSizeObject.resizeWidth, 10) + ((newX - this.reSizeObject.mouseX) / this.reSizeObject.zoomVal);
+        this.reSizeObject.object.style.width = this.reSizeObject.resizeWidth + "px";
+        this.reSizeObject.mouseX = newX;
+        this.reSizeObject.mouseY = newY;
+        let num = this.reSizeObject.object.cellIndex
+        this._filterRow.children[num].style.width = this.reSizeObject.resizeWidth + "px"
+        Object.values(this._rows).forEach(row => {
+            row.children[num].style.width = this.reSizeObject.resizeWidth + "px";
+        })
+    }
+
+    endResizeTh(event) {
+        if (this.reSizeObject === undefined)
+            return
+        let num = this.reSizeObject.object.cellIndex
+        this._filterRow.children[num].style.width = this.reSizeObject.resizeWidth + "px"
+        Object.values(this._rows).forEach(row => {
+            row.children[num].style.width = this.reSizeObject.resizeWidth + "px";
+        })
+        if (parseInt(this.reSizeObject.resizeWidth, 10) < 10) {
+            document.getElementById(this.reSizeObject.object.getAttribute('moveCheckBoxName')).click()
+        }
+        this.reSizeObject = undefined
+    }
+
     startMoveTh(event, headerObject) {
-        console.clear()
-        console.dir(this._headerRow)
-        console.dir(this._columnMoveEnablerCB.checked)
-        console.log(undefined)
         if (!this._columnMoveEnablerCB.checked || event.button !== 0 || headerObject.getAttribute("data-rooted") === "")
             return
         this._inMoveTh = {}
@@ -266,12 +334,7 @@ class ListerTableView {
         this._inMoveTh.objectPos = headerObject.getBoundingClientRect();
         // this.inMoveTh.moveCbChecked = tableObject.moveEnablerCB.checked;
         // let zoomVal = window.getComputedStyle(tableObject.tableDiv).zoom;
-        let zoomVal = this._tableContainer.style.zoom
-        if (zoomVal === '')
-            zoomVal = 1
-        console.dir(zoomVal)
-        console.log((this._inMoveTh.objectPos.x + this._inMoveTh.objectPos.width - 10) * zoomVal)
-        console.dir(this._inMoveTh)
+        let zoomVal = this.getZoom()
         if ((this._inMoveTh.objectPos.x + this._inMoveTh.objectPos.width - 10) * zoomVal > this._inMoveTh.mouseX) {
             let floatingHeader = HtmlElementCreator.createHtmlElement('div',
                 this._headerRow)
@@ -342,8 +405,6 @@ class ListerTableView {
             head.style.borderLeft = "";
             head.style.borderRight = "";
         })
-        console.log(swapCellIndex)
-        console.log(inMove.actualCellIndex)
         this._headerRow.removeChild(inMove);
         this._controllerPointer.moveColumn(inMove.actualCellIndex, swapCellIndex)
         this._inMoveTh = undefined
@@ -481,9 +542,11 @@ class ListerTableView {
     }
 
     zoomContent(zoomValue) {
-        console.trace()
-        console.log(zoomValue)
         this._tableContainer.style.zoom = zoomValue
+    }
+
+    getZoom() {
+        return this._tableContainer.style.zoom === '' ? 1 : this._tableContainer.style.zoom
     }
 
     createRowWithRecord(values, id) {

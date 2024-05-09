@@ -30,6 +30,7 @@
 
 .listTable thead th {
     display: inline-block;
+    position: relative;
 }
 
 .listTable tbody {
@@ -160,3 +161,15 @@
     display: block
 }
 
+.listTable .resize {
+    position: absolute;
+    width: 10px;
+    top: 0;
+    height: 20px;
+    right: 0
+}
+
+.resize:hover {
+    cursor: col-resize;
+    border-right: 2px solid red
+}
