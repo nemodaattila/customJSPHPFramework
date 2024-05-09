@@ -73,7 +73,10 @@ class DesktopController {
         console.log(windowName)
         this._model.removeWindow(windowName)
     }
-
+    static getDesktopDOMElement()
+    {
+        return this._view._deskTopDOMElement
+    }
 
     //
     // /**

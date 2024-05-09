@@ -2,7 +2,7 @@ Includer.setIncludableFileSource(
     'desktop', [
         {
             directory: WEB_DESKTOP_DIR,
-            fileNames: ['WindowOpener.js']
+            fileNames: ['WindowOpener.js', 'WindowMover.js']
         }, {
             directory: WEB_DESKTOP_DIR + 'Desktop',
             fileNames: ['DesktopController.js', 'DesktopView.js', 'DesktopModel.js', 'Desktop.css']

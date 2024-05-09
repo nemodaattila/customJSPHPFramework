@@ -1,8 +1,13 @@
 class DesktopWindowView {
 
+
     _windowHeaderDiv
     _titleDiv
     _controllerPointer
+
+    get titleDiv() {
+        return this._titleDiv;
+    }
 
     get windowHeaderDiv() {
         return this._windowHeaderDiv;
@@ -42,8 +47,7 @@ class DesktopWindowView {
         })
         this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
         // this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
-        this._titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
-        ))
+
         this.displayWindowIcons()
         // this.displayWindowTab()
         // this.displayMainElements(params, service)

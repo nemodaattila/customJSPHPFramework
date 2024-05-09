@@ -44,11 +44,6 @@ class DesktopView {
         this._deskTopDOMElement = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'desktop', id: 'desktop'
         })
-        // this._deskTopDOMElement.addEventListener('mouseup', (event) =>
-        //     DesktopEventHandlers.endMove(event))
-        // this._mainContainer.addEventListener('mousemove', (event) => {
-        //     if (event.buttons === 1)
-        //         DesktopEventHandlers.move(event)
-        // })
+
     }
 }

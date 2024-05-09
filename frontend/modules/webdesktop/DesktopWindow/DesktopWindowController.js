@@ -15,20 +15,21 @@ class DesktopWindowController {
         this._model.setIdToCount()
         this._view.displayWindow(container)
         this.calcDefaultParameters()
+        WindowMover?.addMoveEventToWindow(this)
+
         // this.observer = new ResizeObserver(DesktopEventHandlers.onWindowResize)
         // this.observer.observe(this._view.windowDiv);
     }
 
-    setName(windowName){
-        this._model.name=windowName;
+    setName(windowName) {
+        this._model.name = windowName;
     }
 
-    getName(){
+    getName() {
         return this._model.name;
     }
 
     _tabPointer
-
     set tabPointer(value) {
         this._tabPointer = value;
     }
@@ -75,17 +76,14 @@ class DesktopWindowController {
     }
 
     //bool
-    setMinimized(minimized)
-    {
+    setMinimized(minimized) {
         this._model.minimized = minimized
         if (minimized)
-        DesktopController.switchActiveWindow()
+            DesktopController.switchActiveWindow()
     }
 
-    resetSize()
-    {
+    resetSize() {
         this._view.resetSize()
-
     }
 
     activateWindow() {
@@ -109,14 +107,11 @@ class DesktopWindowController {
         //     this.windowDiv.children[1].classList.add('inactiveWindow')
     }
 
-    close()
-    {
+    close() {
         //DO un observe
-
         DesktopController.switchActiveWindow()
         DesktopController.removeWindow(this._model.name)
         this._tabPointer.destruct()
-
         this._contentControllerPointer.destruct()
         this._view.destruct()
         delete this
@@ -127,10 +122,7 @@ class DesktopWindowController {
         // Desktop.removeWindow(this, this.windowTab)
         // delete this
         // DesktopEventHandlers.saveWindowParams(this.windowDiv, false)
-
     }
-
-
 
     //
     // /**
@@ -319,7 +311,6 @@ class DesktopWindowController {
     // /**
     //  * ablak bezárása, modul eltávolítása, következő ablak aktívvá tétele
     //  */
-
     //
     // /**
     //  * ablak és ablak fül felratának beállítása
@@ -332,7 +323,6 @@ class DesktopWindowController {
     // /**
     //  * ablak aktívra állítása
     //  */
-
     //
     // /**
     //  * ablak zomm-jának változtatása
@@ -346,7 +336,6 @@ class DesktopWindowController {
     // /**
     //  * ablak minimalizálása az "asztalra"
     //  */
-
     //
     // /**
     //  * az ablak tartalmára mutató pointer visszaadása
@@ -360,5 +349,4 @@ class DesktopWindowController {
     //  * az ablak maximalizálása teljes méretre (és a korábbi ablak paraméterek mentése),
     //  * valamint az előző méretre visszaállítása
     //  */
-
 }
