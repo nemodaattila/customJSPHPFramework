@@ -95,6 +95,10 @@ class ListerTable {
         this._controllerPointer.moveColumn(moveCellFrom, moveCellTo)
     }
 
+    refreshRows()
+    {
+        this._controllerPointer.refreshRows()
+    }
 
 
     beforeRefresh() {

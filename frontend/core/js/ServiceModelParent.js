@@ -42,11 +42,13 @@ class ServiceModelParent {
     }
 
     isIdInRecords(id) {
-        return Object.keys(this._records).findIndex(rId => rId === id) !== -1
+        return this._records[id] !== undefined && Math.abs(this._records[id]._queryed - Date.now())<600000
+        // return Object.keys(this._records).findIndex(rId => rId === id) !== -1
     }
 
     addRecord(id, record) {
         this._records[id] = record
+        record._queryed = Date.now()
     }
 
     getRecordByIdForListTable(id) {

@@ -83,13 +83,12 @@ class ListerControllerParent extends ControllerParent {
         console.log(this._serviceModelPointer)
     }
 
-    moveColumn(moveCellFrom, moveCellTo){
+    moveColumn(moveCellFrom, moveCellTo) {
         this._serviceModelPointer.moveColumnInOrder(moveCellFrom, moveCellTo)
         this.refreshTable()
     }
 
-    refreshTable()
-    {
+    async refreshTable() {
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
         console.log(recordIds)
         console.log(this._serviceModelPointer.tableHeaderAttributeOrder)
@@ -99,8 +98,12 @@ class ListerControllerParent extends ControllerParent {
             this._serviceModelPointer.defaultOrder,
             true
         )
-        this._view.getComponent('listerTable').displayRecordsInTable(this._service.getDataFromLocalDatabase(recordIds))
+        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
+    }
 
+   async refreshRows() {
+        let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
+        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
     }
 
     // getEnabledOperations() {   //DO rethink with AUTH in mind

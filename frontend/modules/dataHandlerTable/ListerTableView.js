@@ -169,9 +169,9 @@ class ListerTableView {
         })
         refresher.addEventListener('click', (event) => {
             event.stopPropagation()
-            this.refreshRows()
-            clearInterval(this.interval)
-            this.interval = setInterval(() => this.refreshRows(), 60000)
+            this._controllerPointer.refreshRows()
+            // clearInterval(this.interval)
+            // this.interval = setInterval(() => this.refreshRows(), 60000)
         })
     }
 
