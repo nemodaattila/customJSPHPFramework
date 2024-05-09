@@ -18,27 +18,27 @@ class ListerTableView {
     _actualSortElement = null
     _tableHeader
     _tableBody
+    _controllerPointer
+    _inMoveTh = undefined
 
-    constructor(id, tableContainer) {
+    constructor(id, tableContainer, controllerPointer) {
         this._id = id
         this._mainContainer = tableContainer;
         this._mainContainer.style.display = 'table';
         this._mainContainer.style.tableLayout = 'fixed';
+        this._controllerPointer = controllerPointer
     }
 
-    destruct()
-    {
+    destruct() {
         HtmlElementCreator.emptyDOMElement(this._mainContainer)
     }
 
     _id
-
     get id() {
         return this._id;
     }
 
     _tableFooter
-
     get tableFooter() {
         return this._tableFooter;
     }
@@ -71,6 +71,12 @@ class ListerTableView {
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
         this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
         this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
+        this._mainContainer.addEventListener('mouseup', (event) =>
+            this.endMoveTh(event))
+        this._mainContainer.addEventListener('mousemove', (event) => {
+            if (event.buttons === 1)
+                this.moveTh(event)
+        })
         // this.pageScrollData.scrollDiv = HtmlElementCreator.createHtmlElement('div', this.tableContainer, {class: 'scrollHeight'})
         // this.pageScrollData.scrollDiv.style.height = this.defaultScrollHeight + "px"
         // this.redrawHeaders()
@@ -187,25 +193,35 @@ class ListerTableView {
         this.columnHiderDiv = HtmlElementCreator.createHtmlElement('span', columnHiderParent, {
             class: 'columnHiderDiv'
         })
-        columnHider.addEventListener('click', () => this.columnHiderDiv.style.display = this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
+        columnHider.addEventListener('click', () => this.columnHiderDiv.style.display =
+            this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
     }
 
-    displayTableHeaders(attributeOrder, attributeParams) {
+    changeCursor() {
+        Array.from(this._headerRow.children).forEach((head) =>
+            head.style.cursor = this._columnMoveEnablerCB.checked === true ? 'grab' : "")
+    }
+
+    displayTableHeaders(attributeOrder, attributeParams, isReDraw = false) {
         if (this._tHead.hasChildNodes())
             HtmlElementCreator.emptyDOMElement(this._tHead)
-        this.headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
-        attributeOrder.forEach((id) => {
-            let modelParams = attributeParams[id]
-            let th = HtmlElementCreator.createHtmlElement('th', this.headerRow, {})
-            th.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveTh(event, th, this))
+        this._headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
+        attributeOrder.forEach((columnName) => {
+            let modelParams = attributeParams[columnName]
+            let th = HtmlElementCreator.createHtmlElement('th', this._headerRow, {})
+            th.addEventListener('mousedown', (event) =>
+                this.startMoveTh(event, th))
             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
             if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
                 orderDiv.classList.add('order')
                 orderDiv.addEventListener('click', () => {
-                    this.initSorting(id, orderDiv)
+                    this.initSorting(columnName, orderDiv)
                 })
             }
-            HtmlElementCreator.createHtmlElement('div', th, {class: 'text', innerHTML: modelParams?.label ?? id})
+            HtmlElementCreator.createHtmlElement('div', th, {
+                class: 'text',
+                innerHTML: modelParams?.label ?? columnName
+            })
             let resizeElement = HtmlElementCreator.createHtmlElement('div', th, {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
                 event.stopPropagation()
@@ -213,35 +229,155 @@ class ListerTableView {
             })
             resizeElement.addEventListener('dblclick', (event) => {
                 event.stopImmediatePropagation()
-                DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(id))
+                DesktopEventHandlers.resizeOptimal(event, th, this.dataTable, this.getTableHeaderIndex(columnName))
             })
+            if (isReDraw)
+                return
             let span = HtmlElementCreator.createSimpleHtmlElement('span', this.columnHiderDiv,)
             let hcb = HtmlElementCreator.createSimpleHtmlElement('input', span, {
                 type: 'checkbox',
-                id: 'hcb-' + this._id + "-" + id,
+                id: 'hcb-' + this._id + "-" + columnName,
                 checked: 'checked'
             })
             HtmlElementCreator.createSimpleHtmlElement('label', span, {
-                for: 'hcb-' + this._id + "-" + id,
+                for: 'hcb-' + this._id + "-" + columnName,
                 innerHTML: modelParams?.label
             })
             hcb.addEventListener('click', (event) => {
                 event.stopPropagation()
-                if (hcb.checked) {
-                    DesktopEventHandlers.reDisplayColumn(th, this.dataTable)
-                    if (this.autoHeaderSetting === false)
-                        this.saveHeaderParams()
-                } else {
-                    DesktopEventHandlers.hideColumn(th, this.dataTable, this, id)
-                    if (this.autoHeaderSetting === false)
-                        this.saveHeaderParams()
-                }
+                this._controllerPointer.displayHideColumn(hcb.checked, columnName)
+                //     DesktopEventHandlers.hideColumn(th, this.dataTable, this, id)
+                //     if (this.autoHeaderSetting === false)
+                //         this.saveHeaderParams()
+                // }
             })
         })
     }
 
+    startMoveTh(event, headerObject) {
+        console.clear()
+        console.dir(this._headerRow)
+        console.dir(this._columnMoveEnablerCB.checked)
+        console.log(undefined)
+        if (!this._columnMoveEnablerCB.checked || event.button !== 0 || headerObject.getAttribute("data-rooted") === "")
+            return
+        this._inMoveTh = {}
+        this._inMoveTh.mouseX = event.pageX || event.clientX;
+        this._inMoveTh.objectPos = headerObject.getBoundingClientRect();
+        // this.inMoveTh.moveCbChecked = tableObject.moveEnablerCB.checked;
+        // let zoomVal = window.getComputedStyle(tableObject.tableDiv).zoom;
+        let zoomVal = this._tableContainer.style.zoom
+        if (zoomVal === '')
+            zoomVal = 1
+        console.dir(zoomVal)
+        console.log((this._inMoveTh.objectPos.x + this._inMoveTh.objectPos.width - 10) * zoomVal)
+        console.dir(this._inMoveTh)
+        if ((this._inMoveTh.objectPos.x + this._inMoveTh.objectPos.width - 10) * zoomVal > this._inMoveTh.mouseX) {
+            let floatingHeader = HtmlElementCreator.createHtmlElement('div',
+                this._headerRow)
+            floatingHeader.style.background = "lightgray";
+            floatingHeader.style.border = "2px solid rgb(0,0,0)";
+            floatingHeader.style.textAlign = "center";
+            floatingHeader.style.fontWeight = "bold";
+            floatingHeader.style.position = "absolute";
+            floatingHeader.style.top = "0px";
+            floatingHeader.style.left = headerObject.getBoundingClientRect().x - this._headerRow.getBoundingClientRect().x + "px";
+            floatingHeader.style.height = "20px";
+            floatingHeader.style.width = headerObject.getBoundingClientRect().width + "px";
+            floatingHeader.style.zIndex = '1010';
+            floatingHeader.actualCellIndex = headerObject.cellIndex;
+            floatingHeader.innerHTML = headerObject.innerHTML;
+            // floatingHeader.tableParent = tableObject.tableDiv
+            // floatingHeader.tableHeadPointer = tableObject.tHead
+            // floatingHeader.tableBodyPointer = tableObject.tBody
+            // for (let e in table.rows)
+            //     if (table.rows[e].cells && table.rows[e].cells[headerObject.cellIndex])
+            //         table.rows[e].cells[headerObject.cellIndex].style.display = "none";
+            this._inMoveTh.object = floatingHeader;
+            this._inMoveTh.object.zoomVal = zoomVal;
+        }
+    }
+
+    moveTh(event) {
+        if (this._inMoveTh === undefined)
+            return
+        let newX = event.pageX || event.clientX;
+        let newY = event.pageY || event.clientY;
+        this._inMoveTh.object.style.left =
+            parseInt(this._inMoveTh.object.style.left, 10) +
+            ((newX - this._inMoveTh.mouseX) / this._inMoveTh.object.zoomVal) + 'px';
+        let swapCellIndex = 0;
+        let inMove = this._inMoveTh.object
+        Array.from(this._headerRow.children).forEach((head, i) => {
+            if (head.nodeName === 'DIV')
+                return
+            head.style.borderLeft = ''
+            head.style.borderRight = ''
+            if (head.getBoundingClientRect().x * inMove.zoomVal < event.pageX &&
+                i !== inMove.actualCellIndex && head.style.display !== "none") {
+                swapCellIndex = i;
+                head.style.borderLeft = "";
+                head.style.borderRight = "";
+            }
+        })
+        if (swapCellIndex < inMove.actualCellIndex) {
+            this._headerRow.children[swapCellIndex].style.borderLeft = "2px solid red";
+        } else
+            this._headerRow.children[swapCellIndex].style.borderRight = "2px solid red";
+        this._inMoveTh.mouseX = newX;
+        this._inMoveTh.mouseY = newY;
+    }
+
+    endMoveTh(event) {
+        if (this._inMoveTh === undefined)
+            return
+        let inMove = this._inMoveTh.object
+        let swapCellIndex = 0;
+        Array.from(this._headerRow.children).forEach((head, i) => {
+            if (head.nodeName === 'DIV')
+                return
+            if (head.getBoundingClientRect().x * inMove.zoomVal < event.pageX &&
+                i !== inMove.actualCellIndex && head.style.display !== "none")
+                swapCellIndex = i;
+            head.style.borderLeft = "";
+            head.style.borderRight = "";
+        })
+        console.log(swapCellIndex)
+        console.log(inMove.actualCellIndex)
+        this._headerRow.removeChild(inMove);
+        this._controllerPointer.moveColumn(inMove.actualCellIndex, swapCellIndex)
+        this._inMoveTh = undefined
+        // let headerRow = inMove.tableHeadPointer.firstElementChild
+        // headerRow.cells[inMove.actualCellIndex].style.display = "";
+        // let cell = headerRow.cells[inMove.actualCellIndex];
+        // headerRow.removeChild(cell);
+        // headerRow.insertBefore(cell, headerRow.cells[swapCellIndex]);
+        // if (inMove.tableHeadPointer.children[1] !== undefined) {
+        //     let filterRow = inMove.tableHeadPointer.children[1]
+        //     filterRow.cells[inMove.actualCellIndex].style.display = "";
+        //     let cell = filterRow.cells[inMove.actualCellIndex];
+        //     filterRow.removeChild(cell);
+        //     filterRow.insertBefore(cell, filterRow.cells[swapCellIndex]);
+        // }
+        // Array.from(inMove.tableBodyPointer.children).forEach((row) => {
+        //     if (row.cells && row.cells[inMove.actualCellIndex]) {
+        //         row.cells[inMove.actualCellIndex].style.display = "";
+        //         let cell = row.cells[inMove.actualCellIndex];
+        //         row.removeChild(cell);
+        //         row.insertBefore(cell, row.cells[swapCellIndex]);
+        //     }
+        // })
+        // let spliced = this.inMoveTh.windowPointer.columnNames.splice(inMove.actualCellIndex, 1)[0]
+        // this.inMoveTh.windowPointer.columnNames.splice(swapCellIndex, 0, spliced)
+    }
+
+    getDisplayRowIds() {
+        return this._rows.map(row => row.getAttribute('recordId'))
+    }
+
     displayFilters(attributeOrder, attributeParams) {
         this._filterRow = HtmlElementCreator.createSimpleHtmlElement('tr', this._tHead, {'class': 'filterRow'})
+        this._filterInputs = {}
         attributeOrder.forEach(id => {
             let modelParams = attributeParams[id]
             let td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
@@ -350,8 +486,9 @@ class ListerTableView {
         this._tableContainer.style.zoom = zoomValue
     }
 
-    createRowWithRecord(values) {
+    createRowWithRecord(values, id) {
         let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
+        row.setAttribute("recordId", id)
         this._rows.push(row)
         values.forEach(([value, type, paramName]) => {
             let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})

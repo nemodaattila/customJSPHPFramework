@@ -22,6 +22,7 @@
 }
 
 .listTable thead {
+    position: relative;
     display: table-row;
     /*height: max-content;*/
     height: 20px;
@@ -30,7 +31,6 @@
 .listTable thead th {
     display: inline-block;
 }
-
 
 .listTable tbody {
     display: table-row;
@@ -41,7 +41,6 @@
 .listTable tbody tr {
     display: table-row;
     background-color: white;
-
 }
 
 .listTable td {
@@ -59,12 +58,9 @@
 }
 
 .view_field {
-
-    overflow: hidden;
+    /*overflow: hidden;*/
     user-select: none;
     justify-content: space-between;
-
-
     position: sticky;
     left: 0;
     top: 0;
@@ -88,7 +84,6 @@
     display: inline;
 }
 
-
 .tableContainer {
     overflow: auto;
     width: 100%;
@@ -107,7 +102,7 @@
 .columnHiderDiv {
     display: none;
     border: 1px solid #fff;
-    position: fixed;
+    position: absolute;
     width: 200px;
     background: #566575;
     right: 0;
@@ -120,7 +115,6 @@
 
 .listTable tbody td {
     height: 20px;
-
 }
 
 .listTable td, .listTable th {
@@ -131,7 +125,6 @@
     border-left-width: 0;
 }
 
-
 .listTable tr:nth-child(2n), .listTable th:nth-child(2n) {
     background: rgba(0, 0, 0, .1);
 }
@@ -139,7 +132,6 @@
 .listTable td:nth-child(2n) {
     background: rgba(0, 0, 0, .05);
 }
-
 
 .order {
     position: absolute;
@@ -154,8 +146,6 @@
 /*.order {*/
 /*    left: 0*/
 /*}*/
-
-
 .order.ordered.reversed:hover:after, .order.ordered:after, .order:hover:after {
     display: initial;
     content: "\2193"

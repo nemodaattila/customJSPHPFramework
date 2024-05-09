@@ -3,13 +3,18 @@ class ListerTable {
     _view
     _interval // refreshInterval
     _intervalInSeconds = 60000;
-    autoHeaderSetting = false
-    dblClickTimer = false
 
-    constructor(container) {
+    _controllerPointer
+
+    // autoHeaderSetting = false
+    // dblClickTimer = false
+
+
+    constructor(container,controllerPointer) {
         ListerTable._id++
-        this._view = new ListerTableView(ListerTable._id, container)
+        this._view = new ListerTableView(ListerTable._id, container, this)
         this._view.displayTableElements()
+        this._controllerPointer = controllerPointer
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
 
@@ -32,10 +37,11 @@ class ListerTable {
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder) {
-        this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams)
+    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder, isReDraw = false) {
+        this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams,isReDraw)
         this._view.displayFilters(tableAttributeOrder, tableAttributeParams)
         this.addFilterEvents(tableAttributeOrder, tableAttributeParams)
+        console.dir(this)
     }
 
     addFilterEvents(tableAttributeOrder, tableAttributeParams) {
@@ -72,6 +78,24 @@ class ListerTable {
         this._view.zoomContent(zoomValue)
         //DO refresh
     }
+
+    displayHideColumn(isDisplay, columnName)
+    {
+        this._controllerPointer.displayHideColumn(isDisplay, columnName)
+    }
+
+    getDisplayRowIds()
+    {
+        return this._view.getDisplayRowIds()
+
+    }
+
+    moveColumn(moveCellFrom, moveCellTo)
+    {
+        this._controllerPointer.moveColumn(moveCellFrom, moveCellTo)
+    }
+
+
 
     beforeRefresh() {
         // let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
@@ -700,8 +724,5 @@ class ListerTable {
 //     /**
 //      * header-ök a cursor 'move'-ra változik, ha a header mozgatás engedélyezve van
 //      */
-//     changeCursor() {
-//         Array.from(this.tHead.firstElementChild.children).forEach((head) =>
-//             head.style.cursor = this.moveEnablerCB.checked === true ? 'move' : "")
-//     }
+//
 }

@@ -4,22 +4,17 @@ class ListerControllerParent extends ControllerParent {
     _pageTurnerType = 'infinity'
     _serviceModelPointer
     _rowHeight = 20
-    _listerTable
 
     init() {
         console.log(this)
         this._searchAndOrderParameters = new SearchAndOrderParameters()
     }
 
-    destruct()
-    {
-        this._listerTable = null
+    destruct() {
         this._view.destruct(['pageTurner'])
         this._serviceModelPointer = null
         this._service = null
         this._searchAndOrderParameters = undefined
-
-
     }
 
     getTitle() {
@@ -28,8 +23,7 @@ class ListerControllerParent extends ControllerParent {
 
     async displayView(windowBody) {
         this._serviceModelPointer = this.service.model
-        let listerTable = new ListerTable(windowBody)
-        this._listerTable = listerTable
+        let listerTable = new ListerTable(windowBody, this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
@@ -43,7 +37,7 @@ class ListerControllerParent extends ControllerParent {
             await Includer.loadFileSource('pageTurner')
             pageTurner = new PageTurnerController(listerTable.getTableFooter())
         }
-        this._view.addComponent("pageTurner",pageTurner)
+        this._view.addComponent("pageTurner", pageTurner)
         console.dir(windowBody)
         this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
         this.getRecordsFromServer("refresh")
@@ -54,7 +48,7 @@ class ListerControllerParent extends ControllerParent {
     }
 
     zoomContent(zoomValue) {
-        this._listerTable.zoomContent(zoomValue)
+        this._view.getComponent('listerTable').zoomContent(zoomValue)
     }
 
     async collectSearchParamsForRequest(type) {
@@ -78,6 +72,35 @@ class ListerControllerParent extends ControllerParent {
                 this.appendTableData(records)
             }
         }
+    }
+
+    displayHideColumn(isDisplay, columnName) {
+        if (isDisplay) {
+            this._serviceModelPointer.addHeaderAttributeToOrder(columnName)
+        } else
+            this._serviceModelPointer.deleteHeaderAttributeFromOrder(columnName)
+        this.refreshTable()
+        console.log(this._serviceModelPointer)
+    }
+
+    moveColumn(moveCellFrom, moveCellTo){
+        this._serviceModelPointer.moveColumnInOrder(moveCellFrom, moveCellTo)
+        this.refreshTable()
+    }
+
+    refreshTable()
+    {
+        let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
+        console.log(recordIds)
+        console.log(this._serviceModelPointer.tableHeaderAttributeOrder)
+        this._view.getComponent('listerTable').drawHeaders(
+            this._serviceModelPointer.tableHeaderAttributeOrder,
+            this._serviceModelPointer.tableHeaderAttributes,
+            this._serviceModelPointer.defaultOrder,
+            true
+        )
+        this._view.getComponent('listerTable').displayRecordsInTable(this._service.getDataFromLocalDatabase(recordIds))
+
     }
 
     // getEnabledOperations() {   //DO rethink with AUTH in mind
