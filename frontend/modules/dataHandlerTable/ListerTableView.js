@@ -160,7 +160,7 @@ class ListerTableView {
         })
         printer.addEventListener('click', (event) => {
             event.stopPropagation()
-            this.printTableContent()
+            this.exportTableContentToCsv()
         })
         let refresher = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'refresh_icon.png',
@@ -198,6 +198,34 @@ class ListerTableView {
         })
         columnHider.addEventListener('click', () => this.columnHiderDiv.style.display =
             this.columnHiderDiv.style.display === 'block' ? 'none' : 'block')
+    }
+
+    exportTableContentToCsv() {
+        let content = [];
+        let headerRow = [];
+        [...this._headerRow.children].forEach((cell) => {
+            if (cell.style.display !== 'none')
+                headerRow.push(cell.innerText)
+        });
+        headerRow = headerRow.join(";");
+        content.push(headerRow);
+        [...this._rows].forEach(row => {
+            let rowContent = [];
+            [...row.children].forEach((cell) => {
+                if (cell.style.display !== 'none')
+                    rowContent.push('"' + cell.innerText + '"')
+            })
+            rowContent = rowContent.join(";")
+            content.push(rowContent)
+        })
+        content = content.join("\n")
+        let blob = new Blob(["\uFEFF" + content], {type: 'text/csv;charset=utf-8;'});
+        let url = URL.createObjectURL(blob);
+        let pom = document.createElement('a');
+        pom.href = url;
+        pom.setAttribute('download', 'tableContent.csv');
+        pom.click();
+        blob = null
     }
 
     changeCursor() {
