@@ -111,3 +111,12 @@
     top: 5px;
     background-image: url(pin_icon.png)
 }
+
+.pinned {
+    z-index: 110 !important
+}
+
+.windowTab.inActive
+{
+    background-color: rgb(136, 151, 167)
+}

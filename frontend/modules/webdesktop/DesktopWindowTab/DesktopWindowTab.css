@@ -11,7 +11,8 @@
     width: 20%;
     min-width: 55px;
     border-radius: 2px;
-    border-left: 0 solid #000
+    border-left: 0 solid #000;
+    background: #566575;
 }
 
 .windowTab .titleDiv {
@@ -50,4 +51,9 @@
     background-size: cover;
     position: absolute;
     height: 25px
+}
+
+.windowHeaderDiv.inActive
+{
+    background-color: rgb(136, 151, 167)
 }

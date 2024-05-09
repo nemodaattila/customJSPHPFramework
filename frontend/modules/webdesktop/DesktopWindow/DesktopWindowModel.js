@@ -1,4 +1,5 @@
 class DesktopWindowModel {
+
     /**
      * ablak sorszáma, elhelyezéshez kell
      * @type {number}
@@ -17,6 +18,25 @@ class DesktopWindowModel {
 
     setIdToCount() {
         this._id = DesktopWindowModel._count
+    }
+
+    _minimized = false
+
+    get minimized() {
+        return this._minimized;
+    }
+
+    set minimized(value) {
+        this._minimized = value;
+    }
+
+    _name
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        this._name = value;
     }
 
 // /**
@@ -79,7 +99,7 @@ class DesktopWindowModel {
 //  * az ablak minimalizált-e
 //  * @type {boolean}
 //  */
-// minimized = false
+
 // /**
 //  * az ablak fő konténere
 //  * @type HTMLDivElement

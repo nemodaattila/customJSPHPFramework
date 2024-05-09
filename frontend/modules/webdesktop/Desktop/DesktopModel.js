@@ -1,16 +1,15 @@
 class DesktopModel {
     _windows = {}
     _tabs = {}
-    /**
-     * aktív ablak objektuma
-     * @type {DesktopWindow | undefined}
-     */
+
     _activeWindow = undefined
     get activeWindow() {
         return this._activeWindow;
     }
 
     set activeWindow(value) {
+        console.trace()
+        console.log(value)
         this._activeWindow = value;
     }
 
@@ -38,5 +37,22 @@ class DesktopModel {
     addNewWindow(name, window, tab) {
         this._windows[name] = window
         this._tabs[name] = tab
+        this.activeWindow=name
+    }
+
+    inActivateWindow(windowName)
+    {
+        this._windows[windowName].inActivateWindow()
+    }
+    activateWindow(windowName)
+    {
+        this._windows[windowName].activateWindow()
+    }
+
+    removeWindow(windowName)
+    {
+        console.log(windowName)
+        delete this._windows[windowName];
+        delete this._tabs[windowName];
     }
 }

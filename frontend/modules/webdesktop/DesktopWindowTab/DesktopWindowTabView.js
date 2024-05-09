@@ -1,12 +1,30 @@
 class DesktopWindowTabView {
+
+
+
     _windowTab
     _labelDiv
+    _controllerPointer
+
+    get windowTab() {
+        return this._windowTab;
+    }
+
+    constructor(controllerPointer) {
+        this._controllerPointer = controllerPointer;
+    }
+
+    destruct()
+    {
+        HtmlElementCreator.emptyDOMElement(this._windowTab)
+        this.windowTab.remove()
+    }
 
     createElements(container) {
         this._windowTab = HtmlElementCreator.createHtmlElement('div', container, {
             class: 'windowTab',
         })
-        this._windowTab.addEventListener('mousedown', () => Desktop.switchActiveWindow(this))
+        this._windowTab.addEventListener('mousedown', () => this._controllerPointer.setConnectedWindowAsActive())
         this._labelDiv = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             class: 'titleDiv'
         })
@@ -14,19 +32,12 @@ class DesktopWindowTabView {
             title: 'Ablak alapméretre állítása', class: 'resetWindowIcon'
         })
         resetIcon.addEventListener('click', () => {
-            if (this.windowSize !== undefined)
-                this.maximalizeWindow()
-            this.windowDiv.style.left = '0'
-            this.windowDiv.style.top = '25px'
-            this.windowDiv.style.width = '500px'
-            this.windowDiv.style.height = '250px'
-            this.contentObject.setTableZoom('1', false)
-            this.zoomWindow('1')
+          this._controllerPointer.resetWindowSize()
         })
         let closeIcon = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             title: 'Bezárás', class: 'close'
         })
-        closeIcon.addEventListener('click', () => this.closeWindow())
+        closeIcon.addEventListener(     'click', () => this._controllerPointer.closeWindow())
         closeIcon.style.top = '0'
     }
 

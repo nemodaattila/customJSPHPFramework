@@ -9,9 +9,13 @@ class WindowOpener {
             console.log('controller')
             let tab = new DesktopWindowTabController(DesktopController.getTaskBarContainer())
             let window = new DesktopWindowController(DesktopController.getWindowContainer())
+            window.setName(windowName)
             tab.windowPointer = window
             window.tabPointer = tab
             DesktopController.addNewWindow(windowName, window, tab)
+            DesktopController.switchActiveWindow(windowName)
+
+
             // await controller.init()
             window.displayContent(controller)
             console.log('window')

@@ -26,6 +26,11 @@ class ListerTableView {
         this._mainContainer.style.tableLayout = 'fixed';
     }
 
+    destruct()
+    {
+        HtmlElementCreator.emptyDOMElement(this._mainContainer)
+    }
+
     _id
 
     get id() {
@@ -345,7 +350,7 @@ class ListerTableView {
         this._tableContainer.style.zoom = zoomValue
     }
 
-    createRowWithRecord(values, id) {
+    createRowWithRecord(values) {
         let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
         this._rows.push(row)
         values.forEach(([value, type, paramName]) => {
@@ -356,7 +361,6 @@ class ListerTableView {
                 td.classList.add('leftAlign')
             if (!document.getElementById("hcb-" + this.id + "-" + paramName).checked)
                 td.style.display = 'none'
-            //TODO az id-t kértem le de a paraméter neve kell
         })
         return row;
     }

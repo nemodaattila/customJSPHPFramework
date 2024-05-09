@@ -1,8 +1,12 @@
 class DesktopWindowView {
+
     _windowHeaderDiv
     _titleDiv
     _controllerPointer
 
+    get windowHeaderDiv() {
+        return this._windowHeaderDiv;
+    }
     constructor(controllerPointer) {
         this._controllerPointer = controllerPointer;
     }
@@ -15,8 +19,16 @@ class DesktopWindowView {
 
     _windowBody
 
+    _zoomChanger
+
     get windowBody() {
         return this._windowBody;
+    }
+
+    destruct()
+    {
+        HtmlElementCreator.emptyDOMElement(this._windowDiv)
+        this._windowDiv.remove()
     }
 
     displayWindow(desktopContainer) {
@@ -29,7 +41,7 @@ class DesktopWindowView {
             class: 'titleDiv'
         })
         this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
-        this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
+        // this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
         this._titleDiv.addEventListener('mousedown', (event) => DesktopEventHandlers.startMoveDiv(event, this._windowDiv
         ))
         this.displayWindowIcons()
@@ -50,6 +62,7 @@ class DesktopWindowView {
         let zoomChanger = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
             type: 'range', step: "0.1", min: "0.5", max: "2", class: "zoomInput", value: "1"
         })
+        this._zoomChanger=zoomChanger
         zoomChanger.addEventListener('change', (event) => {
             event.stopPropagation()
             this.zoomWindow(zoomChanger.value)
@@ -73,7 +86,7 @@ class DesktopWindowView {
         })
         miniaturizer.addEventListener('click', (event) => {
             event.stopPropagation()
-            this.miniaturiseWindow()
+            this.miniaturizeWindow()
         })
         let maximalizer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'maximise', title: 'Teljes méret',
@@ -84,9 +97,10 @@ class DesktopWindowView {
         })
         closer.addEventListener('click', (event) => {
             event.stopPropagation()
-            this.closeWindow()
+            this._controllerPointer.close()
         })
     }
+z
 
     setTitle(title) {
         this._titleDiv.innerHTML = title
@@ -101,5 +115,64 @@ class DesktopWindowView {
         // this.tableContainer.style.zoom = value
         // if (save)
         //     DesktopEventHandlers.onWindowResize(this.container)
+    }
+
+    miniaturizeWindow() {
+        this.windowDiv.style.display = "none"
+        this._controllerPointer.setMinimized(true)
+    }
+
+    resetSize()
+    {
+        if (this.windowSize !== undefined)
+            this.maximizeWindow()
+        this.windowDiv.style.left = '0'
+        this.windowDiv.style.top = '25px'
+        this.windowDiv.style.width = '500px'
+        this.windowDiv.style.height = '250px'
+        this._zoomChanger.value = 1
+        this.zoomWindow('1')
+    }
+
+    maximizeWindow() {
+        if (this.windowSize === undefined) {
+            this.windowSize = {}
+            this.windowSize.left = this.windowDiv.style.left;
+            this.windowSize.top = this.windowDiv.style.top;
+            this.windowSize.width = this.windowDiv.style.width;
+            this.windowSize.height = this.windowDiv.style.height;
+            this.windowSize.border = this.windowDiv.style.border;
+            this.windowSize.borderRadius = this.windowDiv.borderRadius;
+            this.windowDiv.style.left = '0';
+            this.windowDiv.style.top = "27px";
+            this.windowDiv.style.width = "100%";
+            this.windowDiv.style.height = "auto";
+            this.windowDiv.style.bottom = '0';
+            this.windowDiv.style.border = "0px";
+            this.windowDiv.style.borderTopLeftRadius = "0px";
+            this.windowDiv.style.borderTopRightRadius = "0px";
+            this.windowDiv.style.borderBottomLeftRadius = "0px";
+            this.windowDiv.style.resize = "none";
+            this.windowDiv.firstElementChild.style.borderTopLeftRadius = "0px";
+            this.windowDiv.firstElementChild.style.borderTopRightRadius = "0px";
+            this.windowDiv.setAttribute("data-rooted", "1");
+        } else {
+            this.windowDiv.style.left = this.windowSize.left;
+            this.windowDiv.style.top = this.windowSize.top;
+            this.windowDiv.style.width = this.windowSize.width;
+            this.windowDiv.style.height = this.windowSize.height;
+            this.windowDiv.style.border = this.windowSize.border;
+            this.windowDiv.style.borderTopLeftRadius = "10px";
+            this.windowDiv.style.borderTopRightRadius = "10px";
+            this.windowDiv.style.borderBottomLeftRadius = "10px";
+            this.windowDiv.style.bottom = "auto";
+            this.windowDiv.style.resize = "both";
+            this.windowDiv.firstElementChild.style.borderTopLeftRadius = "10px";
+            this.windowDiv.firstElementChild.style.borderTopRightRadius = "10px";
+            this.windowDiv.setAttribute("data-rooted", "0");
+            this.windowSize = undefined
+        }
+        this.minimized = false
+       // DesktopEventHandlers.saveWindowParams(this.windowDiv)
     }
 }

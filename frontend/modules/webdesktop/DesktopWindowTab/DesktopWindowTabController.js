@@ -6,7 +6,7 @@ class DesktopWindowTabController {
     _view
 
     constructor(container) {
-        this._view = new DesktopWindowTabView()
+        this._view = new DesktopWindowTabView(this)
         this._view.createElements(container)
     }
 
@@ -18,5 +18,36 @@ class DesktopWindowTabController {
 
     setTitle(title) {
         this._view.setTitle(title)
+    }
+
+    setConnectedWindowAsActive(){
+        DesktopController.switchActiveWindow(this._windowPointer.getName())
+
+    }
+
+    setInactive()
+    {
+        this._view.windowTab.classList.add('inactive')
+    }
+
+    setActive()
+    {
+        this._view.windowTab.classList.remove('inactive')
+    }
+
+    closeWindow()
+    {
+        this._windowPointer.close()
+    }
+
+    resetWindowSize()
+    {
+        this._windowPointer.resetSize()
+    }
+
+    destruct()
+    {
+        this._view.destruct()
+        this._view = undefined
     }
 }

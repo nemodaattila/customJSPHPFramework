@@ -19,6 +19,14 @@ class DesktopWindowController {
         // this.observer.observe(this._view.windowDiv);
     }
 
+    setName(windowName){
+        this._model.name=windowName;
+    }
+
+    getName(){
+        return this._model.name;
+    }
+
     _tabPointer
 
     set tabPointer(value) {
@@ -65,6 +73,64 @@ class DesktopWindowController {
         // if (save)
         //     DesktopEventHandlers.onWindowResize(this.container)
     }
+
+    //bool
+    setMinimized(minimized)
+    {
+        this._model.minimized = minimized
+        if (minimized)
+        DesktopController.switchActiveWindow()
+    }
+
+    resetSize()
+    {
+        this._view.resetSize()
+
+    }
+
+    activateWindow() {
+        console.log(this)
+        this._view.windowHeaderDiv.classList.remove('inactive');
+        this._view.windowDiv.style.display = "";
+        this._tabPointer.setActive()
+        this.setMinimized(false)
+        // if (this.windowDiv.children.length > 1)
+        //     this.windowDiv.children[1].classList.remove('inactiveWindow')
+    }
+
+    /**
+     * ablak inaktívvá tétele
+     */
+    inActivateWindow() {
+        console.log(this._view.windowHeaderDiv)
+        this._view.windowHeaderDiv.classList.add('inactive');
+        this._tabPointer.setInactive()
+        // if (this.windowDiv.children.length > 1)
+        //     this.windowDiv.children[1].classList.add('inactiveWindow')
+    }
+
+    close()
+    {
+        //DO un observe
+
+        DesktopController.switchActiveWindow()
+        DesktopController.removeWindow(this._model.name)
+        this._tabPointer.destruct()
+
+        this._contentControllerPointer.destruct()
+        this._view.destruct()
+        delete this
+        console.dir(DesktopController)
+        // if (this.connectedParams?.connectedService)
+        //     this.connectedParams.connectedService.selectedRecord = null
+        // this.containerElement.removeChild(this.windowDiv);
+        // Desktop.removeWindow(this, this.windowTab)
+        // delete this
+        // DesktopEventHandlers.saveWindowParams(this.windowDiv, false)
+
+    }
+
+
 
     //
     // /**
@@ -253,16 +319,7 @@ class DesktopWindowController {
     // /**
     //  * ablak bezárása, modul eltávolítása, következő ablak aktívvá tétele
     //  */
-    // closeWindow() {
-    //     DesktopEventHandlers.saveWindowParams(this.windowDiv, false)
-    //     Desktop.setActiveNextWindow(this)
-    //     if (this.connectedParams?.connectedService)
-    //         this.connectedParams.connectedService.selectedRecord = null
-    //     App.removeSubModule(this.controllerPointer.id)
-    //     this.containerElement.removeChild(this.windowDiv);
-    //     Desktop.removeWindow(this, this.windowTab)
-    //     delete this
-    // }
+
     //
     // /**
     //  * ablak és ablak fül felratának beállítása
@@ -275,24 +332,7 @@ class DesktopWindowController {
     // /**
     //  * ablak aktívra állítása
     //  */
-    // setActive() {
-    //     this.windowTitleDiv.style.background = "rgb(86,101,117)";
-    //     this.windowDiv.style.display = "";
-    //     this.windowTab.style.background = "rgb(86,101,117)";
-    //     this.minimized = false
-    //     if (this.windowDiv.children.length > 1)
-    //         this.windowDiv.children[1].classList.remove('inactiveWindow')
-    // }
-    //
-    // /**
-    //  * ablak inaktívvá tétele
-    //  */
-    // setInactive() {
-    //     this.windowTitleDiv.style.background = "rgb(136, 151, 167)";
-    //     this.windowTab.style.background = "rgb(136, 151, 167)";
-    //     if (this.windowDiv.children.length > 1)
-    //         this.windowDiv.children[1].classList.add('inactiveWindow')
-    // }
+
     //
     // /**
     //  * ablak zomm-jának változtatása
@@ -306,10 +346,7 @@ class DesktopWindowController {
     // /**
     //  * ablak minimalizálása az "asztalra"
     //  */
-    // miniaturizeWindow() {
-    //     this.windowDiv.style.display = "none"
-    //     this.minimized = true
-    // }
+
     //
     // /**
     //  * az ablak tartalmára mutató pointer visszaadása
@@ -323,45 +360,5 @@ class DesktopWindowController {
     //  * az ablak maximalizálása teljes méretre (és a korábbi ablak paraméterek mentése),
     //  * valamint az előző méretre visszaállítása
     //  */
-    // maximalizeWindow() {
-    //     if (this.windowSize === undefined) {
-    //         this.windowSize = {}
-    //         this.windowSize.left = this.windowDiv.style.left;
-    //         this.windowSize.top = this.windowDiv.style.top;
-    //         this.windowSize.width = this.windowDiv.style.width;
-    //         this.windowSize.height = this.windowDiv.style.height;
-    //         this.windowSize.border = this.windowDiv.style.border;
-    //         this.windowSize.borderRadius = this.windowDiv.borderRadius;
-    //         this.windowDiv.style.left = '0';
-    //         this.windowDiv.style.top = "27px";
-    //         this.windowDiv.style.width = "100%";
-    //         this.windowDiv.style.height = "auto";
-    //         this.windowDiv.style.bottom = '0';
-    //         this.windowDiv.style.border = "0px";
-    //         this.windowDiv.style.borderTopLeftRadius = "0px";
-    //         this.windowDiv.style.borderTopRightRadius = "0px";
-    //         this.windowDiv.style.borderBottomLeftRadius = "0px";
-    //         this.windowDiv.style.resize = "none";
-    //         this.windowDiv.firstElementChild.style.borderTopLeftRadius = "0px";
-    //         this.windowDiv.firstElementChild.style.borderTopRightRadius = "0px";
-    //         this.windowDiv.setAttribute("data-rooted", "1");
-    //     } else {
-    //         this.windowDiv.style.left = this.windowSize.left;
-    //         this.windowDiv.style.top = this.windowSize.top;
-    //         this.windowDiv.style.width = this.windowSize.width;
-    //         this.windowDiv.style.height = this.windowSize.height;
-    //         this.windowDiv.style.border = this.windowSize.border;
-    //         this.windowDiv.style.borderTopLeftRadius = "10px";
-    //         this.windowDiv.style.borderTopRightRadius = "10px";
-    //         this.windowDiv.style.borderBottomLeftRadius = "10px";
-    //         this.windowDiv.style.bottom = "auto";
-    //         this.windowDiv.style.resize = "both";
-    //         this.windowDiv.firstElementChild.style.borderTopLeftRadius = "10px";
-    //         this.windowDiv.firstElementChild.style.borderTopRightRadius = "10px";
-    //         this.windowDiv.setAttribute("data-rooted", "0");
-    //         this.windowSize = undefined
-    //     }
-    //     this.minimized = false
-    //     DesktopEventHandlers.saveWindowParams(this.windowDiv)
-    // }
+
 }

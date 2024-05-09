@@ -32,14 +32,11 @@ class ServiceModelParent {
     }
 
     getRecordByIdForListTable(id) {
-        console.log(id)
         let record = {...this._records[id]}
         let recordData = this._tableHeaderAttributeOrder.map(param => {
-            console.log(param)
             let filterType = this._tableHeaderAttributes[param].type ?? 'string'
             let tdContent
             if (filterType === 'select') {
-                console.log()
                 tdContent = this._tableHeaderAttributes[param].values[record[param]]
             } else {
                 try {

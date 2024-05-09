@@ -38,19 +38,43 @@ class DesktopController {
     //  * aktív ablak beállítása
     //  * @param window DesktopWindow - beállítandó aktív ablak
     //  */
-    // static switchActiveWindow(window) {
-    //     if (DesktopController.activeWindow !== undefined) {
-    //         if (window !== DesktopController.activeWindow)
-    //             DesktopController.previousWindow = DesktopController.activeWindow
-    //         DesktopController.activeWindow.setInactive()
-    //     }
-    //     if (window !== null) {
-    //         DesktopController.activeWindow = window
-    //         DesktopController.activeWindow.setActive()
-    //     }
-    //     Object.values(DesktopController.windows).forEach(actWindow =>
-    //         actWindow.windowDiv.style.zIndex = actWindow === window ? '100' : (parseInt(actWindow.windowDiv.style.zIndex) - 1).toString())
-    // }
+    static switchActiveWindow(windowName = undefined) {
+        console.log(windowName)
+        console.log(typeof windowName)
+        console.dir(this)
+        console.dir({...this._model.activeWindow})
+        console.dir(typeof this._model.activeWindow)
+        if (windowName === this._model.activeWindow)
+            return
+        if (this._model.activeWindow !== undefined) {
+                this._model.previousWindow = this._model.activeWindow
+                console.log(this._model.previousWindow)
+                this._model.inActivateWindow(this._model.activeWindow)
+            this._model.activeWindow = undefined
+            console.log(this._model)
+        }
+        if (windowName !== undefined ) {
+            console.log(windowName)
+
+            this._model.activeWindow = windowName
+            console.log(this._model.activeWindow)
+
+            this._model.activateWindow(this._model.activeWindow)
+        }
+        console.log(this._model)
+        console.dir(this._model.activeWindow)
+        console.dir(typeof this._model.activeWindow)
+        // Object.values(this._model.windows).forEach(actWindow =>
+        //     actWindow.windowDiv.style.zIndex = actWindow === windowName ? '100' : (parseInt(actWindow.windowDiv.style.zIndex) - 1).toString())
+    }
+
+    static removeWindow(windowName) {
+        console.trace()
+        console.log(windowName)
+        this._model.removeWindow(windowName)
+    }
+
+
     //
     // /**
     //  *  ha a user minimalizál egy ablakot, megkeresi a következő nem minimalizált ablakot, és aktívvá teszi azt
@@ -92,13 +116,7 @@ class DesktopController {
     //  * @param clWindow DesktopWindow - bezárandó ablak
     //  * @param windowTab HTMLDivElement az ablakhoz tartozó fül
     //  */
-    // static removeWindow(clWindow, windowTab) {
-    //     let index = Object.keys(this.windows)[Object.values(this.windows).findIndex(window => window === clWindow)]
-    //     if (DesktopController.windows[index] === this.activeWindow)
-    //         this.setActiveNextWindow(clWindow)
-    //     delete DesktopController.windows[index]
-    //     this.tabsBarElement.removeChild(windowTab)
-    // }
+
     //
     // /**
     //  * meg van e nyítva egy ablak

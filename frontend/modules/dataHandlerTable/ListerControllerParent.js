@@ -11,6 +11,17 @@ class ListerControllerParent extends ControllerParent {
         this._searchAndOrderParameters = new SearchAndOrderParameters()
     }
 
+    destruct()
+    {
+        this._listerTable = null
+        this._view.destruct(['pageTurner'])
+        this._serviceModelPointer = null
+        this._service = null
+        this._searchAndOrderParameters = undefined
+
+
+    }
+
     getTitle() {
         return this.service.getTitle(this._type)
     }
@@ -32,7 +43,7 @@ class ListerControllerParent extends ControllerParent {
             await Includer.loadFileSource('pageTurner')
             pageTurner = new PageTurnerController(listerTable.getTableFooter())
         }
-        this._view.addComponent(pageTurner)
+        this._view.addComponent("pageTurner",pageTurner)
         console.dir(windowBody)
         this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
         this.getRecordsFromServer("refresh")

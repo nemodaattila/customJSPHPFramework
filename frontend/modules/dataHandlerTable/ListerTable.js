@@ -13,6 +13,12 @@ class ListerTable {
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
 
+    destruct() {
+        this._view.destruct()
+        this._view = undefined
+        //DO destruct interals
+    }
+
     getTableFooter() {
         return this._view.tableFooter
     }

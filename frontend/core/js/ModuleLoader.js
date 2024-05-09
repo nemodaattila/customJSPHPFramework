@@ -30,7 +30,7 @@ class ModuleLoader {
         }
         // let controllerName =
         // console.log(controllerName)
-        let controller = new (eval(await this.loadFile(temp)))()
+        let controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
         let serviceModel = undefined
         temp = await this.getComponent(moduleFiles, 'ServiceModel')
         if (temp) {
