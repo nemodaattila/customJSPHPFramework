@@ -46,4 +46,17 @@ class SearchAndOrderParameters {
             limit: this.limit
         }
     }
+
+    changePageParams(num)
+    {
+        if (num === '+') {
+            this.offset += this._limit
+        }else        if (num === '-')
+        {
+            this.offset-=this._limit
+            if (this.offset < 0)
+                this.offset = 0
+        }
+        else this.offset = num*this.limit
+    }
 }

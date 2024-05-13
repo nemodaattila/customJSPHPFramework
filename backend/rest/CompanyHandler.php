@@ -7,7 +7,8 @@ class CompanyHandler extends RestParent
 
     public function getCompanyIds(): void {
         $searchParams = json_decode(getallheaders()["Search-And-Order-Params"], true);
-        $this->result = $this->dbConnection->getRecordsFromServer(
+        $searchParams["orderAndLimitParams"]['limit']++;
+        $res = $this->dbConnection->getRecordsFromServer(
             ["tableName" => $this->tableName,
                 "attributes" => ['id'],
                 "conditionalAttributes" => ['name'],
@@ -15,6 +16,13 @@ class CompanyHandler extends RestParent
                 "fetchType" => 7, //FETCH COLUMN
             ]
         );
+        $hasNext = false;
+        if (count($res)===$searchParams["orderAndLimitParams"]['limit'])
+        {
+            $hasNext=true;
+               array_pop($res);
+        }
+        $this->result =['ids'=>$res, 'hasNext'=>$hasNext];
     }
 
     public function getOne($parameters): void {

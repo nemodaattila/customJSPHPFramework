@@ -50,11 +50,11 @@ class ServiceParent {
         //     ac.postFields.additionalParams = JSON.stringify(additionalParams)
         try {
             console.log(searchAndOrderParams)
-            let recordIds = await RESTHandler.send({
+            let {ids: recordIds, hasNext: hasNext} = await RESTHandler.send({
                 url: this._restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
-           return await this.getRecordsFromLocalDatabase(recordIds, hardReset)
+           return [await this.getRecordsFromLocalDatabase(recordIds, hardReset), hasNext];
 
         } catch (e) {
             return false

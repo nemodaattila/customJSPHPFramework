@@ -35,12 +35,12 @@ class ListerControllerParent extends ControllerParent {
         let pageTurner
         if (this._pageTurnerType === 'pageTurner') {
             await Includer.loadFileSource('pageTurner')
-            pageTurner = new PageTurnerController(listerTable.getTableFooter())
+            pageTurner = new PageTurnerController(listerTable.getTableFooter(), this)
         }
         this._view.addComponent("pageTurner", pageTurner)
         console.dir(windowBody)
         this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
-        this.getRecordsFromServer("refresh")
+        // this.getRecordsFromServer("refresh")
     }
 
     hardRefreshTable() {
@@ -67,17 +67,28 @@ class ListerControllerParent extends ControllerParent {
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
-        let records = await this.service.getRecordsFromServer(searchParams, hardReset)
+         let res = await this.service.getRecordsFromServer(searchParams, hardReset)
+        console.log(res)
+        let [records,hasNext] = res
         console.trace()
         if (records !== false) {
             console.log(records)
             if (type === 'reset' || type === 'refresh') {
                 this._view.getComponent('listerTable').displayRecordsInTable(records)
+                let pageNum = Math.floor(searchParams.orderAndLimitParams.offset/searchParams.orderAndLimitParams.limit)+1
+                console.log(pageNum)
+                this._view.getComponent('pageTurner').hideElementsAccordingToPageNum(pageNum, hasNext)
                 // this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
             } else {
                 this.appendTableData(records)
             }
         }
+    }
+
+    changePage(pageNun)
+    {
+        this._searchAndOrderParameters.changePageParams(pageNun)
+        this.getRecordsFromServer('refresh')
     }
 
     displayHideColumn(isDisplay, columnName) {
