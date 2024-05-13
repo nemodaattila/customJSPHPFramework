@@ -16,9 +16,9 @@ class DesktopWindowController {
         this._view.displayWindow(container)
         this.calcDefaultParameters()
         WindowMover?.addMoveEventToWindow(this)
-
-        // this.observer = new ResizeObserver(DesktopEventHandlers.onWindowResize)
-        // this.observer.observe(this._view.windowDiv);
+        this._view.windowDiv.controllerPointer = this
+        this.observer = new ResizeObserver(this.onWindowResize)
+        this.observer.observe(this._view.windowDiv);
     }
 
     setName(windowName) {
@@ -33,6 +33,31 @@ class DesktopWindowController {
     set tabPointer(value) {
         this._tabPointer = value;
     }
+
+    onWindowResize(object) {
+        console.log(object)
+        console.log(this)
+        if (!(object instanceof Element))
+            object = object[0].target
+        let controller = object.controllerPointer
+        console.log(controller)
+        clearTimeout(this.resizeTimeOut);
+        this.resizeTimeOut = setTimeout(() => {
+            if (object.style.width !== '100%' && parseInt(object.style.width) < 400)
+                object.style.width = "400px"
+            if (parseInt(object.style.height) < 200)
+                object.style.height = "200px"
+            controller._contentControllerPointer.hardRefreshTable()
+            // object.windowObject.contentObject.rows = []
+            // object.windowObject.controllerPointer.calcTableRowNum()
+            // object.windowObject.contentObject.offset = 0
+            // object.windowObject.contentObject.tableContainer.scrollTop = 0
+            // object.windowObject.controllerPointer.collectSearchParamsForRequest('reset')
+            // object.windowObject.contentObject.scrollRows(0)
+            // DesktopEventHandlers.saveWindowParams(object)
+        }, 300);
+    }
+
 
     calcDefaultParameters() {
         let top, left

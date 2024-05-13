@@ -100,6 +100,10 @@ class ListerTable {
         this._controllerPointer.refreshRows()
     }
 
+    flushTable()
+    {
+        this._view.emptyBody()
+    }
 
     beforeRefresh() {
         // let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)

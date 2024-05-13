@@ -43,15 +43,21 @@ class ListerControllerParent extends ControllerParent {
         this.getRecordsFromServer("refresh")
     }
 
-    async getRecordsFromServer(type) {
-        await this.collectSearchParamsForRequest(type)
+    hardRefreshTable() {
+        this._view.getComponent('listerTable').flushTable()
+        this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
+        this.getRecordsFromServer("refresh", true)
+    }
+
+    async getRecordsFromServer(type, hardReset = false) {
+        await this.collectSearchParamsForRequest(type, hardReset)
     }
 
     zoomContent(zoomValue) {
         this._view.getComponent('listerTable').zoomContent(zoomValue)
     }
 
-    async collectSearchParamsForRequest(type) {
+    async collectSearchParamsForRequest(type, hardReset = false) {
         if (this.service === undefined) {
             alert('please set controllor `service` property');
             return;
@@ -61,7 +67,7 @@ class ListerControllerParent extends ControllerParent {
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
-        let records = await this.service.getRecordsFromServer(searchParams)
+        let records = await this.service.getRecordsFromServer(searchParams, hardReset)
         console.trace()
         if (records !== false) {
             console.log(records)
@@ -101,9 +107,9 @@ class ListerControllerParent extends ControllerParent {
         this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
     }
 
-   async refreshRows() {
+    async refreshRows() {
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
-        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
+        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds, true))
     }
 
     // getEnabledOperations() {   //DO rethink with AUTH in mind

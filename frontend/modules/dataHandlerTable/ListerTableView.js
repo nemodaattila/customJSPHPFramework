@@ -22,6 +22,10 @@ class ListerTableView {
     _inMoveTh = undefined
     reSizeObject
 
+    get tBody() {
+        return this._tBody;
+    }
+
     constructor(id, tableContainer, controllerPointer) {
         this._id = id
         this._mainContainer = tableContainer;
