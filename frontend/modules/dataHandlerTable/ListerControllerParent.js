@@ -21,8 +21,7 @@ class ListerControllerParent extends ControllerParent {
         return this.service.getTitle(this._type)
     }
 
-    getHeaderAttributeParams()
-    {
+    getHeaderAttributeParams() {
         return this._serviceModelPointer.tableHeaderAttributes
     }
 
@@ -48,23 +47,21 @@ class ListerControllerParent extends ControllerParent {
     }
 
     //reset
-    onTableFilterChange()
-    {
+    onTableFilterChange() {
         this._view.getComponent('listerTable').flushTable()
-        this._searchAndOrderParameters.offset=0;
+        this._searchAndOrderParameters.offset = 0;
         this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
         this.getRecordsFromServer("reset", true)
-
     }
 
-    onSortElementClick(parameterName, order)
-    {
+    onSortElementClick(parameterName, order) {
         console.log(parameterName)
         console.log(order)
-        this._searchAndOrderParameters.setOrdering(parameterName,order)
+        this._searchAndOrderParameters.setOrdering(parameterName, order)
         this._view.getComponent('listerTable').flushTable()
         this.getRecordsFromServer("reset", true)
     }
+
     hardRefreshTable() {
         this._view.getComponent('listerTable').flushTable()
         this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
@@ -90,15 +87,15 @@ class ListerControllerParent extends ControllerParent {
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
         searchParams.filterParams = this._view.getComponent('listerTable').collectAndConvertFilterParams()
-         let res = await this.service.getRecordsFromServer(searchParams, hardReset)
+        let res = await this.service.getRecordsFromServer(searchParams, hardReset)
         console.log(res)
-        let [records,hasNext] = res
+        let [records, hasNext] = res
         console.trace()
         if (records !== false) {
             console.log(records)
             if (type === 'reset' || type === 'refresh') {
                 this._view.getComponent('listerTable').displayRecordsInTable(records)
-                let pageNum = Math.floor(searchParams.orderAndLimitParams.offset/searchParams.orderAndLimitParams.limit)+1
+                let pageNum = Math.floor(searchParams.orderAndLimitParams.offset / searchParams.orderAndLimitParams.limit) + 1
                 console.log(pageNum)
                 this._view.getComponent('pageTurner').hideElementsAccordingToPageNum(pageNum, hasNext)
                 // this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
@@ -108,8 +105,7 @@ class ListerControllerParent extends ControllerParent {
         }
     }
 
-    changePage(pageNun)
-    {
+    changePage(pageNun) {
         this._searchAndOrderParameters.changePageParams(pageNun)
         this.getRecordsFromServer('refresh')
     }

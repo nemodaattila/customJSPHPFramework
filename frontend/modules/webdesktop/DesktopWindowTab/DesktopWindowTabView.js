@@ -1,21 +1,18 @@
 class DesktopWindowTabView {
-
-
-
-    _windowTab
     _labelDiv
     _controllerPointer
-
-    get windowTab() {
-        return this._windowTab;
-    }
 
     constructor(controllerPointer) {
         this._controllerPointer = controllerPointer;
     }
 
-    destruct()
-    {
+    _windowTab
+
+    get windowTab() {
+        return this._windowTab;
+    }
+
+    destruct() {
         HtmlElementCreator.emptyDOMElement(this._windowTab)
         this.windowTab.remove()
     }
@@ -32,12 +29,12 @@ class DesktopWindowTabView {
             title: 'Ablak alapméretre állítása', class: 'resetWindowIcon'
         })
         resetIcon.addEventListener('click', () => {
-          this._controllerPointer.resetWindowSize()
+            this._controllerPointer.resetWindowSize()
         })
         let closeIcon = HtmlElementCreator.createHtmlElement('div', this._windowTab, {
             title: 'Bezárás', class: 'close'
         })
-        closeIcon.addEventListener(     'click', () => this._controllerPointer.closeWindow())
+        closeIcon.addEventListener('click', () => this._controllerPointer.closeWindow())
         closeIcon.style.top = '0'
     }
 

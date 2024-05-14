@@ -13,17 +13,16 @@ class CompanyHandler extends RestParent
                 "attributes" => ['id'],
                 "conditionalAttributes" => ['name'],
                 "orderLimit" => $searchParams["orderAndLimitParams"],
-                'filterParameters' =>$searchParams["filterParams"],
+                'filterParameters' => $searchParams["filterParams"],
                 "fetchType" => 7, //FETCH COLUMN
             ]
         );
         $hasNext = false;
-        if (count($res)===$searchParams["orderAndLimitParams"]['limit'])
-        {
-            $hasNext=true;
-               array_pop($res);
+        if (count($res) === $searchParams["orderAndLimitParams"]['limit']) {
+            $hasNext = true;
+            array_pop($res);
         }
-        $this->result =['ids'=>$res, 'hasNext'=>$hasNext];
+        $this->result = ['ids' => $res, 'hasNext' => $hasNext];
     }
 
     public function getOne($parameters): void {

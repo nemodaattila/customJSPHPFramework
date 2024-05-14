@@ -14,8 +14,6 @@ class WindowOpener {
             window.tabPointer = tab
             DesktopController.addNewWindow(windowName, window, tab)
             DesktopController.switchActiveWindow(windowName)
-
-
             // await controller.init()
             window.displayContent(controller)
             console.log('window')

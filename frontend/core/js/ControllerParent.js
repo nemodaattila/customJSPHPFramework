@@ -2,9 +2,7 @@
  * controllerek ősosztálya
  */
 class ControllerParent {
-
     _model
-
     get model() {
         return this._model;
     }
@@ -26,9 +24,6 @@ class ControllerParent {
     set service(value) {
         this._service = value;
     }
-
-
-
 
 // /**
     //  * sorszám kontroller azonosítójának megadásához

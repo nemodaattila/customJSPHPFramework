@@ -2,14 +2,12 @@ body {
     background-image: url("desktop.webp");
 }
 
-
 .tabsBar {
     display: table-row;
     height: 25px;
     background: #8897a7;
     z-index: 109
 }
-
 
 .desktop {
     display: table-row;

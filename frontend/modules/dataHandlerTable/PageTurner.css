@@ -2,7 +2,6 @@
     text-align: center;
     margin-right: auto;
     margin-left: auto;
-
 }
 
 .pagerNavContainer > input {
@@ -16,8 +15,7 @@
     margin-left: 5px;
 }
 
-.pagerNavContainer .navLink:hover
-{
+.pagerNavContainer .navLink:hover {
     cursor: pointer;
     background-color: blue;
 }

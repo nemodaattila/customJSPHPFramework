@@ -201,7 +201,6 @@ class RESTHandler
 //            }
 //        }
 //    }
-
     /**
      * checks user authentication
      */

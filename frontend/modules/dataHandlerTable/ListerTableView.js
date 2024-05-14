@@ -6,7 +6,6 @@ class ListerTableView {
     _tableDiv
     _dataTable
     _tHead
-    _tBody
     _tableIconContainer
     _iconPath = "./modules/dataHandlerTable/"
     _headerRow
@@ -22,14 +21,6 @@ class ListerTableView {
     _inMoveTh = undefined
     _reSizeObject
 
-    getFilterInput(name) {
-        return this._filterInputs[name];
-    }
-
-    get tBody() {
-        return this._tBody;
-    }
-
     constructor(id, tableContainer, controllerPointer) {
         this._id = id
         this._mainContainer = tableContainer;
@@ -38,18 +29,30 @@ class ListerTableView {
         this._controllerPointer = controllerPointer
     }
 
-    destruct() {
-        HtmlElementCreator.emptyDOMElement(this._mainContainer)
+    _tBody
+
+    get tBody() {
+        return this._tBody;
     }
 
     _id
+
     get id() {
         return this._id;
     }
 
     _tableFooter
+
     get tableFooter() {
         return this._tableFooter;
+    }
+
+    getFilterInput(name) {
+        return this._filterInputs[name];
+    }
+
+    destruct() {
+        HtmlElementCreator.emptyDOMElement(this._mainContainer)
     }
 
     getTBodyHeight() {

@@ -1,23 +1,12 @@
 class DesktopWindowModel {
-
     /**
      * ablak sorszáma, elhelyezéshez kell
      * @type {number}
      */
     static _count = -1
-
     _id
-
     get id() {
         return this._id;
-    }
-
-    increaseCount() {
-        DesktopWindowModel._count++;
-    }
-
-    setIdToCount() {
-        this._id = DesktopWindowModel._count
     }
 
     _minimized = false
@@ -31,12 +20,21 @@ class DesktopWindowModel {
     }
 
     _name
+
     get name() {
         return this._name;
     }
 
     set name(value) {
         this._name = value;
+    }
+
+    increaseCount() {
+        DesktopWindowModel._count++;
+    }
+
+    setIdToCount() {
+        this._id = DesktopWindowModel._count
     }
 
 // /**
@@ -99,7 +97,6 @@ class DesktopWindowModel {
 //  * az ablak minimalizált-e
 //  * @type {boolean}
 //  */
-
 // /**
 //  * az ablak fő konténere
 //  * @type HTMLDivElement

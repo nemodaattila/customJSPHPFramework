@@ -13,7 +13,6 @@ class ServiceParent {
     }
 
     _model
-
     get model() {
         return this._model;
     }
@@ -54,8 +53,7 @@ class ServiceParent {
                 url: this._restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
-           return [await this.getRecordsFromLocalDatabase(recordIds, hardReset), hasNext];
-
+            return [await this.getRecordsFromLocalDatabase(recordIds, hardReset), hasNext];
         } catch (e) {
             return false
         }
@@ -78,8 +76,7 @@ class ServiceParent {
         return recordIds.map(id => this.model.getRecordByIdForListTable(id))
     }
 
-    async getRecordsFromLocalDatabase(recordIds, hardReset = false)
-    {
+    async getRecordsFromLocalDatabase(recordIds, hardReset = false) {
         await this.refreshLocalDatabase(recordIds, hardReset)
         console.log(recordIds)
         return this.getDataFromLocalDatabase(recordIds);

@@ -11,7 +11,6 @@ class DesktopWindowTabController {
     }
 
     _windowPointer
-
     set windowPointer(value) {
         this._windowPointer = value;
     }
@@ -20,33 +19,27 @@ class DesktopWindowTabController {
         this._view.setTitle(title)
     }
 
-    setConnectedWindowAsActive(){
+    setConnectedWindowAsActive() {
         DesktopController.switchActiveWindow(this._windowPointer.getName())
-
     }
 
-    setInactive()
-    {
+    setInactive() {
         this._view.windowTab.classList.add('inactive')
     }
 
-    setActive()
-    {
+    setActive() {
         this._view.windowTab.classList.remove('inactive')
     }
 
-    closeWindow()
-    {
+    closeWindow() {
         this._windowPointer.close()
     }
 
-    resetWindowSize()
-    {
+    resetWindowSize() {
         this._windowPointer.resetSize()
     }
 
-    destruct()
-    {
+    destruct() {
         this._view.destruct()
         this._view = undefined
     }

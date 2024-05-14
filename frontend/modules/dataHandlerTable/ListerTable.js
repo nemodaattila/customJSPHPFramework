@@ -3,21 +3,16 @@ class ListerTable {
     _view
     _interval // refreshInterval
     _intervalInSeconds = 60000;
-
     _controllerPointer
-
     _headerAttributeParams
-
     // autoHeaderSetting = false
     // dblClickTimer = false
-
-
-    constructor(container,controllerPointer) {
+    constructor(container, controllerPointer) {
         ListerTable._id++
         this._view = new ListerTableView(ListerTable._id, container, this)
         this._view.displayTableElements()
         this._controllerPointer = controllerPointer
-        this._headerAttributeParams=this._controllerPointer.getHeaderAttributeParams()
+        this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
 
@@ -26,8 +21,6 @@ class ListerTable {
         this._view = undefined
         //DO destruct interals
     }
-
-
 
     getTableFooter() {
         return this._view.tableFooter
@@ -42,8 +35,8 @@ class ListerTable {
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder,  defaultOrder, isReDraw = false) {
-        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams,isReDraw)
+    drawHeaders(tableAttributeOrder, defaultOrder, isReDraw = false) {
+        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams, isReDraw)
         this._view.displayFilters(tableAttributeOrder, this._headerAttributeParams)
         this.addFilterEvents(tableAttributeOrder)
         console.dir(this)
@@ -83,45 +76,37 @@ class ListerTable {
         //DO refresh
     }
 
-    displayHideColumn(isDisplay, columnName)
-    {
+    displayHideColumn(isDisplay, columnName) {
         this._controllerPointer.displayHideColumn(isDisplay, columnName)
     }
 
-    getDisplayRowIds()
-    {
+    getDisplayRowIds() {
         return this._view.getDisplayRowIds()
-
     }
 
-    moveColumn(moveCellFrom, moveCellTo)
-    {
+    moveColumn(moveCellFrom, moveCellTo) {
         this._controllerPointer.moveColumn(moveCellFrom, moveCellTo)
     }
 
-    refreshRows()
-    {
+    refreshRows() {
         this._controllerPointer.refreshRows()
     }
 
-    flushTable()
-    {
+    flushTable() {
         this._view.emptyBody()
     }
 
-        collectAndConvertFilterParams() {
+    collectAndConvertFilterParams() {
         let finalFilterData = []
-            console.log(this)
-        Object.entries(this._headerAttributeParams).forEach(([name,headerParams]) => {
-            let filterType = headerParams.type ??'string'
-
+        console.log(this)
+        Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
+            let filterType = headerParams.type ?? 'string'
             let inputs = this._view.getFilterInput(name)
             if (inputs === undefined)
                 return;
-            let inputValues = [inputs[0].value,inputs[1].value];
+            let inputValues = [inputs[0].value, inputs[1].value];
             console.log(inputValues)
             let values = ''
-          
             switch (filterType) {
                 case 'number':
                 case 'bigint':
@@ -219,11 +204,11 @@ class ListerTable {
             if (values !== '')
                 finalFilterData.push([name].concat(values))
         })
-            Object.entries(this._headerAttributeParams).forEach(([name,headerParams]) => {
-                if (headerParams.filterType === 'hidden' && headerParams.defaultOperator !== undefined)
-                    finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
-            })
-            console.log(finalFilterData)
+        Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
+            if (headerParams.filterType === 'hidden' && headerParams.defaultOperator !== undefined)
+                finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
+        })
+        console.log(finalFilterData)
         return finalFilterData
     }
 
@@ -246,8 +231,7 @@ class ListerTable {
         }
     }
 
-    onSortElementClick(parameterName, order)
-    {
+    onSortElementClick(parameterName, order) {
         this._controllerPointer.onSortElementClick(parameterName, order)
     }
 
@@ -443,14 +427,12 @@ class ListerTable {
 //      * szűrőkből a keresési feltételek és értékek kinyerése, és megfelelő formátumba konvertálásq
 //      * @returns {*[]}
 //      */
-
 //
 //     /**
 //      * műveletek szövegből jellé konvertálása
 //      * @param operation műveleto kód
 //      * @returns {*|string} műveleti jel
 //      */
-   
 //
 //     /**
 //      * tábla kiürítése és feltöltése, soresemények hozzáadása

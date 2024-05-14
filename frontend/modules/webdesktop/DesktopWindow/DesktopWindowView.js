@@ -1,19 +1,22 @@
 class DesktopWindowView {
+    _controllerPointer
+    _zoomChanger
+    z
 
+    constructor(controllerPointer) {
+        this._controllerPointer = controllerPointer;
+    }
 
     _windowHeaderDiv
-    _titleDiv
-    _controllerPointer
-
-    get titleDiv() {
-        return this._titleDiv;
-    }
 
     get windowHeaderDiv() {
         return this._windowHeaderDiv;
     }
-    constructor(controllerPointer) {
-        this._controllerPointer = controllerPointer;
+
+    _titleDiv
+
+    get titleDiv() {
+        return this._titleDiv;
     }
 
     _windowDiv
@@ -24,14 +27,11 @@ class DesktopWindowView {
 
     _windowBody
 
-    _zoomChanger
-
     get windowBody() {
         return this._windowBody;
     }
 
-    destruct()
-    {
+    destruct() {
         HtmlElementCreator.emptyDOMElement(this._windowDiv)
         this._windowDiv.remove()
     }
@@ -47,7 +47,6 @@ class DesktopWindowView {
         })
         this._windowBody = HtmlElementCreator.createHtmlElement('div', this._windowDiv, {class: 'windowBody'})
         // this._windowDiv.addEventListener('click', () => Desktop.switchActiveWindow(this))
-
         this.displayWindowIcons()
         // this.displayWindowTab()
         // this.displayMainElements(params, service)
@@ -66,7 +65,7 @@ class DesktopWindowView {
         let zoomChanger = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
             type: 'range', step: "0.1", min: "0.5", max: "2", class: "zoomInput", value: "1"
         })
-        this._zoomChanger=zoomChanger
+        this._zoomChanger = zoomChanger
         zoomChanger.addEventListener('change', (event) => {
             event.stopPropagation()
             this.zoomWindow(zoomChanger.value)
@@ -104,7 +103,6 @@ class DesktopWindowView {
             this._controllerPointer.close()
         })
     }
-z
 
     setTitle(title) {
         this._titleDiv.innerHTML = title
@@ -126,8 +124,7 @@ z
         this._controllerPointer.setMinimized(true)
     }
 
-    resetSize()
-    {
+    resetSize() {
         if (this.windowSize !== undefined)
             this.maximizeWindow()
         this.windowDiv.style.left = '0'
@@ -177,6 +174,6 @@ z
             this.windowSize = undefined
         }
         this.minimized = false
-       // DesktopEventHandlers.saveWindowParams(this.windowDiv)
+        // DesktopEventHandlers.saveWindowParams(this.windowDiv)
     }
 }

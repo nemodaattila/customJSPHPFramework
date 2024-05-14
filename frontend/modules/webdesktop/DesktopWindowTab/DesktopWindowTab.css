@@ -22,7 +22,6 @@
     /*top: 50%;*/
     white-space: nowrap;
     text-align: center
-
 }
 
 .resetWindowIcon {
@@ -38,9 +37,7 @@
     cursor: pointer
 }
 
-
 .close {
-
 }
 
 .close {
@@ -53,7 +50,6 @@
     height: 25px
 }
 
-.windowHeaderDiv.inActive
-{
+.windowHeaderDiv.inActive {
     background-color: rgb(136, 151, 167)
 }

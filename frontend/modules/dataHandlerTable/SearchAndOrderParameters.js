@@ -1,6 +1,5 @@
 class SearchAndOrderParameters {
     _offset = 0;
-
     get offset() {
         return this._offset;
     }
@@ -10,13 +9,11 @@ class SearchAndOrderParameters {
     }
 
     _actualSort = ['', 1];
-
     get actualSort() {
         return this._actualSort;
     }
 
     _limit
-
     get limit() {
         return this._limit;
     }
@@ -31,7 +28,7 @@ class SearchAndOrderParameters {
         //     dir = 'ASC'
         // if (dir === -1)
         //     dir = 'DESC'
-        this._actualSort = [attr, (dir === 1 ||  isNaN(dir)&&dir.trim() === 'ASC' ? 1 : -1)]
+        this._actualSort = [attr, (dir === 1 || isNaN(dir) && dir.trim() === 'ASC' ? 1 : -1)]
     }
 
     getSearchParameters() {
@@ -48,16 +45,13 @@ class SearchAndOrderParameters {
         }
     }
 
-    changePageParams(num)
-    {
+    changePageParams(num) {
         if (num === '+') {
             this.offset += this._limit
-        }else        if (num === '-')
-        {
-            this.offset-=this._limit
+        } else if (num === '-') {
+            this.offset -= this._limit
             if (this.offset < 0)
                 this.offset = 0
-        }
-        else this.offset = num*this.limit
+        } else this.offset = num * this.limit
     }
 }

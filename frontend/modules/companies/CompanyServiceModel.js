@@ -1,6 +1,5 @@
 class CompanyServiceModel extends ServiceModelParent {
     _companyTypes = {0: 'Nem vevő'}
-
     get companyTypes() {
         return this._companyTypes;
     }
@@ -12,13 +11,11 @@ class CompanyServiceModel extends ServiceModelParent {
     }
 
     _selectedId
-
     get selectedId() {
         return this._selectedId;
     }
 
     _selectedRecord = null
-
     get selectedRecord() {
         return this._selectedRecord;
     }
@@ -43,31 +40,26 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         deletable: true
     }
-
     get moduleParams() {
         return this._moduleParams;
     }
 
     _restName = 'company'
-
     get restName() {
         return this._restName;
     }
 
     _entityTriggerName = 'company'
-
     get entityTriggerName() {
         return this._entityTriggerName;
     }
 
     _onClickEventAttribs = ['id', 'name']
-
     get onClickEventAttribs() {
         return this._onClickEventAttribs;
     }
 
     _defaultOrder = 'name'
-
     get defaultOrder() {
         return this._defaultOrder;
     }
@@ -83,7 +75,6 @@ class CompanyServiceModel extends ServiceModelParent {
         },
         comment: {label: 'Megjegyzés'}
     }
-
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
     }
@@ -132,7 +123,6 @@ class CompanyServiceModel extends ServiceModelParent {
             }],
         }
     }
-
     get editSubMenuParams() {
         return this._editSubMenuParams;
     }

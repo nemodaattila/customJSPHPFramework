@@ -44,6 +44,5 @@ class DesktopView {
         this._deskTopDOMElement = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'desktop', id: 'desktop'
         })
-
     }
 }

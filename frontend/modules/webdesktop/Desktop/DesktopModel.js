@@ -1,7 +1,6 @@
 class DesktopModel {
     _windows = {}
     _tabs = {}
-
     _activeWindow = undefined
     get activeWindow() {
         return this._activeWindow;
@@ -37,20 +36,18 @@ class DesktopModel {
     addNewWindow(name, window, tab) {
         this._windows[name] = window
         this._tabs[name] = tab
-        this.activeWindow=name
+        this.activeWindow = name
     }
 
-    inActivateWindow(windowName)
-    {
+    inActivateWindow(windowName) {
         this._windows[windowName].inActivateWindow()
     }
-    activateWindow(windowName)
-    {
+
+    activateWindow(windowName) {
         this._windows[windowName].activateWindow()
     }
 
-    removeWindow(windowName)
-    {
+    removeWindow(windowName) {
         console.log(windowName)
         delete this._windows[windowName];
         delete this._tabs[windowName];

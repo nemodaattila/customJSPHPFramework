@@ -21,17 +21,18 @@ class DesktopWindowController {
         this.observer.observe(this._view.windowDiv);
     }
 
+    _tabPointer
+
+    set tabPointer(value) {
+        this._tabPointer = value;
+    }
+
     setName(windowName) {
         this._model.name = windowName;
     }
 
     getName() {
         return this._model.name;
-    }
-
-    _tabPointer
-    set tabPointer(value) {
-        this._tabPointer = value;
     }
 
     onWindowResize(object) {
@@ -57,7 +58,6 @@ class DesktopWindowController {
             // DesktopEventHandlers.saveWindowParams(object)
         }, 300);
     }
-
 
     calcDefaultParameters() {
         let top, left

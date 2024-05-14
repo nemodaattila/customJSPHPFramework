@@ -42,6 +42,5 @@ class Main {
         DesktopController.init()
         WindowMover.init(DesktopController)
         DesktopController.openWindow('companies', 'companyLister')
-
     }
 }

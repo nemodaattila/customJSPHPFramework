@@ -47,18 +47,16 @@ class DesktopController {
         if (windowName === this._model.activeWindow)
             return
         if (this._model.activeWindow !== undefined) {
-                this._model.previousWindow = this._model.activeWindow
-                console.log(this._model.previousWindow)
-                this._model.inActivateWindow(this._model.activeWindow)
+            this._model.previousWindow = this._model.activeWindow
+            console.log(this._model.previousWindow)
+            this._model.inActivateWindow(this._model.activeWindow)
             this._model.activeWindow = undefined
             console.log(this._model)
         }
-        if (windowName !== undefined ) {
+        if (windowName !== undefined) {
             console.log(windowName)
-
             this._model.activeWindow = windowName
             console.log(this._model.activeWindow)
-
             this._model.activateWindow(this._model.activeWindow)
         }
         console.log(this._model)
@@ -73,8 +71,8 @@ class DesktopController {
         console.log(windowName)
         this._model.removeWindow(windowName)
     }
-    static getDesktopDOMElement()
-    {
+
+    static getDesktopDOMElement() {
         return this._view._deskTopDOMElement
     }
 
@@ -119,7 +117,6 @@ class DesktopController {
     //  * @param clWindow DesktopWindow - bezárandó ablak
     //  * @param windowTab HTMLDivElement az ablakhoz tartozó fül
     //  */
-
     //
     // /**
     //  * meg van e nyítva egy ablak

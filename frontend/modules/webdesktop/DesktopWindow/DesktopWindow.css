@@ -39,7 +39,6 @@
     white-space: nowrap;
     text-align: center;
     color: #fff;
-
 }
 
 .zoom {
@@ -72,9 +71,7 @@
     left: 15px;
     top: 3px;
     position: absolute
-
 }
-
 
 .close, .zoomIcon, .maximise, .miniaturise, .pin {
     width: 25px;
@@ -86,7 +83,6 @@
 .close:hover, .zoomIcon:hover, .maximise:hover, .miniaturise:hover, .zoom:hover {
     cursor: pointer
 }
-
 
 .close {
     right: 10px;
@@ -116,7 +112,6 @@
     z-index: 110 !important
 }
 
-.windowTab.inActive
-{
+.windowTab.inActive {
     background-color: rgb(136, 151, 167)
 }
