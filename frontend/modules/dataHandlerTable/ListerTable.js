@@ -60,8 +60,7 @@ class ListerTable {
                 event.stopPropagation()
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
-                    this.filters[attribName] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
-                    this.controllerPointer.collectSearchParamsForRequest('reset')
+                    this._controllerPointer.onTableFilterChange()
                 }, 300);
                 if (event.target.value === 'null' || event.target.value === 'notnull') {
                     event.target.nextElementSibling.value = '';
@@ -71,8 +70,7 @@ class ListerTable {
             filters[1].addEventListener('input', (event) => {
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
-                    this.filters[attribName] = [event.target.previousElementSibling.value.trim(), event.target.value.trim()];
-                    this.controllerPointer.collectSearchParamsForRequest('reset')
+                    this._controllerPointer.onTableFilterChange()
                 }, 300);
             })
             if (this._headerAttributeParams[attribName]?.hidden === true)
@@ -109,6 +107,143 @@ class ListerTable {
     flushTable()
     {
         this._view.emptyBody()
+    }
+
+        collectAndConvertFilterParams() {
+        let finalFilterData = []
+            console.log(this)
+        Object.entries(this._headerAttributeParams).forEach(([name,headerParams]) => {
+            let filterType = headerParams.type ??'string'
+
+            let inputs = this._view.getFilterInput(name)
+            if (inputs === undefined)
+                return;
+            let inputValues = [inputs[0].value,inputs[1].value];
+            console.log(inputValues)
+            let values = ''
+          
+            switch (filterType) {
+                case 'number':
+                case 'bigint':
+                case 'decimal':
+                case 'double':
+                case 'float':
+                case 'int':
+                case 'smallint':
+                case 'tinyint':
+                case 'year':
+                    if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
+                        values = [this.convertOperationString(inputValues[0]), parseInt(inputValues[1])];
+                    break;
+                case 'string':
+                case 'char':
+                case 'longtext':
+                case 'mediumtext':
+                case 'text':
+                case 'tinytext':
+                case 'varchar':
+                case 'select':
+                case 'array':
+                    if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
+                        values = [this.convertOperationString(inputValues[0]), inputValues[1].toString()];
+                    break;
+                case 'time':
+                    let timeFrom = '';
+                    if (inputValues[0] !== '') {
+                        let tf = inputValues[0].split(':')
+                        timeFrom = new Date()
+                        timeFrom.setHours(tf[0])
+                        timeFrom.setMinutes(tf[1])
+                        timeFrom.setSeconds(0)
+                    }
+                    let timeTo = '';
+                    if (inputValues[1] !== '') {
+                        let tt = inputValues[1].split(':')
+                        timeTo = new Date()
+                        timeTo.setHours(tt[0])
+                        timeTo.setMinutes(tt[1])
+                        timeTo.setSeconds(0)
+                    }
+                    if (timeFrom !== '' || timeTo !== '')
+                        values = [timeFrom, timeTo, 1];
+                    if (values[0] > values[1]) {
+                        Messenger.showAlert('kezdő idő nem lehet nagyobb a végidőnél')
+                        return
+                    }
+                    break;
+                case 'datetime':
+                    let temp = []
+                    if (inputValues[0] !== '')
+                        temp[0] = inputValues[0].toString().replace('T', ' ')
+                    if (inputValues[1] !== '')
+                        temp[1] = inputValues[1].toString().replace('T', ' ')
+                    if (inputValues[0] !== '' || inputValues[1] !== '') {
+                        if (inputValues[0] !== '' && inputValues[1] === '')
+                            temp[1] = '2286-11-20 23:59:59'
+                        if (inputValues[0] === '' && inputValues[1] !== '')
+                            temp[0] = '1970-01-01 00:00:00'
+                        values = temp
+                        values[2] = 1;
+                        if (values[0] > values[1]) {
+                            Messenger.showAlert('kezdő dátum-idő nem lehet nagyobb a végdátum idő-nél')
+                            return
+                        }
+                    }
+                    break;
+                case 'date':
+                    let temp2 = []
+                    if (inputValues[0] !== '')
+                        temp2[0] = inputValues[0].toString().replace('T', ' ')
+                    if (inputValues[1] !== '')
+                        temp2[1] = inputValues[1].toString().replace('T', ' ')
+                    if (inputValues[0] !== '' || inputValues[1] !== '') {
+                        if (inputValues[0] !== '' && inputValues[1] === '')
+                            temp2[1] = '2286-11-20'
+                        if (inputValues[0] === '' && inputValues[1] !== '')
+                            temp2[0] = '1970-01-01'
+                        values = temp2
+                        values[2] = 1;
+                    }
+                    if (values[0] > values[1]) {
+                        Messenger.showAlert('kezdő dátum nem lehet nagyobb a végdátumnál')
+                        return
+                    }
+                    break;
+                case 'hidden':
+                case undefined:
+                    break
+                default:
+                    if (inputValues[0] !== '' || inputValues[1] !== '')
+                        values = [this.convertOperationString(inputValues[0]), inputValues[1]];
+            }
+            if (values !== '')
+                finalFilterData.push([name].concat(values))
+        })
+            Object.entries(this._headerAttributeParams).forEach(([name,headerParams]) => {
+                if (headerParams.filterType === 'hidden' && headerParams.defaultOperator !== undefined)
+                    finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
+            })
+            console.log(finalFilterData)
+        return finalFilterData
+    }
+
+    convertOperationString(operation) {
+        switch (operation) {
+            case 'eq':
+                return '=';
+            case 'neq':
+                return '!=';
+            case 'sm':
+                return '<';
+            case 'sme':
+                return '<=';
+            case 'gr':
+                return '>';
+            case 'gre':
+                return '>=';
+            default:
+                return operation;
+        }
     }
 
     beforeRefresh() {
@@ -303,143 +438,14 @@ class ListerTable {
 //      * szűrőkből a keresési feltételek és értékek kinyerése, és megfelelő formátumba konvertálásq
 //      * @returns {*[]}
 //      */
-//     collectAndConvertFilterParams() {
-//         let finalFilterData = []
-//         this.columnNames.forEach(id => {
-//             let modelParams = this.content.headers[id]
-//             let serviceParams = this.service.tableAttributeParams[this.content.serviceTable][id]
-//             let filter = modelParams?.filterType ?? serviceParams['DATA_TYPE']
-//             if (this.filterInputs[id] === undefined)
-//                 return;
-//             let values = ''
-//             let inputs = this.filters[id]
-//             switch (filter) {
-//                 case 'number':
-//                 case 'bigint':
-//                 case 'decimal':
-//                 case 'double':
-//                 case 'float':
-//                 case 'int':
-//                 case 'smallint':
-//                 case 'tinyint':
-//                 case 'year':
-//                     if (inputs[1] !== '' || inputs[0] === 'null' || inputs[0] === 'notnull')
-//                         values = [this.convertOperationString(inputs[0]), parseInt(inputs[1])];
-//                     break;
-//                 case 'string':
-//                 case 'char':
-//                 case 'longtext':
-//                 case 'mediumtext':
-//                 case 'text':
-//                 case 'tinytext':
-//                 case 'varchar':
-//                 case 'select':
-//                 case 'array':
-//                     if (inputs[1] !== '' || inputs[0] === 'null' || inputs[0] === 'notnull')
-//                         values = [this.convertOperationString(inputs[0]), inputs[1].toString()];
-//                     break;
-//                 case 'time':
-//                     let timeFrom = '';
-//                     if (inputs[0] !== '') {
-//                         let tf = inputs[0].split(':')
-//                         timeFrom = new Date()
-//                         timeFrom.setHours(tf[0])
-//                         timeFrom.setMinutes(tf[1])
-//                         timeFrom.setSeconds(0)
-//                     }
-//                     let timeTo = '';
-//                     if (inputs[1] !== '') {
-//                         let tt = inputs[1].split(':')
-//                         timeTo = new Date()
-//                         timeTo.setHours(tt[0])
-//                         timeTo.setMinutes(tt[1])
-//                         timeTo.setSeconds(0)
-//                     }
-//                     if (timeFrom !== '' || timeTo !== '')
-//                         values = [timeFrom, timeTo, 1];
-//                     if (values[0] > values[1]) {
-//                         AlertPopup.showAlert('kezdő idő nem lehet nagyobb a végidőnél')
-//                         return
-//                     }
-//                     break;
-//                 case 'datetime':
-//                     let temp = []
-//                     if (inputs[0] !== '')
-//                         temp[0] = inputs[0].toString().replace('T', ' ')
-//                     if (inputs[1] !== '')
-//                         temp[1] = inputs[1].toString().replace('T', ' ')
-//                     if (inputs[0] !== '' || inputs[1] !== '') {
-//                         if (inputs[0] !== '' && inputs[1] === '')
-//                             temp[1] = '2286-11-20 23:59:59'
-//                         if (inputs[0] === '' && inputs[1] !== '')
-//                             temp[0] = '1970-01-01 00:00:00'
-//                         values = temp
-//                         values[2] = 1;
-//                         if (values[0] > values[1]) {
-//                             AlertPopup.showAlert('kezdő dátum-idő nem lehet nagyobb a végdátum idő-nél')
-//                             return
-//                         }
-//                     }
-//                     break;
-//                 case 'date':
-//                     let temp2 = []
-//                     if (inputs[0] !== '')
-//                         temp2[0] = inputs[0].toString().replace('T', ' ')
-//                     if (inputs[1] !== '')
-//                         temp2[1] = inputs[1].toString().replace('T', ' ')
-//                     if (inputs[0] !== '' || inputs[1] !== '') {
-//                         if (inputs[0] !== '' && inputs[1] === '')
-//                             temp2[1] = '2286-11-20'
-//                         if (inputs[0] === '' && inputs[1] !== '')
-//                             temp2[0] = '1970-01-01'
-//                         values = temp2
-//                         values[2] = 1;
-//                     }
-//                     if (values[0] > values[1]) {
-//                         AlertPopup.showAlert('kezdő dátum nem lehet nagyobb a végdátumnál')
-//                         return
-//                     }
-//                     break;
-//                 case 'hidden':
-//                 case undefined:
-//                     break
-//                 default:
-//                     if (inputs[0] !== '' || inputs[1] !== '')
-//                         values = [this.convertOperationString(inputs[0]), inputs[1]];
-//             }
-//             if (values !== '')
-//                 finalFilterData.push([id].concat(values))
-//         })
-//         let heads = this.content.headers
-//         for (let key in heads)
-//             if (heads[key].filterType === 'hidden' && heads[key].defaultOperator !== undefined)
-//                 finalFilterData.push([key, this.convertOperationString(heads[key].defaultOperator), heads[key].defaultValue])
-//         return finalFilterData
-//     }
+
 //
 //     /**
 //      * műveletek szövegből jellé konvertálása
 //      * @param operation műveleto kód
 //      * @returns {*|string} műveleti jel
 //      */
-//     convertOperationString(operation) {
-//         switch (operation) {
-//             case 'eq':
-//                 return '=';
-//             case 'neq':
-//                 return '!=';
-//             case 'sm':
-//                 return '<';
-//             case 'sme':
-//                 return '<=';
-//             case 'gr':
-//                 return '>';
-//             case 'gre':
-//                 return '>=';
-//             default:
-//                 return operation;
-//         }
-//     }
+   
 //
 //     /**
 //      * tábla kiürítése és feltöltése, soresemények hozzáadása

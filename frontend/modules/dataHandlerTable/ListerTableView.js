@@ -20,7 +20,11 @@ class ListerTableView {
     _tableBody
     _controllerPointer
     _inMoveTh = undefined
-    reSizeObject
+    _reSizeObject
+
+    getFilterInput(name) {
+        return this._filterInputs[name];
+    }
 
     get tBody() {
         return this._tBody;
@@ -48,9 +52,7 @@ class ListerTableView {
         return this._tableFooter;
     }
 
-    getFilterInput(name) {
-        return this._filterInputs[name]
-    }
+
 
     getTBodyHeight() {
         return this._tBody.clientHeight
@@ -259,9 +261,9 @@ class ListerTableView {
                 innerHTML: modelParams?.label ?? columnName
             })
             if (this._columnMoveEnablerCB.checked)
-            {
+
                 th.style.cursor='grab'
-            }
+
             let resizeElement = HtmlElementCreator.createHtmlElement('div', th,
                 {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
@@ -324,42 +326,42 @@ class ListerTableView {
     startResizeTh(event, object) {
         if (event.button !== 0 || object.getAttribute("data-rooted") === "1")
             return
-        this.reSizeObject = {}
-        this.reSizeObject.mouseX = event.pageX || event.clientX;
-        this.reSizeObject.objectPos = object.getBoundingClientRect();
-        this.reSizeObject.zoomVal = this.getZoom()
-        this.reSizeObject.object = object;
-        this.reSizeObject.resizeWidth = object.getBoundingClientRect().width;
+        this._reSizeObject = {}
+        this._reSizeObject.mouseX = event.pageX || event.clientX;
+        this._reSizeObject.objectPos = object.getBoundingClientRect();
+        this._reSizeObject.zoomVal = this.getZoom()
+        this._reSizeObject.object = object;
+        this._reSizeObject.resizeWidth = object.getBoundingClientRect().width;
     }
 
     moveResizeTh(event) {
-        if (this.reSizeObject === undefined)
+        if (this._reSizeObject === undefined)
             return
         let newX = event.pageX || event.clientX;
         let newY = event.pageY || event.clientY;
-        this.reSizeObject.resizeWidth = parseInt(this.reSizeObject.resizeWidth, 10) + ((newX - this.reSizeObject.mouseX) / this.reSizeObject.zoomVal);
-        this.reSizeObject.object.style.width = this.reSizeObject.resizeWidth + "px";
-        this.reSizeObject.mouseX = newX;
-        this.reSizeObject.mouseY = newY;
-        let num = this.reSizeObject.object.cellIndex
-        this._filterRow.children[num].style.width = this.reSizeObject.resizeWidth + "px"
+        this._reSizeObject.resizeWidth = parseInt(this._reSizeObject.resizeWidth, 10) + ((newX - this._reSizeObject.mouseX) / this._reSizeObject.zoomVal);
+        this._reSizeObject.object.style.width = this._reSizeObject.resizeWidth + "px";
+        this._reSizeObject.mouseX = newX;
+        this._reSizeObject.mouseY = newY;
+        let num = this._reSizeObject.object.cellIndex
+        this._filterRow.children[num].style.width = this._reSizeObject.resizeWidth + "px"
         Object.values(this._rows).forEach(row => {
-            row.children[num].style.width = this.reSizeObject.resizeWidth + "px";
+            row.children[num].style.width = this._reSizeObject.resizeWidth + "px";
         })
     }
 
     endResizeTh(event) {
-        if (this.reSizeObject === undefined)
+        if (this._reSizeObject === undefined)
             return
-        let num = this.reSizeObject.object.cellIndex
-        this._filterRow.children[num].style.width = this.reSizeObject.resizeWidth + "px"
+        let num = this._reSizeObject.object.cellIndex
+        this._filterRow.children[num].style.width = this._reSizeObject.resizeWidth + "px"
         Object.values(this._rows).forEach(row => {
-            row.children[num].style.width = this.reSizeObject.resizeWidth + "px";
+            row.children[num].style.width = this._reSizeObject.resizeWidth + "px";
         })
-        if (parseInt(this.reSizeObject.resizeWidth, 10) < 10) {
-            document.getElementById(this.reSizeObject.object.getAttribute('moveCheckBoxName')).click()
+        if (parseInt(this._reSizeObject.resizeWidth, 10) < 10) {
+            document.getElementById(this._reSizeObject.object.getAttribute('moveCheckBoxName')).click()
         }
-        this.reSizeObject = undefined
+        this._reSizeObject = undefined
     }
 
     startMoveTh(event, headerObject) {

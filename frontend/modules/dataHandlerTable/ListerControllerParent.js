@@ -47,6 +47,15 @@ class ListerControllerParent extends ControllerParent {
         // this.getRecordsFromServer("refresh")
     }
 
+    //reset
+    onTableFilterChange()
+    {
+        this._view.getComponent('listerTable').flushTable()
+        this._searchAndOrderParameters.offset=0;
+        this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
+        this.getRecordsFromServer("reset", true)
+
+    }
     hardRefreshTable() {
         this._view.getComponent('listerTable').flushTable()
         this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
@@ -71,7 +80,7 @@ class ListerControllerParent extends ControllerParent {
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
-        // searchParams.filterParams = this._view.getComponent('listerTable').collectAndConvertFilterParams()
+        searchParams.filterParams = this._view.getComponent('listerTable').collectAndConvertFilterParams()
          let res = await this.service.getRecordsFromServer(searchParams, hardReset)
         console.log(res)
         let [records,hasNext] = res
