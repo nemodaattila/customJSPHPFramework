@@ -6,6 +6,8 @@ class ListerTable {
 
     _controllerPointer
 
+    _headerAttributeParams
+
     // autoHeaderSetting = false
     // dblClickTimer = false
 
@@ -15,6 +17,7 @@ class ListerTable {
         this._view = new ListerTableView(ListerTable._id, container, this)
         this._view.displayTableElements()
         this._controllerPointer = controllerPointer
+        this._headerAttributeParams=this._controllerPointer.getHeaderAttributeParams()
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
     }
 
@@ -23,6 +26,8 @@ class ListerTable {
         this._view = undefined
         //DO destruct interals
     }
+
+
 
     getTableFooter() {
         return this._view.tableFooter
@@ -37,24 +42,25 @@ class ListerTable {
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder, tableAttributeParams, defaultOrder, isReDraw = false) {
-        this._view.displayTableHeaders(tableAttributeOrder, tableAttributeParams,isReDraw)
-        this._view.displayFilters(tableAttributeOrder, tableAttributeParams)
-        this.addFilterEvents(tableAttributeOrder, tableAttributeParams)
+    drawHeaders(tableAttributeOrder,  defaultOrder, isReDraw = false) {
+        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams,isReDraw)
+        this._view.displayFilters(tableAttributeOrder, this._headerAttributeParams)
+        this.addFilterEvents(tableAttributeOrder)
         console.dir(this)
     }
 
-    addFilterEvents(tableAttributeOrder, tableAttributeParams) {
-        tableAttributeOrder.forEach(id => {
-            let type = tableAttributeParams[id]?.type
+    addFilterEvents(tableAttributeOrder) {
+        console.log(tableAttributeOrder)
+        tableAttributeOrder.forEach(attribName => {
+            let type = this._headerAttributeParams[attribName]?.type
             if (type === 'none')
                 return
-            let filters = this._view.getFilterInput(id)
+            let filters = this._view.getFilterInput(attribName)
             filters[0].addEventListener('input', (event) => {
                 event.stopPropagation()
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
-                    this.filters[id] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
+                    this.filters[attribName] = [event.target.value.trim(), event.target.nextElementSibling.value.trim()];
                     this.controllerPointer.collectSearchParamsForRequest('reset')
                 }, 300);
                 if (event.target.value === 'null' || event.target.value === 'notnull') {
@@ -65,12 +71,12 @@ class ListerTable {
             filters[1].addEventListener('input', (event) => {
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
-                    this.filters[id] = [event.target.previousElementSibling.value.trim(), event.target.value.trim()];
+                    this.filters[attribName] = [event.target.previousElementSibling.value.trim(), event.target.value.trim()];
                     this.controllerPointer.collectSearchParamsForRequest('reset')
                 }, 300);
             })
-            if (tableAttributeParams[id]?.hidden === true)
-                document.getElementById('hcb-' + this._view.id + "-" + id).click()
+            if (this._headerAttributeParams[attribName]?.hidden === true)
+                document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
         })
     }
 

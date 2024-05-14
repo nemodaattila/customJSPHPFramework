@@ -21,6 +21,11 @@ class ListerControllerParent extends ControllerParent {
         return this.service.getTitle(this._type)
     }
 
+    getHeaderAttributeParams()
+    {
+        return this._serviceModelPointer.tableHeaderAttributes
+    }
+
     async displayView(windowBody) {
         this._serviceModelPointer = this.service.model
         let listerTable = new ListerTable(windowBody, this)
@@ -29,7 +34,6 @@ class ListerControllerParent extends ControllerParent {
         this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
             this._serviceModelPointer.tableHeaderAttributeOrder,
-            this._serviceModelPointer.tableHeaderAttributes,
             this._serviceModelPointer.defaultOrder
         )
         let pageTurner
@@ -67,6 +71,7 @@ class ListerControllerParent extends ControllerParent {
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
         searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
+        // searchParams.filterParams = this._view.getComponent('listerTable').collectAndConvertFilterParams()
          let res = await this.service.getRecordsFromServer(searchParams, hardReset)
         console.log(res)
         let [records,hasNext] = res

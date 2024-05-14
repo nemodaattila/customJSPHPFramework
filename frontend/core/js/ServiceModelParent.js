@@ -1,5 +1,10 @@
 class ServiceModelParent {
     _tableHeaderAttributes = {}
+
+    get tableHeaderAttributes() {
+        return this._tableHeaderAttributes;
+    }
+
     _records = {}
 
     _loaded = false
