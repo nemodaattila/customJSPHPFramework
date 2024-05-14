@@ -58,7 +58,7 @@ class CustomPDO implements DatabaseConnectionInterface
         $filters = $params['filterParameters'] ?? [];
         $tables = [];
         if (!str_contains($params['tableName'], '.')) {
-            [$databaseName, $tableName] = ['everlink_projectmanager', $params['tableName']];
+            [$databaseName, $tableName] = ['customJSPHPFramework', $params['tableName']];
             $tables[$tableName] = 't1';
         } else {
             [$databaseName, $tableName] = explode('.', $params['tableName']);
@@ -85,6 +85,9 @@ class CustomPDO implements DatabaseConnectionInterface
         }
         foreach ($conditionalAttributes as $value)
             $what[] = 't1.' . $value;
+        foreach ($filters as $filter)
+            $what[] = 't1'.$filter[0]; //DO
+
         $joins = '';
         $id = 2;
         if (isset($params['connectedTableParams'])) {
@@ -137,13 +140,16 @@ class CustomPDO implements DatabaseConnectionInterface
         $innerFrom = (count($innerFrom) === 0 ? '' : ' ' . implode(', ', $innerFrom) . ', ');
         $sql = 'SELECT ' . implode(", ", $outerWhat) . ' FROM (SELECT ' . implode(", ", $what) . ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
         $where = [];
-        foreach ($filters as $filter) {
-            [$attrName, $filterType, $filterValue] = $filter;
+        foreach ($filters as [$attrName, $filterType, $filterValue]) {
+
+
+
             if (isset($filter[3]) && $filter[3] === 1) {
                 $where[] = 'fi.' . $attrName . ' BETWEEN \'' . $filterType . '\' and \'' . $filterValue . '\'';
             } else {
                 $where[] = match ($filterType) {
                     'cont' => 'fi.' . $attrName . ' LIKE \'%' . $filterValue . '%\'',
+                    'notcont' => 'fi.' . $attrName . ' NOT LIKE \'%' . $filterValue . '%\'',
                     'start' => 'fi.' . $attrName . ' LIKE \'' . $filterValue . '%\'',
                     'end' => 'fi.' . $attrName . ' LIKE \'%' . $filterValue . '\'',
                     'null' => '(fi.' . $attrName . ' IS NULL OR fi.' . $attrName . ' = \'\')',

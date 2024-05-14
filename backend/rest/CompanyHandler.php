@@ -13,6 +13,7 @@ class CompanyHandler extends RestParent
                 "attributes" => ['id'],
                 "conditionalAttributes" => ['name'],
                 "orderLimit" => $searchParams["orderAndLimitParams"],
+                'filterParameters' =>$searchParams["filterParams"],
                 "fetchType" => 7, //FETCH COLUMN
             ]
         );
