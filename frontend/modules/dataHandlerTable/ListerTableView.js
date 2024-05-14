@@ -501,6 +501,7 @@ class ListerTableView {
                     this._filterInputs[id] = [
                         HtmlElementCreator.createSelectWithOptions(td, {}, {
                             cont: 'Tartalmaz',
+                            notcont: 'Nem tartalmaz',
                             start: 'Kezdődik',
                             end: 'Végződik',
                             eq: 'Egyenlő',
