@@ -86,7 +86,7 @@ class CustomPDO implements DatabaseConnectionInterface
         foreach ($conditionalAttributes as $value)
             $what[] = 't1.' . $value;
         foreach ($filters as $filter)
-            $what[] = 't1'.$filter[0]; //DO
+            $what[] = 't1.'.$filter[0]; //DO
 
         $joins = '';
         $id = 2;
@@ -137,6 +137,7 @@ class CustomPDO implements DatabaseConnectionInterface
             }
             $innerWhere = " WHERE " . implode(' AND ', $innerWhere);
         }
+        $what = array_unique($what);
         $innerFrom = (count($innerFrom) === 0 ? '' : ' ' . implode(', ', $innerFrom) . ', ');
         $sql = 'SELECT ' . implode(", ", $outerWhat) . ' FROM (SELECT ' . implode(", ", $what) . ' FROM ' . $innerFrom . ' ' . $tableName . ' AS t1 ' . $joins . $innerWhere . ') as fi';
         $where = [];
