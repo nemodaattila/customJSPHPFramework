@@ -254,10 +254,14 @@ class ListerTableView {
                     this.initSorting(columnName, orderDiv)
                 })
             }
-            HtmlElementCreator.createHtmlElement('div', th, {
+            let nameDiv = HtmlElementCreator.createHtmlElement('div', th, {
                 class: 'text',
                 innerHTML: modelParams?.label ?? columnName
             })
+            if (this._columnMoveEnablerCB.checked)
+            {
+                th.style.cursor='grab'
+            }
             let resizeElement = HtmlElementCreator.createHtmlElement('div', th,
                 {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
