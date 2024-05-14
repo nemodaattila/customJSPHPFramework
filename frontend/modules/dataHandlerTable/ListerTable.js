@@ -246,6 +246,11 @@ class ListerTable {
         }
     }
 
+    onSortElementClick(parameterName, order)
+    {
+        this._controllerPointer.onSortElementClick(parameterName, order)
+    }
+
     beforeRefresh() {
         // let selectedIds = this.selectedRows.map(tr => tr.connectedObjectId)
 //         this.selectedRows = []

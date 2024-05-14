@@ -56,6 +56,15 @@ class ListerControllerParent extends ControllerParent {
         this.getRecordsFromServer("reset", true)
 
     }
+
+    onSortElementClick(parameterName, order)
+    {
+        console.log(parameterName)
+        console.log(order)
+        this._searchAndOrderParameters.setOrdering(parameterName,order)
+        this._view.getComponent('listerTable').flushTable()
+        this.getRecordsFromServer("reset", true)
+    }
     hardRefreshTable() {
         this._view.getComponent('listerTable').flushTable()
         this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)

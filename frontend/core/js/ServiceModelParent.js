@@ -1,20 +1,16 @@
 class ServiceModelParent {
     _tableHeaderAttributes = {}
-
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
     }
 
     _records = {}
-
     _loaded = false
-
     set loaded(value) {
         this._loaded = value;
     }
 
     _tableHeaderAttributeOrder = undefined
-
     get tableHeaderAttributeOrder() {
         return this._tableHeaderAttributeOrder
     }
@@ -28,27 +24,33 @@ class ServiceModelParent {
         console.log(this)
     }
 
-    deleteHeaderAttributeFromOrder(headerName)
-    {
+    deleteHeaderAttributeFromOrder(headerName) {
         const index = this.tableHeaderAttributeOrder.indexOf(headerName);
         if (index > -1)  // only splice array when item is found
             this.tableHeaderAttributeOrder.splice(index, 1); // 2nd parameter means remove one item only
     }
 
-    addHeaderAttributeToOrder(headerName)
-    {
+    addHeaderAttributeToOrder(headerName) {
         this.tableHeaderAttributeOrder.unshift(headerName)
     }
 
-    moveColumnInOrder(moveCellFrom, moveCellTo)
-    {
+    moveColumnInOrder(moveCellFrom, moveCellTo) {
         let headerName = this.tableHeaderAttributeOrder.splice(moveCellFrom, 1)[0];
-        this.tableHeaderAttributeOrder.splice( moveCellTo, 0, headerName );
+        this.tableHeaderAttributeOrder.splice(moveCellTo, 0, headerName);
+    }
+
+    deleteRecord(id) {
+        delete this._records[id];
     }
 
     isIdInRecords(id) {
-        return this._records[id] !== undefined && Math.abs(this._records[id]._queryed - Date.now())<600000
-        // return Object.keys(this._records).findIndex(rId => rId === id) !== -1
+        if (this._records[id] === undefined)
+            return false;
+        if (Math.abs(this._records[id]._queryed - Date.now()) > 600000) {
+            delete this._records[id];
+            return false
+        }
+        return true
     }
 
     addRecord(id, record) {

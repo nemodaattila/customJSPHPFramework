@@ -52,8 +52,6 @@ class ListerTableView {
         return this._tableFooter;
     }
 
-
-
     getTBodyHeight() {
         return this._tBody.clientHeight
     }
@@ -253,7 +251,7 @@ class ListerTableView {
             if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
                 orderDiv.classList.add('order')
                 orderDiv.addEventListener('click', () => {
-                    this.initSorting(columnName, orderDiv)
+                    this.initSorting(columnName, th)
                 })
             }
             let nameDiv = HtmlElementCreator.createHtmlElement('div', th, {
@@ -261,9 +259,7 @@ class ListerTableView {
                 innerHTML: modelParams?.label ?? columnName
             })
             if (this._columnMoveEnablerCB.checked)
-
-                th.style.cursor='grab'
-
+                th.style.cursor = 'grab'
             let resizeElement = HtmlElementCreator.createHtmlElement('div', th,
                 {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
@@ -296,6 +292,24 @@ class ListerTableView {
                 // }
             })
         })
+    }
+
+    initSorting(paramName, orderDiv) {
+        let order = 1;
+        console.log(this._actualSortElement)
+        console.log(orderDiv)
+        console.log(this._actualSortElement === orderDiv)
+        if (this._actualSortElement === orderDiv) {
+            order = (this._actualSortElement.classList.contains('reversed') ? 1 : -1)
+            console.log(order)
+            this._actualSortElement.classList.toggle('reversed')
+        } else if (this._actualSortElement !== null) {
+            this._actualSortElement.classList.remove('ordered')
+            this._actualSortElement.classList.remove('reversed')
+        }
+        this._actualSortElement = orderDiv
+        this._actualSortElement.classList.add('ordered')
+        this._controllerPointer.onSortElementClick(paramName, order)
     }
 
     resizeThOptimal(event, object) {

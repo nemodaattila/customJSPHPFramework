@@ -26,11 +26,12 @@ class SearchAndOrderParameters {
     }
 
     setOrdering(attr, dir) {
+        console.dir([attr, dir])
         // if (dir === 1)
         //     dir = 'ASC'
         // if (dir === -1)
         //     dir = 'DESC'
-        this._actualSort = [attr, (dir === 1 || dir.trim() === 'ASC' ? 1 : -1)]
+        this._actualSort = [attr, (dir === 1 ||  isNaN(dir)&&dir.trim() === 'ASC' ? 1 : -1)]
     }
 
     getSearchParameters() {
