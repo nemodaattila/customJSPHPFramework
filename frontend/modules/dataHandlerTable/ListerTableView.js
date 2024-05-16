@@ -15,8 +15,8 @@ class ListerTableView {
     _selectedRows = []
     _lastClickedRow = undefined
     _actualSortElement = null
-    _tableHeader
-    _tableBody
+    _tableContainerHeader
+    _tableContainerBody
     _controllerPointer
     _inMoveTh = undefined
     _reSizeObject
@@ -41,10 +41,10 @@ class ListerTableView {
         return this._id;
     }
 
-    _tableFooter
+    _tableContainerFooter
 
-    get tableFooter() {
-        return this._tableFooter;
+    get tableContainerFooter() {
+        return this._tableContainerFooter;
     }
 
     getFilterInput(name) {
@@ -60,19 +60,19 @@ class ListerTableView {
     }
 
     displayTableElements() {
-        this._tableHeader = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableContainerHeader = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableHeader'
         })
-        this._tableBody = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableContainerBody = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableBody'
         })
-        this._tableFooter = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
+        this._tableContainerFooter = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableFooter'
         })
-        this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._tableHeader, {
+        this._operationDiv = HtmlElementCreator.createHtmlElement('div', this._tableContainerHeader, {
             class: 'view_field'
         })
-        this._tableContainer = HtmlElementCreator.createHtmlElement('div', this._tableBody, {
+        this._tableContainer = HtmlElementCreator.createHtmlElement('div', this._tableContainerBody, {
             class: 'tableContainer'
         })
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
