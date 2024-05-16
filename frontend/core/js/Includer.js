@@ -36,6 +36,8 @@ class Includer {
 
     static addFilesToLoad(filesToLoad) {
         console.log(filesToLoad)
+        if (!filesToLoad)
+            return;
         if (filesToLoad === undefined) {
             Messenger.showAlert('file load error - addFilesToLoad param undefined')
             return

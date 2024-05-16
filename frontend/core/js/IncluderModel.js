@@ -19,7 +19,11 @@ class IncluderModel {
     }
 
     getIncludableFileSource(name) {
-        return this._includableFileSources[name];
+        if (this._includableFileSources[name] === undefined) {
+            Messenger.showAlert('fileSource not included: '+name);
+            return false;
+        }
+            return this._includableFileSources[name];
     }
 
     setIncludableFileSource(name, value) {
