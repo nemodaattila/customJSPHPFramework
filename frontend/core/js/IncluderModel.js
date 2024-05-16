@@ -34,7 +34,10 @@ class IncluderModel {
     }
 
     searchInLoadedFiles(fileName) {
-        return this._loadedFiles.find(file => file === fileName) !== -1
+        console.log(fileName)
+        console.log(this._loadedFiles)
+        console.log(this._loadedFiles.findIndex(file => file === fileName) !== -1)
+        return this._loadedFiles.findIndex(file => file === fileName) !== -1
     }
 
     // loadedModuleFiles = {}

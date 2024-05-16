@@ -47,7 +47,7 @@ class Includer {
         console.log(filesToLoad)
         filesToLoad.forEach((group) => {
             group.fileNames.forEach((file) => {
-                if (this._model.searchInLoadedFiles(group.directory + '/' + file))
+                if (!this._model.searchInLoadedFiles(group.directory + '/' + file))
                     this._model.setFilesToLoad(group.directory + '/' + file)
             })
             console.dir(this)
@@ -61,7 +61,7 @@ class Includer {
         return new Promise(async (resolve, reject) => {
             let filesToLoad = this._model.filesToLoad
             if (filesToLoad.length === 0)
-                return
+                resolve(true)
             let res
             for (const file of filesToLoad) {
                 try {
