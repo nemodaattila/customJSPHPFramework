@@ -1,7 +1,7 @@
 class DesktopWindowView {
     _controllerPointer
     _zoomChanger
-    z
+
 
     constructor(controllerPointer) {
         this._controllerPointer = controllerPointer;

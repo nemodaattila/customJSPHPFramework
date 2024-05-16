@@ -254,8 +254,8 @@ class ListerTable {
     }
 
     displayRecordsInTable(records, append = false) {
-        if (!append)
-            this._view.emptyBody()
+        console.log(append)
+
         records.forEach(record => {
             console.log(record)
             let row = this._view.createRowWithRecord(record[1], record[0])

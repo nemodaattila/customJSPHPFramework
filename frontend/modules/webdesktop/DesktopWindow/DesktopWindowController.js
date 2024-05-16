@@ -48,7 +48,7 @@ class DesktopWindowController {
                 object.style.width = "400px"
             if (parseInt(object.style.height) < 200)
                 object.style.height = "200px"
-            controller._contentControllerPointer.hardRefreshTable()
+            controller._contentControllerPointer.softRefreshTable()
             // object.windowObject.contentObject.rows = []
             // object.windowObject.controllerPointer.calcTableRowNum()
             // object.windowObject.contentObject.offset = 0
@@ -56,7 +56,7 @@ class DesktopWindowController {
             // object.windowObject.controllerPointer.collectSearchParamsForRequest('reset')
             // object.windowObject.contentObject.scrollRows(0)
             // DesktopEventHandlers.saveWindowParams(object)
-        }, 300);
+        }, 200);
     }
 
     calcDefaultParameters() {
