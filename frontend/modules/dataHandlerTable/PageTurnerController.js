@@ -3,6 +3,8 @@ class PageTurnerController {
     _lastPageNum = undefined
     _listerControllerPointer
 
+    stat
+
     constructor(container, controllerPointer) {
         this._listerControllerPointer = controllerPointer
         container.style.height = parseInt(container.style.height) + 30 + "px";

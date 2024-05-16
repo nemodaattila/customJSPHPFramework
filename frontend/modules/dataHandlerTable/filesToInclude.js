@@ -19,3 +19,11 @@ Includer.setIncludableFileSource(
                 'PageTurner.css',
             ]
         }])
+Includer.setIncludableFileSource(
+    'pageTurnerInitiator', [
+        {
+            directory: MODULE_FILE_DIR + 'dataHandlerTable',
+            fileNames: [
+                'PageTurnerInitiator.js',
+            ]
+        }])

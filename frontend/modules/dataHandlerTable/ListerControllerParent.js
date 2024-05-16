@@ -35,12 +35,8 @@ class ListerControllerParent extends ControllerParent {
             this._serviceModelPointer.tableHeaderAttributeOrder,
             this._serviceModelPointer.defaultOrder
         )
-        let pageTurner
-        if (this._pageTurnerType === 'pageTurner') {
-            await Includer.loadFileSource('pageTurner')
-            pageTurner = new PageTurnerController(listerTable.getTableFooter(), this)
-        }
-        this._view.addComponent("pageTurner", pageTurner)
+
+        this._view.addComponent("pageTurner", await PageTurnerInitiator.init(this._pageTurnerType,listerTable.getTableFooter(),this))
         console.dir(windowBody)
         this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
         // this.getRecordsFromServer("refresh")
@@ -105,7 +101,7 @@ class ListerControllerParent extends ControllerParent {
                 this._view.getComponent('listerTable').displayRecordsInTable(records)
                 let pageNum = Math.floor(searchParams.orderAndLimitParams.offset / searchParams.orderAndLimitParams.limit) + 1
                 console.log(pageNum)
-                this._view.getComponent('pageTurner').hideElementsAccordingToPageNum(pageNum, hasNext)
+                this._view.getComponent('pageTurner')?.hideElementsAccordingToPageNum(pageNum, hasNext)
                 // this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
             } else {
                 this.appendTableData(records)
