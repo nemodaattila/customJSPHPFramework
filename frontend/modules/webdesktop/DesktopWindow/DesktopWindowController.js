@@ -134,6 +134,7 @@ class DesktopWindowController {
 
     close() {
         //DO un observe
+        this.observer.unobserve(this._view.windowDiv);
         DesktopController.switchActiveWindow()
         DesktopController.removeWindow(this._model.name)
         this._tabPointer.destruct()
