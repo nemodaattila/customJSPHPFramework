@@ -1,30 +1,35 @@
 class ListerControllerParent extends ControllerParent {
     _type = 'list'
-    _searchAndOrderParameters
+    // _searchAndOrderParameters
     _pageTurnerType = 'infinityScroller'
     _serviceModelPointer
     _rowHeight = 20
+    
+    _searchParamConnector
 
     init() {
         console.log(this)
-        this._searchAndOrderParameters = new SearchAndOrderParameters()
+        this._searchParamConnector = new ListerTableSearchConnector()
+        this._searchParamConnector.orderAndLimitParameterObject= new SearchAndOrderParameters()
+        this._searchParamConnector.defaultRowHeight=this._rowHeight
+        this._searchParamConnector.controllerPointer=this;
     }
 
     destruct() {
         this._view.destruct(['pageTurner'])
         this._serviceModelPointer = null
         this._service = null
-        this._searchAndOrderParameters = undefined
+        this._searchParamConnector = undefined
     }
 
     getTitle() {
         return this.service.getTitle(this._type)
     }
 
-    getTableBody()
-{
-    return this._view.getComponent('listerTable').view.tBody
-}
+//     getTableBody()
+// {
+//     return this._view.getComponent('listerTable').view.tBody
+// }
 
     getHeaderAttributeParams() {
         return this._serviceModelPointer.tableHeaderAttributes
@@ -35,32 +40,42 @@ class ListerControllerParent extends ControllerParent {
         let listerTable = new ListerTable(windowBody, this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
-        this._searchAndOrderParameters.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
+        this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
             this._serviceModelPointer.tableHeaderAttributeOrder,
             this._serviceModelPointer.defaultOrder
         )
-
-        this._view.addComponent("pageTurner", await PageTurnerInitiator.init(this._pageTurnerType,listerTable.getTableContainerFooter(),this))
+        this._searchParamConnector.orderSourceObject= listerTable.view
+        this._view.addComponent("pageTurner", this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType,listerTable,this))
         console.dir(windowBody)
-        this._searchAndOrderParameters.limit = Math.floor(parseInt(listerTable.getTBodyHeight()) / this._rowHeight)
+        this._searchParamConnector.tableDOMElement=this._view.getComponent('listerTable').view.tBody
+        this._searchParamConnector.setAutoLimit()
         // this.getRecordsFromServer("refresh")
     }
 
     //reset
     onTableFilterChange() {
-        this._view.getComponent('listerTable').flushTable()
-        this._searchAndOrderParameters.offset = 0;
-        this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
+        // this._view.getComponent('listerTable').flushTable()
+        // this._searchAndOrderParameters.offset = 0;
+        this._searchParamConnector.resetOffset()
+        // this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
         this.getRecordsFromServer("reset", true)
     }
 
     onSortElementClick(parameterName, order) {
         console.log(parameterName)
         console.log(order)
-        this._searchAndOrderParameters.setOrdering(parameterName, order)
-        this._view.getComponent('listerTable').flushTable()
+        this._searchParamConnector.setOrdering(parameterName, order)
+        // this._view.getComponent('listerTable').flushTable()
         this.getRecordsFromServer("reset", true)
+    }
+
+    refreshTable(type='soft')
+    {
+        if (type ==='soft')
+            this.softRefreshTable()
+        if (type ==='hard')
+            this.softRefreshTable()
     }
 
     hardRefreshTable() {
@@ -86,12 +101,13 @@ class ListerControllerParent extends ControllerParent {
             return;
         }
         this._view.getComponent('listerTable').flushTable()
-        this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
+        this._searchParamConnector.setAutoLimit()
         let searchParams = {}
+        searchParams.orderAndLimitParams = this._searchParamConnector.getSearchParameters()
+
         searchParams.additionalParams = null
         if (typeof this.getConnectedSearchParams === "function")
             searchParams.additionalParams = this.getConnectedSearchParams()
-        searchParams.orderAndLimitParams = this._searchAndOrderParameters.getSearchParameters()
         searchParams.filterParams = this._view.getComponent('listerTable').collectAndConvertFilterParams()
         let res = await this.service.getRecordsFromServer(searchParams, hardReset)
         console.log(res)
@@ -99,12 +115,15 @@ class ListerControllerParent extends ControllerParent {
         console.trace()
         if (records !== false) {
             console.log(records)
+            console.log(type)
+
             if (type === 'reset' || type === 'refresh') {
 
                 this._view.getComponent('listerTable').displayRecordsInTable(records)
                 let pageNum = Math.floor(searchParams.orderAndLimitParams.offset / searchParams.orderAndLimitParams.limit) + 1
                 console.log(pageNum)
-                this._view.getComponent('pageTurner')?.hideElementsAccordingToPageNum?.(pageNum, hasNext)
+                this._searchParamConnector.hidePageElementsAccordingToPageNum(pageNum, hasNext)
+                // this._view.getComponent('pageTurner')?.hideElementsAccordingToPageNum?.(pageNum, hasNext)
                 // this.windowContentPointer.entityHandlerIcons['refresh'].classList.remove('expiredBill')
             } else {
                 this.appendTableData(records)
@@ -112,32 +131,33 @@ class ListerControllerParent extends ControllerParent {
         }
     }
 
-    changePage(pageNun) {
-        this._searchAndOrderParameters.changePageParams(pageNun)
-        this.getRecordsFromServer('refresh')
-    }
+    // changePage(pageNun) {
+    //     this._searchAndOrderParameters.changePageParams(pageNun)
+    //     this.getRecordsFromServer('refresh')
+    // }
 
     displayHideColumn(isDisplay, columnName) {
         if (isDisplay) {
             this._serviceModelPointer.addHeaderAttributeToOrder(columnName)
         } else
             this._serviceModelPointer.deleteHeaderAttributeFromOrder(columnName)
-        this.refreshTable()
+        this.redrawTable()
         console.log(this._serviceModelPointer)
     }
 
     moveColumn(moveCellFrom, moveCellTo) {
         this._serviceModelPointer.moveColumnInOrder(moveCellFrom, moveCellTo)
-        this.refreshTable()
+        this.redrawTable()
     }
 
-    async refreshTable() {
+    async redrawTable() {
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
         console.log(recordIds)
         console.log(this._serviceModelPointer.tableHeaderAttributeOrder)
+        this._view.getComponent('listerTable').flushTable()
         this._view.getComponent('listerTable').drawHeaders(
             this._serviceModelPointer.tableHeaderAttributeOrder,
-            this._serviceModelPointer.tableHeaderAttributes,
+            // this._serviceModelPointer.tableHeaderAttributes,
             this._serviceModelPointer.defaultOrder,
             true
         )
@@ -146,6 +166,7 @@ class ListerControllerParent extends ControllerParent {
 
     async refreshRows() {
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
+        this._view.getComponent('listerTable').flushTable()
         this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds, true))
     }
 

@@ -47,6 +47,10 @@ class ListerTableView {
         return this._tableContainerFooter;
     }
 
+    get tableContainerBody() {
+        return this._tableContainerBody;
+    }
+
     getFilterInput(name) {
         return this._filterInputs[name];
     }
@@ -66,6 +70,7 @@ class ListerTableView {
         this._tableContainerBody = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableBody'
         })
+        this._tableContainerBody._controllerPointer = this._controllerPointer
         this._tableContainerFooter = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableFooter'
         })
@@ -78,6 +83,7 @@ class ListerTableView {
         this._dataTable = HtmlElementCreator.createHtmlElement('table', this._tableContainer, {class: 'listTable'})
         this._tHead = HtmlElementCreator.createHtmlElement('thead', this._dataTable, {})
         this._tBody = HtmlElementCreator.createHtmlElement('tbody', this._dataTable)
+
         this._mainContainer.addEventListener('mouseup', (event) => {
             this.endMoveTh(event)
             this.endResizeTh(event)
@@ -609,8 +615,11 @@ class ListerTableView {
         let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
         row.setAttribute("recordId", id)
         this._rows.push(row)
-        values.forEach(([value, type, paramName]) => {
+        values.forEach(([value, type, paramName],key) => {
+            console.log(key)
+
             let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+            td.style.width=this._headerRow.children[key].style.width
             if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
                 td.classList.add('rightAlign')
             if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(dataType => dataType === type) !== -1)

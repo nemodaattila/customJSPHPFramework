@@ -1,10 +1,12 @@
 class ListerTable {
+
     static _id = -1
     _view
     _interval // refreshInterval
     _intervalInSeconds = 60000;
     _controllerPointer
     _headerAttributeParams
+    _resizeTimeOut
     // autoHeaderSetting = false
     // dblClickTimer = false
     constructor(container, controllerPointer) {
@@ -14,16 +16,37 @@ class ListerTable {
         this._controllerPointer = controllerPointer
         this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
         // this._interval = setInterval(() => this.refreshRows(), this._intervalInSeconds)
+        // this.observer = new ResizeObserver(this.onWindowResize)
+        // this.observer.observe(this._view._tableContainerBody);
+    }
+
+    // onWindowResize(object) {
+    //     console.log(object)
+    //     if (!(object instanceof Element))
+    //         object = object[0].target
+    //     clearTimeout(this.resizeTimeOut);
+    //     this.resizeTimeOut = setTimeout(() => {
+    //         object._controllerPointer._controllerPointer.softRefreshTable()
+    //     }, 200);
+    // }
+
+    get view() {
+        return this._view;
     }
 
     destruct() {
+        this.observer.unobserve(this._view.tBody);
         this._view.destruct()
         this._view = undefined
         //DO destruct interals
     }
 
-    getTableFooter() {
-        return this._view.tableFooter
+    getTableContainerFooter() {
+        return this._view.tableContainerFooter
+    }
+
+    getTableContainerBody() {
+        return this._view.tableContainerBody
     }
 
     getTBodyHeight() {
@@ -255,8 +278,8 @@ class ListerTable {
 
     displayRecordsInTable(records, append = false) {
         console.log(append)
-
-        records.forEach(record => {
+        console.trace()
+            records.forEach(record => {
             console.log(record)
             let row = this._view.createRowWithRecord(record[1], record[0])
         })

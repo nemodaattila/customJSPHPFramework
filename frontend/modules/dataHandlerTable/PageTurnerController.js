@@ -2,11 +2,11 @@ class PageTurnerController {
     _navElements = {}
     _lastPageNum = undefined
     _listerControllerPointer
-
-    stat
-
-    constructor(container, controllerPointer) {
+    _searchConnector
+    constructor(listerTable, controllerPointer,searchConnector) {
+        this._searchConnector = searchConnector
         this._listerControllerPointer = controllerPointer
+       let container =  listerTable.getTableContainerFooter()
         container.style.height = parseInt(container.style.height) + 30 + "px";
         let navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
         this._navElements['first'] = HtmlElementCreator.createHtmlElement("span", navContainer, {
@@ -43,10 +43,12 @@ class PageTurnerController {
     }
 
     pageChangeSignal(value) {
-        this._listerControllerPointer.changePage(value)
+        this._searchConnector.changePage(value)
     }
 
     hideElementsAccordingToPageNum(pageNum, hasNext) {
+        console.log(pageNum)
+        console.log(hasNext)
         this._navElements.actual.value = pageNum
         this._navElements.first.style.display = pageNum > 2 ? 'inline' : 'none'
         this._navElements.previous.style.display = pageNum > 1 ? 'inline' : 'none'

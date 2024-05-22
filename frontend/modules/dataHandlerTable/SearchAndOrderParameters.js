@@ -31,7 +31,7 @@ class SearchAndOrderParameters {
         this._actualSort = [attr, (dir === 1 || isNaN(dir) && dir.trim() === 'ASC' ? 1 : -1)]
     }
 
-    getSearchParameters() {
+        getSearchParameters() {
         console.log({
             offset: this.offset,
             sort: this.actualSort,
