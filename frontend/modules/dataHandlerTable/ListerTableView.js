@@ -24,8 +24,8 @@ class ListerTableView {
     constructor(id, tableContainer, controllerPointer) {
         this._id = id
         this._mainContainer = tableContainer;
-        this._mainContainer.style.display = 'table';
-        this._mainContainer.style.tableLayout = 'fixed';
+        // this._mainContainer.style.display = 'table';
+        // this._mainContainer.style.tableLayout = 'fixed';
         this._controllerPointer = controllerPointer
     }
 
@@ -294,7 +294,11 @@ class ListerTableView {
             })
             hcb.addEventListener('click', (event) => {
                 event.stopPropagation()
+                console.log(hcb)
+                console.log(columnName)
+
                 this._controllerPointer.displayHideColumn(hcb.checked, columnName)
+
                 //     DesktopEventHandlers.hideColumn(th, this.dataTable, this, id)
                 //     if (this.autoHeaderSetting === false)
                 //         this.saveHeaderParams()
@@ -616,7 +620,6 @@ class ListerTableView {
         row.setAttribute("recordId", id)
         this._rows.push(row)
         values.forEach(([value, type, paramName],key) => {
-            console.log(key)
 
             let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
             td.style.width=this._headerRow.children[key].style.width
