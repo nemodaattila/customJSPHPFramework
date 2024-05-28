@@ -67,7 +67,8 @@ class ListerControllerParent extends ControllerParent {
         console.log(order)
         this._searchParamConnector.setOrdering(parameterName, order)
         // this._view.getComponent('listerTable').flushTable()
-        this.getRecordsFromServer("reset", true)
+        // this.getRecordsFromServer("reset", true)
+        this.refreshRows({resetOffset: true})
     }
 
 
@@ -108,7 +109,7 @@ class ListerControllerParent extends ControllerParent {
         this._view.getComponent('listerTable').flushTable()
         if(!params.reDrawHeader)
         {
-            this.redrawTable()
+           await this.redrawTable()
         }
             console.trace()
         if (records !== false) {
