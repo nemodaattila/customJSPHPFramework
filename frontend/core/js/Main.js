@@ -35,7 +35,9 @@ class Main {
         await Includer.loadFileSource('desktopWindow')
         await Includer.loadFileSource('desktopWindowTab')
         await Includer.loadFileSource('listerTable')
-        console.dir(Includer)
+        await Includer.loadFileSource('infinityScroller')
+        await Includer.loadFileSource('pageTurnerInitiator')
+
     }
 
     static initComponents() {
