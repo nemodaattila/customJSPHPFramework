@@ -6,7 +6,7 @@ class InfinityScrollerController {
 
     _zoom = 1
 
-    _scrollDiv
+    _scrollMockDiv
 
     _defaultScrollHeight = 50
 
@@ -24,8 +24,8 @@ class InfinityScrollerController {
         // let tableDOM = tableDOMContainer.firstChild
         // tableDOM.classList.add('scrollTable')
 
-        this._scrollDiv = HtmlElementCreator.createHtmlElement('div', tableContainerBody, {class: 'scrollHeight'})
-        this._scrollDiv.style.height = this._defaultScrollHeight + "px"
+        this._scrollMockDiv = HtmlElementCreator.createHtmlElement('div', tableContainerBody, {class: 'scrollHeight'})
+        this._scrollMockDiv.style.height = this._defaultScrollHeight + "px"
 
 
         let lastScrollTop = 0;
@@ -50,26 +50,34 @@ class InfinityScrollerController {
 
     }
     getScrollPercent() {
-        return 100 * (this._scrollDiv.parentElement.scrollTop / (this._scrollDiv.parentElement.scrollHeight - this._scrollDiv.parentElement.clientHeight))
+        return 100 * (this._scrollMockDiv.parentElement.scrollTop / (this._scrollMockDiv.parentElement.scrollHeight - this._scrollMockDiv.parentElement.clientHeight))
     }
 
-    setScrollHeight(rowCount) {
+    setScrollDivHeight(rowCount) {
         console.log(rowCount)
         if (this.zoom === '')
             this.zoom = 1
-        this._scrollDiv.style.height = (this._defaultScrollHeight + (rowCount * this._searchConnector._defaultRowHeight)) / this._zoom + 'px'
+        this._scrollMockDiv.style.height = (this._defaultScrollHeight + (rowCount * this._searchConnector._defaultRowHeight)) / this._zoom + 'px'
         console.log((this._defaultScrollHeight + (rowCount * this._searchConnector._defaultRowHeight)) / this._zoom)
     }
 
     getNewOffsetForScroll(top = null) {
         if (top !== null)
             top = top * (this._searchConnector._defaultScrollHeight/ this._zoom)
-        top = top ?? this._scrollDiv.parentElement.scrollTop
+        top = top ?? this._scrollMockDiv.parentElement.scrollTop
         console.log(top)
         return parseInt(parseInt(top, 10) / (this._searchConnector._defaultRowHeight / this._zoom), 10);
 
     }
     hideElementsAccordingToPageNum(){}
+
+    resetScroll()
+    {
+        console.log('resetScroll')
+        this.setScrollDivHeight(0)
+        this._scrollMockDiv.parentElement.scrollTo(0,0);
+
+    }
 
     // scrollRows(top) {
     //     let [firstRow, lastRow] = this.pageScrollData.getFirstAndLastRowNumberForScroll(top, this.tableContainer.scrollTop)

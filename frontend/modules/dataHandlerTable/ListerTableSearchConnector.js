@@ -55,7 +55,7 @@ class ListerTableSearchConnector {
             / (this.defaultRowHeight)) - 1)
         console.dir(this._orderAndLimitParameterObject.offset)
         if (maxValueChange)
-            this._offsetSourceObject.setScrollHeight(this._orderAndLimitParameterObject.offset, this.defaultRowHeight)
+            this._offsetSourceObject.setScrollDivHeight(this._orderAndLimitParameterObject.offset, this.defaultRowHeight)
     }
 
     getSearchParameters(type) {
@@ -69,6 +69,8 @@ class ListerTableSearchConnector {
 
     resetOffset() {
         this._orderAndLimitParameterObject.offset = 0
+        this._offsetSourceObject.resetScroll()
+
     }
 
     hidePageElementsAccordingToPageNum(hasNext) {
