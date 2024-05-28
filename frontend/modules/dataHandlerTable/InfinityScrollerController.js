@@ -11,6 +11,10 @@ class InfinityScrollerController {
     _defaultScrollHeight = 50
 
     _searchConnector
+
+    _scrollTimer
+
+    _outerScrollTimer
     constructor(listerTable, controllerPointer,searchConnector) {
         console.log(controllerPointer)
         this._searchConnector=searchConnector
@@ -31,20 +35,24 @@ class InfinityScrollerController {
         let lastScrollTop = 0;
         let newScrollTop
         tableContainerBody.addEventListener('scroll', async () => {
-            newScrollTop = tableContainerBody.scrollTop
-            if (newScrollTop === lastScrollTop)
-                return
-            await this._searchConnector.setOffset()
-            if (newScrollTop > lastScrollTop) {
-                let scrollPercent = this.getScrollPercent()
-                if (isNaN(scrollPercent))
-                    scrollPercent = 100
-                if (scrollPercent > 80) {
-                    clearTimeout(this.scrollTimer);
-                    this.scrollTimer = setTimeout(async () => await this._searchConnector.setOffset(null,true), 100)
+            clearTimeout(this._scrollTimer);
+            this._scrollTimer = setTimeout(async () =>
+            {
+                newScrollTop = tableContainerBody.scrollTop
+                if (newScrollTop === lastScrollTop)
+                    return
+                await this._searchConnector.setOffset()
+                if (newScrollTop > lastScrollTop) {
+                    let scrollPercent = this.getScrollPercent()
+                    if (isNaN(scrollPercent))
+                        scrollPercent = 100
+                    if (scrollPercent > 80) {
+                        clearTimeout(this._scrollTimer);
+                        this._scrollTimer = setTimeout(async () => await this._searchConnector.setOffset(null, true), 100)
+                    }
                 }
-            }
-            lastScrollTop = newScrollTop
+                lastScrollTop = newScrollTop
+            },50)
         })
         this.overlay = HtmlElementCreator.createSimpleHtmlElement('div', tableContainerBody.parentElement, {class: 'overlay'})
 
