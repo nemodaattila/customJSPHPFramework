@@ -110,7 +110,8 @@
     width: 200px;
     background: #566575;
     right: 0;
-    top: 30px
+    top: 65px;
+    z-index: 1000;
 }
 
 .columnHiderDiv > span {
