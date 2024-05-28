@@ -31,17 +31,17 @@ class SearchAndOrderParameters {
         this._actualSort = [attr, (dir === 1 || isNaN(dir) && dir.trim() === 'ASC' ? 1 : -1)]
     }
 
-        getSearchParameters() {
+        getSearchParameters(type) {
         console.log({
-            offset: this.offset,
+            offset: type === 'next'?this.offset+this.limit:this.offset,
             sort: this.actualSort,
-            limit: this.limit
+            limit: type === 'next'?3:this.limit
         })
         return {
-            offset: this.offset,
+            offset: type === 'next'?this.offset+this.limit:this.offset,
             order: this.actualSort[0],
             orderDir: this.actualSort[1] === 1 ? 'ASC' : "DESC",
-            limit: this.limit
+            limit: type === 'next'?3:this.limit
         }
     }
 
