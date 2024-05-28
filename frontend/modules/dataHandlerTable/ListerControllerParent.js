@@ -38,6 +38,7 @@ class ListerControllerParent extends ControllerParent {
         let listerTable = new ListerTable(windowBody, this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
+
         this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
             this._serviceModelPointer.tableHeaderAttributeOrder,
