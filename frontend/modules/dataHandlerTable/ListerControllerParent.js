@@ -157,7 +157,6 @@ class ListerControllerParent extends ControllerParent {
     }
 
     async redrawTable() {
-        return
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
         console.log(recordIds)
         console.log(this._serviceModelPointer.tableHeaderAttributeOrder)
