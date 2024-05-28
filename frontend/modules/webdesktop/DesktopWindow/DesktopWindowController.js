@@ -48,7 +48,7 @@ class DesktopWindowController {
                 object.style.width = "400px"
             if (parseInt(object.style.height) < 200)
                 object.style.height = "200px"
-            controller._contentControllerPointer.softRefreshTable()
+            controller._contentControllerPointer.refreshRows({changeLimit:true,resetOffset: true})
             // object.windowObject.contentObject.rows = []
             // object.windowObject.controllerPointer.calcTableRowNum()
             // object.windowObject.contentObject.offset = 0
