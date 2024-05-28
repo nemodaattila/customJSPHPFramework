@@ -11,7 +11,7 @@ class CompanyHandler extends RestParent
         $res = $this->dbConnection->getRecordsFromServer(
             ["tableName" => $this->tableName,
                 "attributes" => ['id'],
-                "conditionalAttributes" => ['name'],
+                "conditionalAttributes" => [$searchParams["orderAndLimitParams"]['order']],
                 "orderLimit" => $searchParams["orderAndLimitParams"],
                 'filterParameters' => $searchParams["filterParams"],
                 "fetchType" => 7, //FETCH COLUMN
