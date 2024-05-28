@@ -58,9 +58,9 @@ class ListerControllerParent extends ControllerParent {
     onTableFilterChange() {
         // this._view.getComponent('listerTable').flushTable()
         // this._searchAndOrderParameters.offset = 0;
-        this._searchParamConnector.resetOffset()
+        // this._searchParamConnector.resetOffset()
         // this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
-        this.getRecordsFromServer("reset", true)
+        this.refreshRows({resetOffset: true, reDrawHeader: false})
     }
 
     onSortElementClick(parameterName, order) {
@@ -90,7 +90,11 @@ class ListerControllerParent extends ControllerParent {
             return;
         }
         this._searchParamConnector.setAutoLimit(params.maxValueChange ??false)
-       let searchParams =await this.collectSearchParamsForRequest(params)
+        let resetOffset = params.resetOffset ?? false
+
+        if (resetOffset)
+            this._searchParamConnector.resetOffset()
+            let searchParams =await this.collectSearchParamsForRequest(params)
 
         let recordIds, hasNext
         if (params.ids !== undefined)
