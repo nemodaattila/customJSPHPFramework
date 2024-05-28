@@ -24,6 +24,15 @@ Includer.setIncludableFileSource(
         {
             directory: MODULE_FILE_DIR + 'dataHandlerTable',
             fileNames: [
-                'PageTurnerInitiator.js',
+                'ListerTableSearchConnector.js',
+            ]
+        }])
+Includer.setIncludableFileSource(
+    'infinityScroller', [
+        {
+            directory: MODULE_FILE_DIR + 'dataHandlerTable',
+            fileNames: [
+                'InfinityScrollerController.js',
+                'InfinityScroller.css',
             ]
         }])
