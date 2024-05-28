@@ -7,7 +7,7 @@ class PageTurnerController {
         this._searchConnector = searchConnector
         this._listerControllerPointer = controllerPointer
        let container =  listerTable.getTableContainerFooter()
-        container.style.height = parseInt(container.style.height) + 30 + "px";
+        container.style.height =  "30px";
         let navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
         this._navElements['first'] = HtmlElementCreator.createHtmlElement("span", navContainer, {
             "class": "navLink",
@@ -57,4 +57,7 @@ class PageTurnerController {
         this._navElements.last.style.display = 'none'
         //DO last page - lastPageNum
     }
+
+    resetScroll(){}
+
 }
