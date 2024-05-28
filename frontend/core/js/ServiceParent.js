@@ -42,26 +42,29 @@ class ServiceParent {
         return this._model.tableHeaderAttributeOrder
     }
 
-    async getRecordsFromServer(searchAndOrderParams, hardReset = false) {
+    async getRecordsFromServer(searchAndOrderParams) {
         // if (data.offset < 0 || data.limit < 1)
         //     return false
         // if (additionalParams !== null)
         //     ac.postFields.additionalParams = JSON.stringify(additionalParams)
         try {
             console.log(searchAndOrderParams)
-            let {ids: recordIds, hasNext: hasNext} = await RESTHandler.send({
+            return  await RESTHandler.send({
                 url: this._restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
-            return [await this.getRecordsFromLocalDatabase(recordIds, hardReset), hasNext];
         } catch (e) {
             return false
         }
     }
 
+
+
+
     async refreshLocalDatabase(ids, hardReset = false) {
+        console.log(ids)
         for (const id of ids) {
-            if (!this._model.isIdInRecords(id) || hardReset)
+            if (hardReset || !this._model.isIdInRecords(id) )
                 await this.getOne(id)
         }
     }
@@ -72,7 +75,7 @@ class ServiceParent {
         }))
     }
 
-    getDataFromLocalDatabase(recordIds) {
+    getDataFromLocalDatabase(recordIds, ) {
         return recordIds.map(id => this.model.getRecordByIdForListTable(id))
     }
 
