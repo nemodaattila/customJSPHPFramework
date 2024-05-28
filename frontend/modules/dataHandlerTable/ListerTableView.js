@@ -246,7 +246,7 @@ class ListerTableView {
             head.style.cursor = this._columnMoveEnablerCB.checked === true ? 'grab' : "")
     }
 
-    displayTableHeaders(attributeOrder, attributeParams, isReDraw = false) {
+    displayTableHeaders(attributeOrder, attributeParams,defaultOrderParamName, isReDraw = false) {
         if (this._tHead.hasChildNodes())
             HtmlElementCreator.emptyDOMElement(this._tHead)
         this._headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
@@ -259,6 +259,10 @@ class ListerTableView {
             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
             if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
                 orderDiv.classList.add('order')
+                if (columnName === defaultOrderParamName) {
+                    orderDiv.classList.add('ordered')
+                    this._actualSortElement = th
+                }
                 orderDiv.addEventListener('click', () => {
                     this.initSorting(columnName, th)
                 })
