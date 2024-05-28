@@ -58,15 +58,13 @@ class ListerTable {
         this._view.addColumnMoveEnabler()
     }
 
-    drawHeaders(tableAttributeOrder, defaultOrder, isReDraw = false) {
-        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams, isReDraw)
+    drawHeaders(tableAttributeOrder, defaultOrderParamName, isReDraw = false) {
+        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams,defaultOrderParamName, isReDraw)
         this._view.displayFilters(tableAttributeOrder, this._headerAttributeParams)
         this.addFilterEvents(tableAttributeOrder)
-        console.dir(this)
     }
 
     addFilterEvents(tableAttributeOrder) {
-        console.log(tableAttributeOrder)
         tableAttributeOrder.forEach(attribName => {
             let type = this._headerAttributeParams[attribName]?.type
             if (type === 'none')
@@ -128,7 +126,6 @@ class ListerTable {
             if (inputs === undefined)
                 return;
             let inputValues = [inputs[0].value, inputs[1].value];
-            console.log(inputValues)
             let values = ''
             switch (filterType) {
                 case 'number':
@@ -276,11 +273,8 @@ class ListerTable {
 //         })
     }
 
-    displayRecordsInTable(records, append = false) {
-        console.log(append)
-        console.trace()
+    displayRecordsInTable(records) {
             records.forEach(record => {
-            console.log(record)
             let row = this._view.createRowWithRecord(record[1], record[0])
         })
 //         data.forEach(record => {
