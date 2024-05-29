@@ -5,7 +5,6 @@ class CompanyListerController extends ListerControllerParent {
     // subscribeToEvents() {
     //     EventSubscriptionHandler.subscribe('companyEdited', this, 'refresh')
     // }
-    // _pageTurnerType = 'infinity'
-    _pageTurnerType = 'pageTurner'
-    _tableConnector
+     _pageTurnerType = 'infinityScroller'
+    //_pageTurnerType = 'pageTurner'
 }
