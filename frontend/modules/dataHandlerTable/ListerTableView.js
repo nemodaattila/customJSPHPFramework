@@ -63,6 +63,8 @@ class ListerTableView {
         return this._tBody.clientHeight
     }
 
+    _firstSortClick=true
+
     displayTableElements() {
         this._tableContainerHeader = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableHeader'
@@ -261,10 +263,10 @@ class ListerTableView {
                 orderDiv.classList.add('order')
                 if (columnName === defaultOrderParamName) {
                     orderDiv.classList.add('ordered')
-                    this._actualSortElement = th
+                    this._actualSortElement = orderDiv
                 }
                 orderDiv.addEventListener('click', () => {
-                    this.initSorting(columnName, th)
+                    this.initSorting(columnName, orderDiv)
                 })
             }
             let nameDiv = HtmlElementCreator.createHtmlElement('div', th, {
@@ -318,12 +320,15 @@ class ListerTableView {
         console.log(this._actualSortElement === orderDiv)
         if (this._actualSortElement === orderDiv) {
             order = (this._actualSortElement.classList.contains('reversed') ? 1 : -1)
+            if (this._firstSortClick)
+                order=-1;
             console.log(order)
             this._actualSortElement.classList.toggle('reversed')
         } else if (this._actualSortElement !== null) {
             this._actualSortElement.classList.remove('ordered')
             this._actualSortElement.classList.remove('reversed')
         }
+        this._firstSortClick=false
         this._actualSortElement = orderDiv
         this._actualSortElement.classList.add('ordered')
         this._controllerPointer.onSortElementClick(paramName, order)
