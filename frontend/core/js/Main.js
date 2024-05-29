@@ -43,6 +43,9 @@ class Main {
         await Includer.loadFileSource('infinityScroller')
         await Includer.loadFileSource('listerTableSearchConnector')
 
+        await Includer.loadFileSource('dataHandlerTable')
+
+
     }
 
     static initComponents() {
