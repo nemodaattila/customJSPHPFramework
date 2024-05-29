@@ -151,7 +151,7 @@ class ListerTableView {
             adder.addEventListener('click', async (event) => {
                 event.stopPropagation()
                 // await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
-                this._controllerPointer.openHandlerWindow('add');
+                this._controllerPointer.openHandlerWindow('creator');
             })
         let editor = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
