@@ -1,15 +1,13 @@
-/**
- * controller a cégek kilistázására táblás formában
- */
 class CompanyCreatorController extends HandlerControllerParent {
 
-     // constructor(module) {
-     //      super(module, 'new');
-     //      EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
-     // }
-     //
-     // init() {
-     //      this.parentInit(new AddNewCompanyModel())
+     constructor(module) {
+          super('creator');
+          // EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
+     }
+
+     init() {
+     console.log(this)
+         // this.createHandlerTable()
      //      this.view.displayTallTable()
      //      this.view.addButtonToTallTable(1, {value: 'Cég hozzáadása'}, () =>
      //          this.collectAndSendNewSystemData())
@@ -17,7 +15,7 @@ class CompanyCreatorController extends HandlerControllerParent {
      //           if (this.view.inputs['category'].value === '4')
      //                this.view.inputs['supplier_category'].value = '1'
      //      })
-     // }
+     }
      //
      // /**
      //  *
