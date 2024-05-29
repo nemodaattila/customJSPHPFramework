@@ -87,6 +87,12 @@ class InfinityScrollerController {
 
     }
 
+    countTableBodyRows(tableDOMElement, defaultRowHeight)
+    {
+        return Math.floor((tableDOMElement.parentElement.offsetHeight - tableDOMElement.firstChild.offsetHeight)
+            / (defaultRowHeight)-1)
+    }
+
     // scrollRows(top) {
     //     let [firstRow, lastRow] = this.pageScrollData.getFirstAndLastRowNumberForScroll(top, this.tableContainer.scrollTop)
     //     this.rows.forEach((row, key) => {
