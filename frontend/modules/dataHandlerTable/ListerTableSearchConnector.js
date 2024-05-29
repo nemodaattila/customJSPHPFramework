@@ -51,8 +51,9 @@ class ListerTableSearchConnector {
         // this._orderAndLimitParameterObject.limit=Math.floor(parseInt(this._tableDOMElement.clientHeight) / this._defaultRowHeight)
         // this.pageScrollData.calcTableRowNum(this.tHead.offsetHeight, parseInt(this.tableContainer.offsetHeight), this.rows.length)
         // headerHeight, fullHeight, rowCount
-        this._orderAndLimitParameterObject.limit = (Math.floor((this._tableDOMElement.parentElement.offsetHeight - this._tableDOMElement.firstChild.offsetHeight)
-            / (this.defaultRowHeight)) - 1)
+        this._orderAndLimitParameterObject.limit =
+            this._offsetSourceObject.countTableBodyRows(this._tableDOMElement, this._defaultRowHeight)
+
         console.dir(this._orderAndLimitParameterObject.offset)
         if (maxValueChange)
             this._offsetSourceObject.setScrollDivHeight(this._orderAndLimitParameterObject.offset, this.defaultRowHeight)
@@ -64,12 +65,12 @@ class ListerTableSearchConnector {
 
     changePage(pageNun) {
         this._orderAndLimitParameterObject.changePageParams(pageNun)
-        this._controllerPointer.refreshTable()
+        this._controllerPointer.refreshRows()
     }
 
     resetOffset() {
         this._orderAndLimitParameterObject.offset = 0
-        this._offsetSourceObject.resetScroll()
+        this._offsetSourceObject?.resetScroll()
 
     }
 
