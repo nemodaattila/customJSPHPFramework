@@ -43,12 +43,12 @@ class DesktopWindowController {
         let controller = object.controllerPointer
         console.log(controller)
         clearTimeout(this.resizeTimeOut);
-        this.resizeTimeOut = setTimeout(() => {
+        this.resizeTimeOut = setTimeout(async () => {
             if (object.style.width !== '100%' && parseInt(object.style.width) < 400)
                 object.style.width = "400px"
             if (parseInt(object.style.height) < 200)
                 object.style.height = "200px"
-            controller._contentControllerPointer.refreshRows({changeLimit:true,resetOffset: true})
+            await controller._contentControllerPointer.refreshRows({changeLimit: true, resetOffset: true})
             // object.windowObject.contentObject.rows = []
             // object.windowObject.controllerPointer.calcTableRowNum()
             // object.windowObject.contentObject.offset = 0
