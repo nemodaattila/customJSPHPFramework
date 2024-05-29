@@ -1,7 +1,13 @@
 class CompanyServiceModel extends ServiceModelParent {
     _companyTypes = {0: 'Nem vevő'}
+
+    _moduleDirName = "companies"
     get companyTypes() {
         return this._companyTypes;
+    }
+
+    get moduleDirName() {
+        return this._moduleDirName;
     }
 
     set companyTypes(types) {
@@ -35,7 +41,7 @@ class CompanyServiceModel extends ServiceModelParent {
             title: 'Cégek szerkesztése'
         },
         add: {
-            module: 'companyAdder',
+            module: 'companyCreator',
             title: 'Cég felvétele'
         },
         deletable: true
