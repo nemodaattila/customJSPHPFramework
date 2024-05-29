@@ -24,9 +24,14 @@ class Main {
                 directory: MODULE_FILE_DIR + 'alertPopup',
                 fileNames: ['filesToInclude.js']
             }, {
+                directory: MODULE_FILE_DIR + 'dataListerTable',
+                fileNames: ['filesToInclude.js']
+            }
+                , {
                 directory: MODULE_FILE_DIR + 'dataHandlerTable',
                 fileNames: ['filesToInclude.js']
-            }]
+            }
+            ]
         );
         await Includer.startLoad()
         await Includer.loadFileSource('alertPopup')
