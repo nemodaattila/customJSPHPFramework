@@ -1,0 +1,32 @@
+.handlerTable td:nth-child(2), .handlerTable textarea {
+    width: 300px
+}
+.handlerTable td:first-child {
+    white-space: pre-wrap
+}
+.handlerTable .tableCell:nth-child(2n){
+    background: rgba(0, 0, 0, .05)
+}
+.handlerTable {
+    display: grid;
+    border: 1px solid #000;
+    width: min-content
+}
+
+.handlerTable .tableRow {
+    display: grid;
+    grid-template-columns:30% 70%;
+    text-align: center;
+    border: 1px solid grey;
+    align-items: center
+}
+.handlerTable .tableCell {
+    padding: 3px;
+    justify-content: center;
+    display: flex;
+    height: 100%;
+    align-items: center
+}
+.requiredInput {
+    color: red
+}
