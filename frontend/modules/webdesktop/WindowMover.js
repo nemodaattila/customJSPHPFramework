@@ -43,10 +43,11 @@ class WindowMover {
         let newY = event.pageY || event.clientY;
         let leftPos = this._moveParameters.object.style.left !== '' ? this._moveParameters.object.style.left : this._moveParameters.objectPos.left
         let topPos = this._moveParameters.object.style.top !== '' ? this._moveParameters.object.style.top : this._moveParameters.objectPos.top
+        console.log(DesktopController)
         if (leftPos === '50%')
-            leftPos = Desktop.desktopElement.clientWidth / 2
+            leftPos = DesktopController.getWindowContainer().clientWidth / 2
         if (topPos === '51%')
-            topPos = Desktop.desktopElement.clientHeight / 2
+            topPos = DesktopController.getWindowContainer().clientHeight / 2
         let newLeftPos = parseInt(leftPos, 10) + (newX - this._moveParameters.mouseX)
         let newTopPos = parseInt(topPos, 10) + (newY - this._moveParameters.mouseY)
         newLeftPos = (newLeftPos >= this._desktopContainer.getBoundingClientRect().left ? newLeftPos : this._desktopContainer.getBoundingClientRect().left)
