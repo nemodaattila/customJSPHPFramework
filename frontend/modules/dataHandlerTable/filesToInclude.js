@@ -20,7 +20,8 @@ Includer.setIncludableFileSource(
             ]
         }])
 Includer.setIncludableFileSource(
-    'pageTurnerInitiator', [
+    //DO rename
+    'listerTableSearchConnector', [
         {
             directory: MODULE_FILE_DIR + 'dataHandlerTable',
             fileNames: [

@@ -36,7 +36,7 @@ class Main {
         await Includer.loadFileSource('desktopWindowTab')
         await Includer.loadFileSource('listerTable')
         await Includer.loadFileSource('infinityScroller')
-        await Includer.loadFileSource('pageTurnerInitiator')
+        await Includer.loadFileSource('listerTableSearchConnector')
 
     }
 
