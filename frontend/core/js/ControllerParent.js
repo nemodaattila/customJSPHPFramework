@@ -25,6 +25,10 @@ class ControllerParent {
         this._service = value;
     }
 
+    getTitle() {
+        return this.service.getTitle(this._type)
+    }
+
 // /**
     //  * sorszám kontroller azonosítójának megadásához
     //  * @type {number}
