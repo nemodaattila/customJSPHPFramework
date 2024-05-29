@@ -1,5 +1,5 @@
 Includer.setIncludableFileSource(
-    'handlerTable', [{
+    'dataHandlerTable', [{
         directory: MODULE_FILE_DIR + 'dataHandlerTable',
         fileNames: [
             'HandlerTable.js',
