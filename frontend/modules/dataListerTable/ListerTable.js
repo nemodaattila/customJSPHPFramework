@@ -308,6 +308,11 @@ class ListerTable {
 //         })
     }
 
+    openHandlerWindow(operationType)
+    {
+        this._controllerPointer.openHandlerWindow(operationType)
+    }
+
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
 //      */
 //     scrollTimer

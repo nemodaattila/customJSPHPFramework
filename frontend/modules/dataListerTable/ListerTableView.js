@@ -7,7 +7,7 @@ class ListerTableView {
     _dataTable
     _tHead
     _tableIconContainer
-    _iconPath = "./modules/dataHandlerTable/"
+    _iconPath = "./modules/dataListerTable/"
     _headerRow
     _filterRow
     _filterInputs = {}
@@ -150,7 +150,8 @@ class ListerTableView {
         if (enabledOperations.add)
             adder.addEventListener('click', async (event) => {
                 event.stopPropagation()
-                await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
+                // await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
+                this._controllerPointer.openHandlerWindow('add');
             })
         let editor = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'

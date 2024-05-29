@@ -176,6 +176,17 @@ class ListerControllerParent extends ControllerParent {
         this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
     }
 
+    openHandlerWindow(operationType)
+    {
+        switch (operationType) {
+            case 'add':
+
+                break
+            default:
+                Messenger.showAlert('there is no operation type as '+operationType)
+        }
+    }
+
     // async refreshRows() {
     //     let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
     //     this._view.getComponent('listerTable').flushTable()
