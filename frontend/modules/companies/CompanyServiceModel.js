@@ -27,20 +27,20 @@ class CompanyServiceModel extends ServiceModelParent {
     }
 
     _moduleParams = {
-        list: {
+        lister: {
             module: 'companyLister',
             title: 'Cégek'
         },
-        edit: {
+        editor: {
             module: 'companyEditor',
             title: 'Cég szerkesztése',
             windowName: 'companyEditor'
         },
-        multiEdit: {
+        multipleEditor: {
             module: 'multipleCompanyEditor',
             title: 'Cégek szerkesztése'
         },
-        add: {
+        creator: {
             module: 'companyCreator',
             title: 'Cég felvétele'
         },
@@ -134,6 +134,7 @@ class CompanyServiceModel extends ServiceModelParent {
     }
 
     getTitle(name) {
+        console.log(name)
         return this._moduleParams[name].title
     }
 
