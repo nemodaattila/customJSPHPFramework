@@ -127,31 +127,22 @@ class RESTHandler
         if (isset($_SERVER['CONTENT_TYPE'])) {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':
-//                    $putVars = file_get_contents('php://input');
-//                    print_r($putVars);
-//                    foreach ($putVars as $key=>$value)
-//                    {
-//                        $putVars[$key] = json_decode($value);
-//                    }
-//                    var_dump($putVars);
-//                    if (count($putVars) === 1) $putVars = $putVars[0];
-//                    $this->parameters->setRequestData($putVars);
-//                    break;
-                case 'POST':
-                    $requestData = file_get_contents('php://input');
-                    $decodedData = json_decode($requestData);
-//                    print_r($decodedData);
-                    if ($decodedData === null) {
-                        $this->parameters->setRequestData([$requestData]);
-                    } else {
-                        if (gettype($decodedData) === 'array') {
-                            $this->parameters->setRequestData($decodedData);
-                        } elseif (gettype($decodedData) === 'object') {
-                            $this->parameters->setRequestData(VariableHelper::convertStdClassToArray($decodedData));
-                        } else throw new Exception('POST REQUEST DATA INCORRECT FORMAT');
+
+                    $putVars = file_get_contents('php://input');
+                    print_r($putVars);
+                    foreach ($putVars as $key=>$value)
+                    {
+                        $putVars[$key] = json_decode($value);
                     }
-//                    print_r($_FILES);
-//                    var_dump(get_object_vars($this->parameters->getRequestData()[0]));
+                    var_dump($putVars);
+                    if (count($putVars) === 1) $putVars = $putVars[0];
+                    $this->parameters->setRequestData($putVars);
+                    break;
+                case 'POST':
+                    $decodedData = filter_input_array(INPUT_POST);
+                    foreach ($decodedData as &$value)
+                        $value = htmlspecialchars($value);
+                    $this->parameters->setRequestData($decodedData);
                     break;
             }
         }
