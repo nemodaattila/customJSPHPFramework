@@ -58,6 +58,7 @@ class HandlerControllerParent extends ControllerParent{
 
     collectAndSaveRecord()
     {
+        let hasError = false
              let collectedData = this._view.getComponent('handlerTable').getInputValues()
         let attributes = this.getHeaderAttributeParams()
             Object.entries(collectedData).forEach(([key,value])=>{
@@ -66,16 +67,35 @@ class HandlerControllerParent extends ControllerParent{
                     if (value === '')
                     {
                         Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
+                        hasError = true
                         return;
                     }
                 }
             })
         console.log(collectedData)
+        if (hasError)
+            return
         //      if (compData.address === '' || compData.name === '') {
         //           AlertPopup.showAlert('Megnevezés és cím kitöltése közelező')
         //           return
         //      }
-        //      this.sendRequest(compData)
+             this.sendDataHandlerRequest(collectedData)
+    }
+
+    async sendDataHandlerRequest(collectedData) {
+        console.log(this._type)
+        if (collectedData === undefined)
+            return
+        if (this._type === 'creator') {
+            await this.service.sendCreateRequest(collectedData)
+                this.view.resetTallTable()
+        } else {
+            if (await this.service.sendEditRequest(collectedData, this.multiple))
+                if (!this.multiple) {
+                    await this.getOneEntity(false)
+                } else
+                    this.view.resetTallTable()
+        }
     }
 
     //
@@ -140,20 +160,7 @@ class HandlerControllerParent extends ControllerParent{
     //  * @param {*} compData összegyüjtött adatok
     //  * @returns {Promise<void>}
     //  */
-    // async sendRequest(compData) {
-    //     if (compData === undefined)
-    //         return
-    //     if (this.type === 'creator') {
-    //         if (await this.service.sendNewRequest(compData))
-    //             this.view.resetTallTable()
-    //     } else {
-    //         if (await this.service.sendEditRequest(compData, this.multiple))
-    //             if (!this.multiple) {
-    //                 await this.getOneEntity(false)
-    //             } else
-    //                 this.view.resetTallTable()
-    //     }
-    // }
+
     //
     // /**
     //  * fájl előkészítése feltöltésre (fájlnév + base64 string)
