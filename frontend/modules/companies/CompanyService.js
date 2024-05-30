@@ -23,11 +23,14 @@ class CompanyService extends ServiceParent {
      */
     async sendCreateRequest(data) {
 
-        return  await RESTHandler.send({
+          await RESTHandler.send({
             url: this._restParameter, requestType: 'POST',
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : data
         })
+        EventSubsc
+
+        return
     }
     //
     // /**

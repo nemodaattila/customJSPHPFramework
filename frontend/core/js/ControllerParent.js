@@ -29,6 +29,11 @@ class ControllerParent {
         return this.service.getTitle(this._type)
     }
 
+    init()
+    {
+        this.subscribeToEvents()
+    }
+
     setWindowMainContentContainer(container)
     {
         this._view.windowContentMainContainer=container
