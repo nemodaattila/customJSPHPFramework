@@ -42,7 +42,7 @@ class ListerControllerParent extends ControllerParent {
         )
         this._searchParamConnector.orderSourceObject = listerTable.view
         console.trace()
-        this._view.addComponent("pageTurner", this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
+        this._view.addComponent("pageTurner", await this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
         console.dir(windowBody)
         this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
         // this._searchParamConnector.setAutoLimit()
@@ -105,9 +105,7 @@ class ListerControllerParent extends ControllerParent {
         if (params.reDrawHeader) {
             await this.redrawTable()
         }
-        console.trace()
         if (records !== false) {
-            console.log(records)
             this._view.getComponent('listerTable').displayRecordsInTable(records)
             if (!params.reDrawHeader)
                 this._searchParamConnector.hidePageElementsAccordingToPageNum(hasNext)

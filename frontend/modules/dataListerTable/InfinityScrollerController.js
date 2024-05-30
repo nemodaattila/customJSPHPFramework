@@ -16,7 +16,6 @@ class InfinityScrollerController {
 
     _outerScrollTimer
     constructor(listerTable, controllerPointer,searchConnector) {
-        console.log(controllerPointer)
         this._searchConnector=searchConnector
         this._listerControllerPointer = controllerPointer
         let tableContainerBody = listerTable.getTableContainerBody()
@@ -62,18 +61,15 @@ class InfinityScrollerController {
     }
 
     setScrollDivHeight(rowCount) {
-        console.log(rowCount)
         if (this.zoom === '')
             this.zoom = 1
         this._scrollMockDiv.style.height = (this._defaultScrollHeight + (rowCount * this._searchConnector._defaultRowHeight)) / this._zoom + 'px'
-        console.log((this._defaultScrollHeight + (rowCount * this._searchConnector._defaultRowHeight)) / this._zoom)
     }
 
     getNewOffsetForScroll(top = null) {
         if (top !== null)
             top = top * (this._searchConnector._defaultScrollHeight/ this._zoom)
         top = top ?? this._scrollMockDiv.parentElement.scrollTop
-        console.log(top)
         return parseInt(parseInt(top, 10) / (this._searchConnector._defaultRowHeight / this._zoom), 10);
 
     }
@@ -81,7 +77,6 @@ class InfinityScrollerController {
 
     resetScroll()
     {
-        console.log('resetScroll')
         this.setScrollDivHeight(0)
         this._scrollMockDiv.parentElement.scrollTo(0,0);
 

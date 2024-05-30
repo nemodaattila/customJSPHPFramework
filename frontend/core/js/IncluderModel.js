@@ -27,16 +27,11 @@ class IncluderModel {
     }
 
     setIncludableFileSource(name, value) {
-        console.log(value)
-        console.log(name)
         if (this._includableFileSources[name] === undefined)
             this._includableFileSources[name] = value;
     }
 
     searchInLoadedFiles(fileName) {
-        console.log(fileName)
-        console.log(this._loadedFiles)
-        console.log(this._loadedFiles.findIndex(file => file === fileName) !== -1)
         return this._loadedFiles.findIndex(file => file === fileName) !== -1
     }
 

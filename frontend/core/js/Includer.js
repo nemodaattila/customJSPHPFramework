@@ -29,13 +29,11 @@ class Includer {
     }
 
     static async loadFileSource(name) {
-        console.log(name)
         this.addFilesToLoad(this._model.getIncludableFileSource(name))
         await this.startLoad()
     }
 
     static addFilesToLoad(filesToLoad) {
-        console.log(filesToLoad)
         if (!filesToLoad)
             return;
         if (filesToLoad === undefined) {
@@ -44,13 +42,11 @@ class Includer {
         }
         if (!Array.isArray(filesToLoad))
             filesToLoad = [filesToLoad]
-        console.log(filesToLoad)
         filesToLoad.forEach((group) => {
             group.fileNames.forEach((file) => {
                 if (!this._model.searchInLoadedFiles(group.directory + '/' + file))
                     this._model.setFilesToLoad(group.directory + '/' + file)
             })
-            console.dir(this)
         })
     };
 

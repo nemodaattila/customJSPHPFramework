@@ -36,12 +36,9 @@ class DesktopWindowController {
     }
 
     onWindowResize(object) {
-        console.log(object)
-        console.log(this)
         if (!(object instanceof Element))
             object = object[0].target
         let controller = object.controllerPointer
-        console.log(controller)
         clearTimeout(this.resizeTimeOut);
         this.resizeTimeOut = setTimeout(async () => {
             if (object.style.width !== '100%' && parseInt(object.style.width) < 400)
@@ -62,7 +59,6 @@ class DesktopWindowController {
     calcDefaultParameters() {
         let top, left
         let id = parseInt(this._model.id)
-        console.log(id)
         switch (id % 4) {
             case 0:
                 top = '25px'
@@ -112,7 +108,6 @@ class DesktopWindowController {
     }
 
     activateWindow() {
-        console.log(this)
         this._view.windowHeaderDiv.classList.remove('inactive');
         this._view.windowDiv.style.display = "";
         this._tabPointer.setActive()
@@ -125,7 +120,6 @@ class DesktopWindowController {
      * ablak inaktívvá tétele
      */
     inActivateWindow() {
-        console.log(this._view.windowHeaderDiv)
         this._view.windowHeaderDiv.classList.add('inactive');
         this._tabPointer.setInactive()
         // if (this.windowDiv.children.length > 1)
@@ -141,7 +135,6 @@ class DesktopWindowController {
         this._contentControllerPointer.destruct()
         this._view.destruct()
         delete this
-        console.dir(DesktopController)
         // if (this.connectedParams?.connectedService)
         //     this.connectedParams.connectedService.selectedRecord = null
         // this.containerElement.removeChild(this.windowDiv);

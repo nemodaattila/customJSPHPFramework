@@ -7,8 +7,6 @@ class DesktopModel {
     }
 
     set activeWindow(value) {
-        console.trace()
-        console.log(value)
         this._activeWindow = value;
     }
 
@@ -48,7 +46,6 @@ class DesktopModel {
     }
 
     removeWindow(windowName) {
-        console.log(windowName)
         delete this._windows[windowName];
         delete this._tabs[windowName];
     }

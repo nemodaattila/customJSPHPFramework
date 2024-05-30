@@ -14,6 +14,7 @@ class HandlerTableView {
     displayTableElements(tableHeaderAttributes, isMultiple)
     {
         console.log(this._mainContainer)
+        console.log(tableHeaderAttributes)
         this.tallTable = HtmlElementCreator.createSimpleHtmlElement('div', this._mainContainer, {class: 'handlerTable'})
         //DO inputPerRow
         // let inputPerNums = this.windowContentPointer.content.inputPerRow ?? 1
