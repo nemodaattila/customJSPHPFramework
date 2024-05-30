@@ -2,7 +2,7 @@ class HandlerTableView {
     _mainContainer
     _controllerPointer
     _inputs = {}
-    //
+    focusedCustomInput
 
     constructor( tableContainer, controllerPointer) {
         this._mainContainer = tableContainer;
@@ -121,7 +121,7 @@ class HandlerTableView {
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('select', tdElem, {})
                     if (input.multiple === true)
                         this._inputs[id].multiple = true
-                    let options = {...input.options}
+                    let options = {...input.values}
                     if (isMultiple === true)
                         HtmlElementCreator.addOptionToSelect(this._inputs[id], {'-1': 'Nincs változás'}, true)
                     HtmlElementCreator.addOptionToSelect(this._inputs[id], options, true)
@@ -149,9 +149,21 @@ class HandlerTableView {
         })
         if (this._inputs[Object.keys(tableHeaderAttributes)[0]].tagName === 'DIV') {
             this._inputs[Object.keys(tableHeaderAttributes)[0]].firstChild.focus()
-        } else
+            this.setFocusedCustomInput(this._inputs[Object.keys(tableHeaderAttributes)[0]].firstChild)
+        } else {
             this._inputs[Object.keys(tableHeaderAttributes)[0]].focus()
+            this.setFocusedCustomInput(this._inputs[Object.keys(tableHeaderAttributes)[0]])
+        }
 
+
+    }
+
+    setFocusedCustomInput(input) {
+        if (this.focusedCustomInput !== undefined)
+            this.focusedCustomInput.classList.remove('focusedInput')
+        this.focusedCustomInput = input
+        if (this.focusedCustomInput !== undefined)
+            this.focusedCustomInput.classList.add('focusedInput')
     }
 
     // /**
@@ -183,7 +195,7 @@ class HandlerTableView {
     //  * aktív , fókuszban lévő input
     //  * @type HTMLInputElement
     //  */
-    // focusedCustomInput
+    //
     // /**
     //  * kapcsolt szervice
     //  */
@@ -530,13 +542,7 @@ class HandlerTableView {
     //  * fókuszban lévő input beállítása
     //  * @param input {HTMLInputElement}
     //  */
-    // setFocusedCustomInput(input) {
-    //     if (this.focusedCustomInput !== undefined)
-    //         this.focusedCustomInput.classList.remove('focusedInput')
-    //     this.focusedCustomInput = input
-    //     if (this.focusedCustomInput !== undefined)
-    //         this.focusedCustomInput.classList.add('focusedInput')
-    // }
+
     //
     // /**
     //  * pénznem összegek megformázása pl: 100.01 Eur
