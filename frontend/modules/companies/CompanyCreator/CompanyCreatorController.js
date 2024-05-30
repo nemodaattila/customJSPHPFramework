@@ -9,11 +9,7 @@ class CompanyCreatorController extends HandlerControllerParent {
           super.displayView(windowBody)
 
           this._view.addButtonToTallTable(1, {value: 'Cég hozzáadása'}, () =>
-              this.collectAndSendNewSystemData())
-          // this.view.inputs['category'].addEventListener('change', () => {
-          //      if (this.view.inputs['category'].value === '4')
-          //           this.view.inputs['supplier_category'].value = '1'
-          // })
+              this.collectAndSaveRecord())
      }
      //
      // /**
@@ -29,12 +25,5 @@ class CompanyCreatorController extends HandlerControllerParent {
      // /**
      //  * adatok összegyűjtése elküldése
      //  */
-     // collectAndSendNewSystemData() {
-     //      let compData = this.view.getTallTableValues()
-     //      if (compData.address === '' || compData.name === '') {
-     //           AlertPopup.showAlert('Megnevezés és cím kitöltése közelező')
-     //           return
-     //      }
-     //      this.sendRequest(compData)
-     // }
+
 }

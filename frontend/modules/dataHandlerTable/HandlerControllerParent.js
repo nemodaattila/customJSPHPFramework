@@ -35,7 +35,7 @@ class HandlerControllerParent extends ControllerParent{
      displayView(windowBody) {
         this._serviceModelPointer = this.service.model
         let handlerTable = new HandlerTable(this.getWindowContentMainContainer(), this)
-        this._view.addComponent('listerTable', handlerTable, this._type)
+        this._view.addComponent('handlerTable', handlerTable, this._type)
          console.log(this)
         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         //
@@ -56,12 +56,28 @@ class HandlerControllerParent extends ControllerParent{
 
     }
 
-    createHandlerTable()
+    collectAndSaveRecord()
     {
-        this._serviceModelPointer = this.service.model
-        let listerTable = new ListerTable(windowBody, this)
-        this._view.addComponent('listerTable', listerTable)
+             let collectedData = this._view.getComponent('handlerTable').getInputValues()
+        let attributes = this.getHeaderAttributeParams()
+            Object.entries(collectedData).forEach(([key,value])=>{
+                if (attributes[key]?.required)
+                {
+                    if (value === '')
+                    {
+                        Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
+                        return;
+                    }
+                }
+            })
+        console.log(collectedData)
+        //      if (compData.address === '' || compData.name === '') {
+        //           AlertPopup.showAlert('Megnevezés és cím kitöltése közelező')
+        //           return
+        //      }
+        //      this.sendRequest(compData)
     }
+
     //
     // /**
     //  * egy rekord/entitás adatainak lekérése

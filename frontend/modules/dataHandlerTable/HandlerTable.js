@@ -13,4 +13,10 @@ class HandlerTable {
         this._type=type
     }
 
+    getInputValues()
+    {
+       return this._view.getInputValues(this._headerAttributeParams)
+    }
+
+
 }

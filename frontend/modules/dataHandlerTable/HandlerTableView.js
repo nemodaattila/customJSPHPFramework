@@ -2,7 +2,7 @@ class HandlerTableView {
     _mainContainer
     _controllerPointer
     _inputs = {}
-    focusedCustomInput
+    _focusedCustomInput
 
     constructor( tableContainer, controllerPointer) {
         this._mainContainer = tableContainer;
@@ -159,11 +159,51 @@ class HandlerTableView {
     }
 
     setFocusedCustomInput(input) {
-        if (this.focusedCustomInput !== undefined)
-            this.focusedCustomInput.classList.remove('focusedInput')
-        this.focusedCustomInput = input
-        if (this.focusedCustomInput !== undefined)
-            this.focusedCustomInput.classList.add('focusedInput')
+        if (this._focusedCustomInput !== undefined)
+            this._focusedCustomInput.classList.remove('focusedInput')
+        this._focusedCustomInput = input
+        if (this._focusedCustomInput !== undefined)
+            this._focusedCustomInput.classList.add('focusedInput')
+    }
+
+    getInputValues() {
+        let values = {}
+        Object.entries(this._inputs).forEach(([id, input]) => {
+            switch (input.type) {
+                case 'customInput':
+                    values[id] = this._inputs[id].firstChild.value
+                    if (values[id] === '') values[id] = null
+                    break;
+                case 'dataListSelect':
+                    let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
+                    if (index === -1) {
+                        values[id] = null
+                    } else
+                        values[id] = this._inputs[id].children[1].options[index].getAttribute('data-value')
+                    break
+                case 'string':
+                case 'char':
+                case 'longtext':
+                case 'mediumtext':
+                case 'text':
+                case 'tinytext':
+                case 'varchar':
+                    values[id] = encodeURIComponent(this._inputs[id].value.trim())
+                    break
+                case 'file':
+                    values[id] = this._inputs[id].files
+                    break
+                case 'currency':
+                    values[id] = this._inputs[id].value.replaceAll(' ', '')
+                    break
+                case 'datetime':
+                    values[id] = this._inputs[id].value.toString().replace('T', ' ')
+                    break
+                default:
+                    values[id] = this._inputs[id].value
+            }
+        })
+        return values
     }
 
     // /**
@@ -266,46 +306,7 @@ class HandlerTableView {
     //  * visszaadja a magas tábla inputjainak értékeit
     //  * @returns {{}}
     //  */
-    // getTallTableValues() {
-    //     let _inputs = this.windowContentPointer.content._inputs
-    //     let values = {}
-    //     Object.entries(_inputs).forEach(([id, input]) => {
-    //         switch (input.type) {
-    //             case 'customInput':
-    //                 values[id] = this._inputs[id].firstChild.value
-    //                 if (values[id] === '') values[id] = null
-    //                 break;
-    //             case 'dataListSelect':
-    //                 let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
-    //                 if (index === -1) {
-    //                     values[id] = null
-    //                 } else
-    //                     values[id] = this._inputs[id].children[1].options[index].getAttribute('data-value')
-    //                 break
-    //             case 'string':
-    //             case 'char':
-    //             case 'longtext':
-    //             case 'mediumtext':
-    //             case 'text':
-    //             case 'tinytext':
-    //             case 'varchar':
-    //                 values[id] = encodeURIComponent(this._inputs[id].value.trim())
-    //                 break
-    //             case 'file':
-    //                 values[id] = this._inputs[id].files
-    //                 break
-    //             case 'currency':
-    //                 values[id] = this._inputs[id].value.replaceAll(' ', '')
-    //                 break
-    //             case 'datetime':
-    //                 values[id] = this._inputs[id].value.toString().replace('T', ' ')
-    //                 break
-    //             default:
-    //                 values[id] = this._inputs[id].value
-    //         }
-    //     })
-    //     return values
-    // }
+
     //
     // /**
     //  * magas tábla azon elemeinek visszadása ami nem üres pl: ''
