@@ -28,9 +28,8 @@ class CompanyService extends ServiceParent {
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : data
         })
-        EventSubsc
+        EventSubscriptionHandler.triggerSubscriptionCall('companyHandlerEvent')
 
-        return
     }
     //
     // /**
