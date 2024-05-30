@@ -28,10 +28,15 @@ class HandlerControllerParent extends ControllerParent{
 
     onDesktopWindowResize() {}
 
-    async displayView(windowBody) {
+    init(){
+        this._view = new HandlerViewParent()
+    }
+
+     displayView(windowBody) {
         this._serviceModelPointer = this.service.model
-        let handlerTable = new HandlerTable(windowBody, this)
+        let handlerTable = new HandlerTable(this.getWindowContentMainContainer(), this)
         this._view.addComponent('listerTable', handlerTable, this._type)
+         console.log(this)
         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         //
         // this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
