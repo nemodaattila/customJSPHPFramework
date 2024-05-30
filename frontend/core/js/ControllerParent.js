@@ -29,6 +29,16 @@ class ControllerParent {
         return this.service.getTitle(this._type)
     }
 
+    setWindowMainContentContainer(container)
+    {
+        this._view.windowContentMainContainer=container
+    }
+
+    getWindowContentMainContainer()
+    {
+        return this._view.windowContentMainContainer
+    }
+
 // /**
     //  * sorszám kontroller azonosítójának megadásához
     //  * @type {number}

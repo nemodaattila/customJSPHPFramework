@@ -1,6 +1,15 @@
 class ViewParent {
     _components = {};
 
+    _windowContentMainContainer
+    set windowContentMainContainer(value) {
+        this._windowContentMainContainer = value;
+    }
+
+    get windowContentMainContainer() {
+        return this._windowContentMainContainer;
+    }
+
     addComponent(name, component) {
         this._components[name] = component;
     }
