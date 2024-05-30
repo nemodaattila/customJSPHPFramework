@@ -8,6 +8,7 @@ class ListerControllerParent extends ControllerParent {
 
     init() {
         //DO check zoom with search and scroll
+        super.init()
         console.log(this)
         this._searchParamConnector = new ListerTableSearchConnector()
         this._searchParamConnector.orderAndLimitParameterObject = new SearchAndOrderParameters()
@@ -80,11 +81,12 @@ class ListerControllerParent extends ControllerParent {
 
     async refreshRows(params = {}) {
         console.log(params)
+        params = params ?? {}
         if (this.service === undefined) {
             alert('please set controllor `service` property');
             return;
         }
-        this._searchParamConnector.setAutoLimit(params.maxValueChange ?? false)
+        this._searchParamConnector.setAutoLimit(params.maxValueChange)
         let resetOffset = params.resetOffset ?? false
         if (resetOffset)
             this._searchParamConnector.resetOffset()
