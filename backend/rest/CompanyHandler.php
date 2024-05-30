@@ -28,4 +28,11 @@ class CompanyHandler extends RestParent
     public function getOne($parameters): void {
         $this->result = $this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]);
     }
+
+    public function createCompany($parameters): void {
+    $data = $parameters->getRequestData();
+$this->dbConnection->insertARecord($this->tableName, $data);
+//        $this->saveEvent(1, 1, $companyId, null);
+    $this->result = true;
+    }
 }
