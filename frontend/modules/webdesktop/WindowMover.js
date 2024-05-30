@@ -3,6 +3,8 @@ class WindowMover {
     static _windowPointer = undefined
     static _moveParameters
 
+    static _moveTime=0
+
     static init(desktopPointer) {
         this.addEventsToDesktop(desktopPointer)
     }
@@ -39,11 +41,14 @@ class WindowMover {
     static moveWindow(event) {
         if (this._moveParameters === undefined)
             return
+        let time = Date.now()
+        if (time - this._moveTime < 11)
+            return;
+        this._moveTime = time
         let newX = event.pageX || event.clientX;
         let newY = event.pageY || event.clientY;
         let leftPos = this._moveParameters.object.style.left !== '' ? this._moveParameters.object.style.left : this._moveParameters.objectPos.left
         let topPos = this._moveParameters.object.style.top !== '' ? this._moveParameters.object.style.top : this._moveParameters.objectPos.top
-        console.log(DesktopController)
         if (leftPos === '50%')
             leftPos = DesktopController.getWindowContainer().clientWidth / 2
         if (topPos === '51%')
@@ -69,6 +74,7 @@ class WindowMover {
     static endMoveWindow(event) {
         if (this._moveParameters === undefined)
             return
+        this._moveTime = 0
         this._moveParameters.object.parentElement.setAttribute("data-inmove", "0");
         //DO savwindowparams
         // this.saveWindowParams(this._moveParameters.object)
