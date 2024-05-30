@@ -5,16 +5,15 @@ class CompanyCreatorController extends HandlerControllerParent {
           // EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
      }
 
-     init() {
-     console.log(this)
-         // this.createHandlerTable()
-     //      this.view.displayTallTable()
-     //      this.view.addButtonToTallTable(1, {value: 'Cég hozzáadása'}, () =>
-     //          this.collectAndSendNewSystemData())
-     //      this.view.inputs['category'].addEventListener('change', () => {
-     //           if (this.view.inputs['category'].value === '4')
-     //                this.view.inputs['supplier_category'].value = '1'
-     //      })
+     displayView(windowBody) {
+          super.displayView(windowBody)
+
+          this._view.addButtonToTallTable(1, {value: 'Cég hozzáadása'}, () =>
+              this.collectAndSendNewSystemData())
+          // this.view.inputs['category'].addEventListener('change', () => {
+          //      if (this.view.inputs['category'].value === '4')
+          //           this.view.inputs['supplier_category'].value = '1'
+          // })
      }
      //
      // /**
