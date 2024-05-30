@@ -30,9 +30,9 @@ class ListerControllerParent extends ControllerParent {
         return this._serviceModelPointer.tableHeaderAttributes
     }
 
-    async displayView(windowBody) {
+    async displayView() {
         this._serviceModelPointer = this.service.model
-        let listerTable = new ListerTable(windowBody, this)
+        let listerTable = new ListerTable(this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
@@ -43,7 +43,6 @@ class ListerControllerParent extends ControllerParent {
         this._searchParamConnector.orderSourceObject = listerTable.view
         console.trace()
         this._view.addComponent("pageTurner", await this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
-        console.dir(windowBody)
         this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
         // this._searchParamConnector.setAutoLimit()
         // this.getRecordsFromServer("refresh")
