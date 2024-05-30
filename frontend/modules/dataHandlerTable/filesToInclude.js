@@ -6,7 +6,8 @@ Includer.setIncludableFileSource(
             'HandlerTableView.js',
             'HandlerTable.css',
             // 'SearchAndOrderParameters.js',
-            'HandlerControllerParent.js'
+            'HandlerControllerParent.js',
+            'HandlerViewParent.js'
         ]
     }])
 // Includer.setIncludableFileSource(
