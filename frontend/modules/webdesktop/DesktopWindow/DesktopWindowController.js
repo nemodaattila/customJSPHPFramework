@@ -45,7 +45,7 @@ class DesktopWindowController {
                 object.style.width = "400px"
             if (parseInt(object.style.height) < 200)
                 object.style.height = "200px"
-            await controller._contentControllerPointer.onDesktopWindowResize()
+            await controller._contentControllerPointer?.onDesktopWindowResize()
             // object.windowObject.contentObject.rows = []
             // object.windowObject.controllerPointer.calcTableRowNum()
             // object.windowObject.contentObject.offset = 0
@@ -83,7 +83,8 @@ class DesktopWindowController {
     displayContent(controller) {
         this._view.setTitle(controller.getTitle())
         this._tabPointer.setTitle(controller.getTitle())
-        controller.displayView(this._view.windowBody);
+        controller.setWindowMainContentContainer(this._view.windowBody)
+        controller.displayView();
         this._contentControllerPointer = controller
     }
 
