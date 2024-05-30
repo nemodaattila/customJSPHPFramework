@@ -17,18 +17,18 @@ class CompanyService extends ServiceParent {
         this._model.loaded = true
     }
 
-    // /**
-    //  * új cég beküldése
-    //  * @param data {Object} cégadatok
-    //  */
-    // static async sendNewRequest(data) {
-    //     let value = await this.createAndSendRequest('insertCompany', JSON.stringify(data))
-    //     if (value.success === true) {
-    //         AlertPopup.showSuccess('Cég hozzáadása')
-    //         EventSubscriptionHandler.triggerSubscriptionCall('companyEdited')
-    //     }
-    //     return value.success
-    // }
+    /**
+     * új cég beküldése
+     * @param data {Object} cégadatok
+     */
+    async sendCreateRequest(data) {
+
+        return  await RESTHandler.send({
+            url: this._restParameter, requestType: 'POST',
+            customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
+            values : data
+        })
+    }
     //
     // /**
     //  * cég módosítási adatok beküldése
