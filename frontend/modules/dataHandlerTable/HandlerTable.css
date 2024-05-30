@@ -30,3 +30,7 @@
 .requiredInput {
     color: red
 }
+
+.focusedInput {
+    background-color: coral
+}
