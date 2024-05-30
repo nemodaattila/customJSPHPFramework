@@ -55,13 +55,17 @@ class RESTHandler {
         if (params && params.url) {
             this.targetUrl = params.url
         } else Messenger.showAlert('RESTHandler target url missing')
-        if (params && params.requestType) {
+        if (params && params.requestType)
             this.requestType = params.requestType
-        }
+
         if (params && params.customHeader)
             Object.entries(params.customHeader).forEach(([name, header]) => {
                 this.addCustomHeader(name, header)
             })
+        if (params && params.values)
+
+            this.postFields = params.values
+
         return new Promise(async (resolve, reject) => {
             let request = new XMLHttpRequest();
             request.open(this._requestType, this._targetUrl, true);
