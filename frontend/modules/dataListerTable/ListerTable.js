@@ -9,9 +9,9 @@ class ListerTable {
     _resizeTimeOut
     // autoHeaderSetting = false
     // dblClickTimer = false
-    constructor(container, controllerPointer) {
+    constructor( controllerPointer) {
         ListerTable._id++
-        this._view = new ListerTableView(ListerTable._id, container, this)
+        this._view = new ListerTableView(ListerTable._id, controllerPointer.getWindowContentMainContainer(), this)
         this._view.displayTableElements()
         this._controllerPointer = controllerPointer
         this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
