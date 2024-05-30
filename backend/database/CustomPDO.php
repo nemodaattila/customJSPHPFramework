@@ -182,7 +182,7 @@ class CustomPDO implements DatabaseConnectionInterface
 //            $orderParams = [];
 //        } else if ($orderParams === false)
 //            $orderParams = (array)json_decode(filter_input(INPUT_POST, 'orderLimit'));
-//        $this->executeQuery('call epm_getRecordsFromTableFiltered2(?,?,?,?,?,?,?)', [
+//        $this->executeQuery('call getRecordsFromTableFiltered2(?,?,?,?,?,?,?)', [
 //            $tableName,
 //            $orderParams['limit'] ?? '',
 //            $orderParams['offset'] ?? '',
@@ -229,7 +229,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * @throws Exception mysql hiba
      */
     protected function getARecordByAttribute(string $tableName, string $attrib, string $value): ?array {
-        $this->executeQuery('call epm_getARecordFromTableByAttribute(?,?,?)', [$tableName, $attrib, $value]);
+        $this->executeQuery('call getARecordFromTableByAttribute(?,?,?)', [$tableName, $attrib, $value]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
         if ($res === false) $res = null;
         return $res;
@@ -245,7 +245,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * @throws Exception mysql hiba
      */
     protected function getAValueByAttributeName($tableName, string $attrName, string $keyAttrName, int $keyAttrValue): int|string|null {
-        $this->executeQuery('call epm_getValueByAttributeName(?,?,?,?)', [$tableName, $attrName, $keyAttrName, $keyAttrValue]);
+        $this->executeQuery('call getValueByAttributeName(?,?,?,?)', [$tableName, $attrName, $keyAttrName, $keyAttrValue]);
         $res = $this->query->fetch(PDO::FETCH_COLUMN);
         if ($res === false) $res = null;
         return $res;
@@ -266,7 +266,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $attr[] = $key;
             $attrVal[] = $val;
         }
-        return $this->executeQuery('call epm_updateARecordById(?,?,?,?)', [$tableName, $id, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
+        return $this->executeQuery('call updateARecordById(?,?,?,?)', [$tableName, $id, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
     }
 
     /**
@@ -285,7 +285,7 @@ class CustomPDO implements DatabaseConnectionInterface
             $attr[] = $key;
             $attrVal[] = $val;
         }
-        return $this->executeQuery('call epm_updateARecordByAttribute(?,?,?,?,?)', [$tableName, $keyName, $keyValue, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
+        return $this->executeQuery('call updateARecordByAttribute(?,?,?,?,?)', [$tableName, $keyName, $keyValue, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
     }
 
     protected function getARecord(array $params) {
@@ -346,7 +346,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * @throws Exception mysql hiba
      */
     protected function deleteARecordById(string $tableName, int $id): bool {
-        return $this->executeQuery('call epm_deleteARecordById(?,?)', [$tableName, $id]);
+        return $this->executeQuery('call deleteARecordById(?,?)', [$tableName, $id]);
     }
 
     /**
@@ -358,7 +358,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * @throws Exception mysql hiba
      */
     protected function deleteARecordByAttribute(string $tableName, string $keyAttrName, $keyAttrValue): bool {
-        return $this->executeQuery('call epm_deleteARecordByAttribute(?,?,?)', [$tableName, $keyAttrName, $keyAttrValue]);
+        return $this->executeQuery('call deleteARecordByAttribute(?,?,?)', [$tableName, $keyAttrName, $keyAttrValue]);
     }
 
     /**
@@ -390,7 +390,7 @@ class CustomPDO implements DatabaseConnectionInterface
      */
     public function getARecordByID(string $tableName, int $id = null): ?array {
         if ($id === null) return null;
-        $this->executeQuery('call epm_getARecordFromTableById(?,?)', [$tableName, $id]);
+        $this->executeQuery('call getARecordFromTableById(?,?)', [$tableName, $id]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
         if ($res === false) $res = null;
         return $res;
@@ -447,11 +447,11 @@ class CustomPDO implements DatabaseConnectionInterface
      * @return int - a beszúrt rekord Id-je (lastinsertedId)
      * @throws Exception mysql hiba
      */
-    protected function insertARecord(string $tableName, array $values): int {
+    public function insertARecord(string $tableName, array $values): int {
         $params = [];
         foreach ($values as $key => $val)
             $params[] = [$key, $val];
-        $this->executeQuery('call epm_insertARecord(?,?)', [$tableName, json_encode($params, JSON_UNESCAPED_UNICODE)]);
+        $this->executeQuery('call insertARecord(?,?)', [$tableName, json_encode($params, JSON_UNESCAPED_UNICODE)]);
         return $this->query->fetch(PDO::FETCH_COLUMN);
     }
 }
