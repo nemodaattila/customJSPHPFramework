@@ -6,7 +6,9 @@ class HandlerTableView {
 
     constructor( tableContainer, controllerPointer) {
         this._mainContainer = tableContainer;
+
         this._controllerPointer = controllerPointer
+        this._mainContainer.style.overflow = 'auto'
     }
 
     displayTableElements(tableHeaderAttributes, isMultiple)

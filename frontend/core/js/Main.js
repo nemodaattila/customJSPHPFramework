@@ -40,7 +40,7 @@ class Main {
         await Includer.loadFileSource('desktopWindow')
         await Includer.loadFileSource('desktopWindowTab')
         await Includer.loadFileSource('listerTable')
-        await Includer.loadFileSource('infinityScroller')
+        // await Includer.loadFileSource('infinityScroller')
         await Includer.loadFileSource('listerTableSearchConnector')
 
         await Includer.loadFileSource('dataHandlerTable')

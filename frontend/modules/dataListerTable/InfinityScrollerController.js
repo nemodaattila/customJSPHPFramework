@@ -90,7 +90,7 @@ class InfinityScrollerController {
     countTableBodyRows(tableDOMElement, defaultRowHeight)
     {
         return Math.floor((tableDOMElement.parentElement.offsetHeight - tableDOMElement.firstChild.offsetHeight)
-            / (defaultRowHeight)-1)
+            / (defaultRowHeight))
     }
 
     // scrollRows(top) {

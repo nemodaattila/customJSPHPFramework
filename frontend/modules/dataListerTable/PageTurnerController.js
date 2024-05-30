@@ -8,6 +8,7 @@ class PageTurnerController {
         this._listerControllerPointer = controllerPointer
        let container =  listerTable.getTableContainerFooter()
         listerTable.getTableContainerBody().firstChild.style.height="calc(100% - 60px)";
+        listerTable.getTableContainerBody().firstChild.style.overflow="auto";
         container.style.height =  "30px";
         let navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
         this._navElements['first'] = HtmlElementCreator.createHtmlElement("span", navContainer, {
@@ -64,7 +65,7 @@ class PageTurnerController {
     countTableBodyRows(tableDOMElement, defaultRowHeight)
     {
        return Math.floor((tableDOMElement.parentElement.offsetHeight - tableDOMElement.firstChild.offsetHeight)
-            / defaultRowHeight)
+            / defaultRowHeight )-1
     }
 
 }
