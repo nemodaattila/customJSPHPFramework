@@ -10,7 +10,8 @@
 .handlerTable {
     display: grid;
     border: 1px solid #000;
-    width: min-content
+    width: min-content;
+    line-height: 1;
 }
 
 .handlerTable .tableRow {
@@ -20,7 +21,7 @@
     border: 1px solid grey;
     align-items: center
 }
-.handlerTable .tableCell {
+.handlerTable .tableCell , .buttonContainer .tableCell{
     padding: 3px;
     justify-content: center;
     display: flex;
@@ -33,4 +34,8 @@
 
 .focusedInput {
     background-color: coral
+}
+
+.tableRow.evenRow {
+    background: rgba(0, 0, 0, .1)
 }
