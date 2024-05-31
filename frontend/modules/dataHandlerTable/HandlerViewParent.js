@@ -3,7 +3,7 @@ class HandlerViewParent extends ViewParent{
     _buttonContainer
 
     addButtonContainer(columnNum, buttonParams, onclickEvent, sameLine = false) {
-        if (this._buttonContainer === undefined)
+        if (!this._buttonContainer)
             this._buttonContainer = HtmlElementCreator.createSimpleHtmlElement('div', this._windowContentMainContainer, {class: 'buttonContainer'})
         //DO columncount
         // let columnCount = (this.windowContentPointer.content.inputPerRow ?? 1) * 2
@@ -16,7 +16,7 @@ class HandlerViewParent extends ViewParent{
         let tr = sameLine === true && this._buttonContainer.childNodes.length !== 0 ? this._buttonContainer.lastChild : HtmlElementCreator.createSimpleHtmlElement('div', this._buttonContainer)
         if (!sameLine)
             tr.style.gridTemplateColumns += cols
-        if (sameLine === false) {
+        if (!sameLine) {
             tr.style.display = 'grid'
             for (let i = 0; i < columnCount; i++)
                 tds.push(HtmlElementCreator.createSimpleHtmlElement('div', tr, {class: 'tableCell'}))

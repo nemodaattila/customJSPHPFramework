@@ -7,14 +7,10 @@ class Messenger {
     }
 
     static showAlert(message) {
-        if (this._messageObject === undefined) {
-            alert(message)
-        } else this._messageObject.showAlert(message)
+        !this._messageObject?            alert(message):        this._messageObject.showAlert(message)
     }
 
     static showSuccess(message) {
-        if (this._messageObject === undefined) {
-            alert(message)
-        } else this._messageObject.showSuccess(message)
+        !this._messageObject?            alert(message):this._messageObject.showSuccess(message)
     }
 }

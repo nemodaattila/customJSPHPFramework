@@ -231,7 +231,7 @@ class CustomPDO implements DatabaseConnectionInterface
     protected function getARecordByAttribute(string $tableName, string $attrib, string $value): ?array {
         $this->executeQuery('call getARecordFromTableByAttribute(?,?,?)', [$tableName, $attrib, $value]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if ($res === false) $res = null;
+        if (!$res) $res = null;
         return $res;
     }
 
@@ -247,7 +247,7 @@ class CustomPDO implements DatabaseConnectionInterface
     protected function getAValueByAttributeName($tableName, string $attrName, string $keyAttrName, int $keyAttrValue): int|string|null {
         $this->executeQuery('call getValueByAttributeName(?,?,?,?)', [$tableName, $attrName, $keyAttrName, $keyAttrValue]);
         $res = $this->query->fetch(PDO::FETCH_COLUMN);
-        if ($res === false) $res = null;
+        if (!$res) $res = null;
         return $res;
     }
 
@@ -334,7 +334,7 @@ class CustomPDO implements DatabaseConnectionInterface
         $sql .= ' WHERE ' . $params['attribute'] . ' = \'' . $params['value'] . '\'';
         $this->executeQuery($sql);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if ($res === false) $res = null;
+        if (!$res) $res = null;
         return $res;
     }
 
@@ -392,7 +392,7 @@ class CustomPDO implements DatabaseConnectionInterface
         if ($id === null) return null;
         $this->executeQuery('call getARecordFromTableById(?,?)', [$tableName, $id]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if ($res === false) $res = null;
+        if (!$res) $res = null;
         return $res;
     }
 

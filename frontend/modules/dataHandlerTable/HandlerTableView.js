@@ -32,7 +32,7 @@ class HandlerTableView {
             return
 
             colorKey++;
-            if (input.gridRowEnd !== undefined)
+            if (input.gridRowEnd)
                 colorOffset += input.gridRowEnd + 1;
             if (colorOffset > 0) {
                 colorKey++;
@@ -45,16 +45,16 @@ class HandlerTableView {
             })
             if (evenRow)
                 tr.classList.add('evenRow')
-            if (input.gridRowEnd !== undefined) {
+            if (input.gridRowEnd) {
                 tr.style.gridRowEnd = 'span ' + input.gridRowEnd
                 evenRow = !evenRow
             }
             let defaultTdParams = {class: 'tableCell'}
             let tdParamForLabel = {...defaultTdParams, ...{innerHTML: input.label ?? id}}
             let label = HtmlElementCreator.createSimpleHtmlElement('div', tr, tdParamForLabel)
-            if (input.required === true)
+            if (input.required )
                 HtmlElementCreator.createSimpleHtmlElement('span', label, {innerHTML: '*', class: 'requiredInput'})
-            if (input.params === undefined)
+            if (!input.params)
                 input.params = {}
             let type = input.type ?? 'string'
             let tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
@@ -92,12 +92,12 @@ class HandlerTableView {
                     break;
                 case 'date':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'date'})
-                    if (isMultiple === false && input.noDefault !== true)
+                    if (!isMultiple && !input.noDefault)
                         this._inputs[id].value = (new Date()).toISOString().split('T')[0]
                     break
                 case 'datetime':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'datetime-local'})
-                    if (isMultiple === false) {
+                    if (!isMultiple) {
                         let now = new Date();
                         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                         this._inputs[id].value = now.toISOString().slice(0, 16);
@@ -122,13 +122,13 @@ class HandlerTableView {
                     break
                 case 'select':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('select', tdElem, {})
-                    if (input.multiple === true)
+                    if (input.multiple)
                         this._inputs[id].multiple = true
                     let options = {...input.values}
-                    if (isMultiple === true)
+                    if (isMultiple)
                         HtmlElementCreator.addOptionToSelect(this._inputs[id], {'-1': 'Nincs változás'}, true)
                     HtmlElementCreator.addOptionToSelect(this._inputs[id], options, true)
-                    if (input.defaultValue !== undefined)
+                    if (input.defaultValue)
                         this._inputs[id].value = input.defaultValue
                     break
                 case 'customInput':
@@ -145,10 +145,17 @@ class HandlerTableView {
                 default:
                     this._inputs[id] = tdElem
             }
-            if (input.type !== 'customInput' && input.type !== 'dataListSelect') {
-                this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id]))
-            } else
-                this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id].firstChild))
+            this._inputs[id].addEventListener('click',(
+                (input.type !== 'customInput' && input.type !== 'dataListSelect')?
+                    () => this.setFocusedCustomInput(this._inputs[id]):
+                    () => this.setFocusedCustomInput(this._inputs[id].firstChild)
+            ))
+
+
+            // if (input.type !== 'customInput' && input.type !== 'dataListSelect') {
+            //     this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id]))
+            // } else
+            //     this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id].firstChild))
         })
         if (this._inputs[Object.keys(this._inputs)[0]].tagName === 'DIV') {
             this._inputs[Object.keys(this._inputs)[0]].firstChild.focus()
@@ -162,19 +169,17 @@ class HandlerTableView {
     }
 
     setFocusedCustomInput(input) {
-        if (this._focusedCustomInput !== undefined)
+        if (this._focusedCustomInput)
             this._focusedCustomInput.classList.remove('focusedInput')
         this._focusedCustomInput = input
-        if (this._focusedCustomInput !== undefined)
+        if (this._focusedCustomInput)
             this._focusedCustomInput.classList.add('focusedInput')
     }
 
     getInputValues(tableHeaderAttributes) {
         let values = {}
         Object.entries(this._inputs).forEach(([id, input]) => {
-            console.log(input)
-            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
-                return
+
             switch (tableHeaderAttributes[id].type) {
                 case 'customInput':
                     values[id] = this._inputs[id].firstChild.value
@@ -182,10 +187,7 @@ class HandlerTableView {
                     break;
                 case 'dataListSelect':
                     let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
-                    if (index === -1) {
-                        values[id] = null
-                    } else
-                        values[id] = this._inputs[id].children[1].options[index].getAttribute('data-value')
+                    values[id] = (index === -1)? null: this._inputs[id].children[1].options[index].getAttribute('data-value')
                     break
                 case 'string':
                 case 'char':
@@ -226,7 +228,7 @@ class HandlerTableView {
             } else if (type === 'select') {
                 this._inputs[id].selectedIndex = 0;
             } else if (type === 'date') {
-                if (isMultiple === false) {
+                if (!isMultiple) {
                     this._inputs[id].value = (new Date()).toISOString().split('T')[0]
                 } else this._inputs[id].value = ''
             } else {

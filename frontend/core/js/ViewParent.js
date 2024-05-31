@@ -20,7 +20,7 @@ class ViewParent {
 
     destruct(prioritizedComponentNames = []) {
         prioritizedComponentNames.forEach((name) => {
-            this._components[name].destruct()
+            this._components[name].destruct?.()
             delete this._components[name];
         })
         Object.keys(this._components).forEach(name => {

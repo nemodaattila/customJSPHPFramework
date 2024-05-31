@@ -29,23 +29,20 @@ class ModuleLoader {
         let controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
         let serviceModel = undefined
         temp = await this.getComponent(moduleFiles, 'ServiceModel')
-        if (temp) {
+        if (temp)
             serviceModel = new (eval(await this.loadFile(temp)))()
-        }
+
         temp = await this.getComponent(moduleFiles, 'Service')
         if (temp) {
             let service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
-            if (serviceModel !== undefined)
+            if (serviceModel)
                 service.model = serviceModel
             await service.init()
             controller.service = service
         }
-        let view
         temp = await this.getComponent(moduleFiles, 'View')
-        if (temp) {
-            view = new (eval(await this.loadFile(temp)))() //DO nicer solution?
-        } else view = new ViewParent()
-        controller.view = view
+
+        controller.view=temp?new (eval(await this.loadFile(temp)))():new ViewParent()
         controller.init();
         // let index = moduleFiles.findIndex(file => file.includes('Service'))
         //

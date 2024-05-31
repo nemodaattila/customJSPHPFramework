@@ -1,6 +1,6 @@
 class WindowOpener {
     static async openWindow(moduleGroupName, moduleName, windowName = undefined) {
-        if (windowName === undefined)
+        if (!windowName)
             windowName = moduleName
         if (DesktopController.isWindowOpen(windowName)) {
         } else {

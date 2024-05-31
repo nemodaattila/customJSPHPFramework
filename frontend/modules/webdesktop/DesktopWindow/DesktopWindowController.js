@@ -133,7 +133,8 @@ class DesktopWindowController {
         DesktopController.switchActiveWindow()
         DesktopController.removeWindow(this._model.name)
         this._tabPointer.destruct()
-        this._contentControllerPointer.destruct()
+        console.log(this._contentControllerPointer)
+        this._contentControllerPointer.destruct?.()
         this._view.destruct()
         delete this
         // if (this.connectedParams?.connectedService)

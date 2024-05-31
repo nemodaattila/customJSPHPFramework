@@ -37,7 +37,7 @@ final class PDOConnection
      */
     public function beginTransaction(): void {
         $this->query?->closeCursor();
-        if ($this->pdo->inTransaction() === false)
+        if (!$this->pdo->inTransaction())
             $this->pdo->beginTransaction();
     }
 
@@ -47,7 +47,7 @@ final class PDOConnection
      */
     public function commitTransaction(): void {
         $this->query?->closeCursor();
-        if ($this->pdo->inTransaction() === true)
+        if ($this->pdo->inTransaction())
             $this->pdo->commit();
     }
 
@@ -57,7 +57,7 @@ final class PDOConnection
      */
     public function rollBackTransaction(): void {
         $this->query?->closeCursor();
-        if ($this->pdo->inTransaction() === true)
+        if ($this->pdo->inTransaction())
             $this->pdo->rollBack();
     }
 

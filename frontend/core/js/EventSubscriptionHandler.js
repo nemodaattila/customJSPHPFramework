@@ -18,15 +18,14 @@ class EventSubscriptionHandler {
      * @param prioritized {boolean} ha true (és több elem iratkozott fel ugyanarra az eventre) előre kerül a feliratkozó, előbb fut le
      */
     static subscribe(callWord, objectPointer, functionName, prioritized = false) {
-        if (this.subscriptions === undefined)
+        if (!this.subscriptions)
             this.subscriptions = {};
-        if (this.subscriptions[callWord] === undefined)
+        if (!this.subscriptions[callWord])
             this.subscriptions[callWord] = [];
         if (this.checkIfAlreadySubscribed(callWord, objectPointer) !== -1)
             return
-        if (prioritized === true) {
-            this.subscriptions[callWord].unshift([objectPointer, functionName]);
-        } else this.subscriptions[callWord].push([objectPointer, functionName]);
+        prioritized?            this.subscriptions[callWord].unshift([objectPointer, functionName]):
+        this.subscriptions[callWord].push([objectPointer, functionName]);
     }
 
     /**
@@ -45,7 +44,7 @@ class EventSubscriptionHandler {
      * @param objectPointer {Object} az objektum ami leiratkozik
      */
     static unSubscribe(callWord, objectPointer) {
-        if (this.subscriptions[callWord] === undefined)
+        if (!this.subscriptions[callWord])
             return
         let index = this.subscriptions[callWord].findIndex(([obj]) => obj === objectPointer)
         if (index !== -1) {
@@ -72,12 +71,12 @@ class EventSubscriptionHandler {
      * @param interWindowParams
      */
     static triggerSubscriptionCall(callwords, resultData = null, interWindowParams = null) {
-        if (interWindowParams === null || interWindowParams.triggerInterWindowMessage !== false || interWindowParams.triggerInterWindowMessage === undefined)
-            App.channel.postMessage({
-                event: callwords,
-                resultData: interWindowParams?.sendData ? resultData : null,
-            })
-        if (this.subscriptions === undefined) {
+        // if (interWindowParams === null || interWindowParams.triggerInterWindowMessage !== false || interWindowParams.triggerInterWindowMessage === undefined)
+        //     Main.channel.postMessage({
+        //         event: callwords,
+        //         resultData: interWindowParams?.sendData ? resultData : null,
+        //     })
+        if (!this.subscriptions) {
             alert('ERROR - SubscriptionHandler is empty');
             return;
         }
@@ -92,12 +91,10 @@ class EventSubscriptionHandler {
      */
     static callSubscribedFunctions(callwords, resultData) {
         for (let callword of callwords) {
-            if (this.subscriptions[callword] === undefined)
+            if (!this.subscriptions[callword])
                 continue
             for (let [classPointer, functionName] of this.subscriptions[callword]) {
-                if (classPointer[functionName] !== undefined) {
-                    classPointer[functionName](resultData);
-                } else
+                classPointer[functionName] ? classPointer[functionName](resultData) :
                     console.log(classPointer.constructor.name + ' - ' + functionName + '  not exists')
             }
         }

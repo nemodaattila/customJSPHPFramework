@@ -20,9 +20,9 @@ class ServiceModelParent {
     setTableHeaderAttributeOrder() {
         console.log('setTableHeaderAttributeOrder')
         console.log(this._tableHeaderAttributes)
-        if (this._tableHeaderAttributes !== undefined) {
+        if (this._tableHeaderAttributes)
             this._tableHeaderAttributeOrder = Object.keys(this._tableHeaderAttributes)
-        }
+
         console.log(this)
     }
 
@@ -46,7 +46,7 @@ class ServiceModelParent {
     }
 
     isIdInRecords(id) {
-        if (this._records[id] === undefined)
+        if (!this._records[id])
             return false;
         if (Math.abs(this._records[id]._queryed - Date.now()) > 600000) {
             delete this._records[id];

@@ -59,9 +59,8 @@ class RESTHandler {
             this.requestType = params.requestType
 
         if (params && params.customHeader)
-            Object.entries(params.customHeader).forEach(([name, header]) => {
-                this.addCustomHeader(name, header)
-            })
+            Object.entries(params.customHeader).forEach(([name, header]) =>
+                this.addCustomHeader(name, header)            )
         if (params && params.values)
 
             this.postFields = params.values

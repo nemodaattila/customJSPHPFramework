@@ -22,6 +22,11 @@ class HandlerControllerParent extends ControllerParent{
         //     this.init()
     }
 
+    destruct()
+    {
+        this._serviceModelPointer = undefined
+    }
+
     getHeaderAttributeParams() {
         return this._serviceModelPointer.tableHeaderAttributes
     }
@@ -61,19 +66,19 @@ class HandlerControllerParent extends ControllerParent{
         let hasError = false
              let collectedData = this._view.getComponent('handlerTable').getInputValues()
         let attributes = this.getHeaderAttributeParams()
-            Object.entries(collectedData).forEach(([key,value])=>{
+            let hasNoError = Object.entries(collectedData).every(([key,value])=>{
                 if (attributes[key]?.required)
                 {
                     if (value === '')
                     {
                         Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
-                        hasError = true
-                        return;
+                        return false
                     }
                 }
+                return true
             })
         console.log(collectedData)
-        if (hasError)
+        if (!hasNoError)
             return
         //      if (compData.address === '' || compData.name === '') {
         //           AlertPopup.showAlert('Megnevezés és cím kitöltése közelező')
@@ -84,7 +89,7 @@ class HandlerControllerParent extends ControllerParent{
 
     async sendDataHandlerRequest(collectedData) {
         console.log(this._type)
-        if (collectedData === undefined)
+        if (!collectedData)
             return
         if (this._type === 'creator') {
             await this.service.sendCreateRequest(collectedData)

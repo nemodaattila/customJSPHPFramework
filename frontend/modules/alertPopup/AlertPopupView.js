@@ -25,9 +25,8 @@ class AlertPopupView {
         this._alertButton.focus()
     }
 
-    showSuccess(message = null) {
+    showSuccess(message) {
         this._successContainer.style.display = "initial";
-        if (message !== null)
             this._successMessageContainer.innerHTML = message
     }
 

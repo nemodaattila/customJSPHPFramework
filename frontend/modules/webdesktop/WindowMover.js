@@ -39,10 +39,10 @@ class WindowMover {
     }
 
     static moveWindow(event) {
-        if (this._moveParameters === undefined)
+        if (!this._moveParameters)
             return
         let time = Date.now()
-        if (time - this._moveTime < 11)
+        if ((time - this._moveTime) < 11)
             return;
         this._moveTime = time
         let newX = event.pageX || event.clientX;
@@ -72,7 +72,7 @@ class WindowMover {
      * @param event {MouseEvent}
      */
     static endMoveWindow(event) {
-        if (this._moveParameters === undefined)
+        if (!this._moveParameters)
             return
         this._moveTime = 0
         this._moveParameters.object.parentElement.setAttribute("data-inmove", "0");

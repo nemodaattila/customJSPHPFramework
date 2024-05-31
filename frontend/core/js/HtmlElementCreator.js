@@ -39,11 +39,13 @@ class HtmlElementCreator {
                 throw new Error('createHtmlSimpleElement type must be a string');
         }
         let newDiv = document.createElement(type);
-        for (let key in params)
-            if (key !== "innerHTML")
-                newDiv.setAttribute(key, params[key]);
-        if ('innerHTML' in params)
+        if ('innerHTML' in params) {
             newDiv.innerHTML = params.innerHTML
+            delete params.innerHTML
+        }
+        for (let key in params)
+                newDiv.setAttribute(key, params[key]);
+
         if (parent !== null)
             parent.appendChild(newDiv);
         return newDiv
@@ -62,7 +64,7 @@ class HtmlElementCreator {
         if (typeof type !== "object")
             throw new Error('createHtmlNestedElement type must be an array');
         let param, temp, returnObject;
-        for (let key in type) {
+        for (let key in type)
             if (type.hasOwnProperty(key)) {
                 param = {}
                 if (parseInt(key) === type.length - 1) param = params;
@@ -70,7 +72,7 @@ class HtmlElementCreator {
                 if (key === "0") returnObject = temp
                 parent = temp;
             }
-        }
+
         return temp;
     }
 
@@ -102,15 +104,21 @@ class HtmlElementCreator {
      */
     static createSelectWithOptions(parent, params = {}, options = [], addOptionValue = true, filterable = false) {
         let newDiv = document.createElement("select");
+        if ('innerHTML' in params) {
+            newDiv.innerHTML = params.innerHTML
+            delete params.innerHTML
+        }
+        if ('selectedIndex' in params) {
+            newDiv.selectedIndex = params.selectedIndex
+            delete params.selectedIndex
+        }
         for (let key in params)
             if (params.hasOwnProperty(key))
-                if (key !== "innerHTML" && key !== "selectedIndex") newDiv.setAttribute(key, params[key]);
-        if ('innerHTML' in params)
-            newDiv.innerHTML = params.innerHTML
+                 newDiv.setAttribute(key, params[key]);
+
         parent.appendChild(newDiv);
         HtmlElementCreator.addOptionToSelect(newDiv, options, addOptionValue, filterable);
-        if ('selectedIndex' in params)
-            newDiv.selectedIndex = params.selectedIndex
+
         return newDiv
     };
 
@@ -123,7 +131,7 @@ class HtmlElementCreator {
      *                                  ha false: a value és a label ugyanaz lesz(attribútumérték)
      * @param filterable {boolean} - ha true, akkor a előre egy üres opció kerül - szűréshez
      */
-    static addOptionToSelect(element, options, addOptionValue, filterable = false) {
+    static addOptionToSelect(element, options, addOptionValue = true, filterable = false) {
         if (addOptionValue === undefined)
             addOptionValue = true;
         if (filterable)
@@ -131,7 +139,7 @@ class HtmlElementCreator {
         for (let i in options)
             if (options.hasOwnProperty(i)) {
                 let option = document.createElement("option");
-                if (addOptionValue === true)
+                if (addOptionValue)
                     option.value = i;
                 option.text = options[i];
                 element.add(option);

@@ -34,11 +34,9 @@ class Includer {
     }
 
     static addFilesToLoad(filesToLoad) {
-        if (!filesToLoad)
+        if (!filesToLoad) {
+            Messenger.showAlert('file load error - addFilesToLoad param type not correct')
             return;
-        if (filesToLoad === undefined) {
-            Messenger.showAlert('file load error - addFilesToLoad param undefined')
-            return
         }
         if (!Array.isArray(filesToLoad))
             filesToLoad = [filesToLoad]
@@ -79,9 +77,8 @@ class Includer {
      * fájl (konkrét) betöltése, load eseményhívás
      */
     static loadScript(file) {
-        console.log(file)
         let extension = file.split('.').pop().toLowerCase()
-        if (extension === 'js') {
+        if (extension === 'js')
             return new Promise((resolve, reject) => {
                 let script = document.createElement("script");
                 script.type = "text/javascript";
@@ -93,7 +90,7 @@ class Includer {
                 }
                 script.onerror = () => reject(file)
             })
-        } else if (extension === 'css') {
+        if (extension === 'css')
             return new Promise((resolve, reject) => {
                 let link = document.createElement('link');
                 link.rel = 'stylesheet';
@@ -107,7 +104,7 @@ class Includer {
                 }
                 link.onerror = () => reject(file)
             })
-        }
+        Z
     }
 
     /**

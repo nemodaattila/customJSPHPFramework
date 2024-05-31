@@ -261,7 +261,7 @@ class ListerTableView {
             th.addEventListener('mousedown', (event) =>
                 this.startMoveTh(event, th))
             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
-            if (((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
+            if (((!('sortable' in modelParams)) || (modelParams['sortable'] ))) {
                 orderDiv.classList.add('order')
                 if (columnName === defaultOrderParamName) {
                     orderDiv.classList.add('ordered')
@@ -373,7 +373,7 @@ class ListerTableView {
     }
 
     moveResizeTh(event) {
-        if (this._reSizeObject === undefined)
+        if (!this._reSizeObject)
             return
         let newX = event.pageX || event.clientX;
         let newY = event.pageY || event.clientY;
@@ -389,16 +389,16 @@ class ListerTableView {
     }
 
     endResizeTh(event) {
-        if (this._reSizeObject === undefined)
+        if (!this._reSizeObject)
             return
         let num = this._reSizeObject.object.cellIndex
         this._filterRow.children[num].style.width = this._reSizeObject.resizeWidth + "px"
         Object.values(this._rows).forEach(row => {
             row.children[num].style.width = this._reSizeObject.resizeWidth + "px";
         })
-        if (parseInt(this._reSizeObject.resizeWidth, 10) < 10) {
+        if (parseInt(this._reSizeObject.resizeWidth, 10) < 10)
             document.getElementById(this._reSizeObject.object.getAttribute('moveCheckBoxName')).click()
-        }
+
         this._reSizeObject = undefined
     }
 
@@ -438,7 +438,7 @@ class ListerTableView {
     }
 
     moveTh(event) {
-        if (this._inMoveTh === undefined)
+        if (!this._inMoveTh)
             return
         let newX = event.pageX || event.clientX;
         let newY = event.pageY || event.clientY;
@@ -471,7 +471,7 @@ class ListerTableView {
     }
 
     endMoveTh(event) {
-        if (this._inMoveTh === undefined)
+        if (!this._inMoveTh)
             return
         let inMoveTh = this._inMoveTh.object
         let swapCellIndex = 0;
@@ -566,9 +566,9 @@ class ListerTableView {
                             size: 20,
                         })
                     ]
-                    if (modelParams.maxLength !== undefined)
+                    if (modelParams.maxLength )
                         this._filterInputs[id][1].maxLength = Math.min(parseInt(modelParams.maxLength), 524288);
-                    if (modelParams.precision !== undefined)
+                    if (modelParams.precision )
                         this._filterInputs[id][1].max = (10 ** modelParams.precision) - 1
                     break;
                 case 'select':
@@ -608,13 +608,15 @@ class ListerTableView {
                 default:
                     console.log('unkown filtertype: ' + filter)
             }
-            if (modelParams !== undefined && modelParams['defaultValue'] !== undefined && modelParams.hidden !== true)
-                this._filterInputs[id][1].value = modelParams['defaultValue']
-            if (modelParams !== undefined && modelParams['defaultOperator'] !== undefined && modelParams.hidden !== true)
-                this._filterInputs[id][0].value = modelParams['defaultOperator']
-            if (modelParams !== undefined && modelParams['disabled'] === true) {
-                this._filterInputs[id][0].disabled = true
-                this._filterInputs[id][1].disabled = true
+            if (modelParams) {
+                if (modelParams['defaultValue'] && !modelParams.hidden)
+                    this._filterInputs[id][1].value = modelParams['defaultValue']
+                if (modelParams['defaultOperator'] && !modelParams.hidden)
+                    this._filterInputs[id][0].value = modelParams['defaultOperator']
+                if (modelParams['disabled']) {
+                    this._filterInputs[id][0].disabled = true
+                    this._filterInputs[id][1].disabled = true
+                }
             }
             // if (filter !== undefined && filter !== 'none')
             //     this._filters[id] = [this.filterInputs[id][0].value, this.filterInputs[id][1].value]

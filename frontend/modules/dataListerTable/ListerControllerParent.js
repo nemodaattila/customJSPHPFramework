@@ -20,7 +20,7 @@ class ListerControllerParent extends ControllerParent {
     setHeaderAttributeOrder() {
         let params = this.getHeaderAttributeParams()
         this._tableHeaderAttributeOrder = Object.keys(params).filter((name) => {
-            if (params[name].inModule === undefined || params[name].inModule.findIndex(module => module === 'lister') !== -1)
+            if (!params[name].inModule || params[name].inModule.findIndex(module => module === 'lister') !== -1)
                 return name
         })
 
@@ -87,23 +87,22 @@ class ListerControllerParent extends ControllerParent {
     }
 
     onDesktopWindowResize() {
-        this.refreshRows({changeLimit: true, resetOffset: true})
+        this.refreshRows({resetOffset: true})
     }
 
     async refreshRows(params = {}) {
         console.log(params)
         params = params ?? {}
-        if (this.service === undefined) {
+        if (!this.service) {
             alert('please set controllor `service` property');
             return;
         }
         this._searchParamConnector.setAutoLimit(params.maxValueChange)
-        let resetOffset = params.resetOffset ?? false
-        if (resetOffset)
+        if (params.resetOffset ?? false)
             this._searchParamConnector.resetOffset()
         let searchParams = await this.collectSearchParamsForRequest(params)
         let recordIds, hasNext
-        if (params.ids !== undefined) {
+        if (params.ids) {
             recordIds = params.ids;
         } else {
             let res = await this.service.getRecordsFromServer(searchParams)
@@ -114,10 +113,10 @@ class ListerControllerParent extends ControllerParent {
         console.log(hasNext)
         let records = await this.service.getRecordsFromLocalDatabase(recordIds, params.hardReset)
         this._view.getComponent('listerTable').flushTable()
-        if (params.reDrawHeader) {
+        if (params.reDrawHeader)
             await this.redrawTable()
-        }
-        if (records !== false) {
+
+        if (records) {
             this._view.getComponent('listerTable').displayRecordsInTable(records,this._tableHeaderAttributeOrder)
             if (!params.reDrawHeader)
                 this._searchParamConnector.hidePageElementsAccordingToPageNum(hasNext)
@@ -126,10 +125,8 @@ class ListerControllerParent extends ControllerParent {
         }
     }
 
-    async collectSearchParamsForRequest({changeLimit = false, redrawHeaders = false}) {
-        console.log(changeLimit)
-        if (changeLimit) {
-        }
+    async collectSearchParamsForRequest({ redrawHeaders = false}) {
+
         let searchParams = {}
         searchParams.orderAndLimitParams = this._searchParamConnector.getSearchParameters()
         searchParams.additionalParams = null
@@ -144,10 +141,8 @@ class ListerControllerParent extends ControllerParent {
     //     this.getRecordsFromServer('refresh')
     // }
     displayHideColumn(isDisplay, columnName) {
-        if (isDisplay) {
-            this.addHeaderAttributeToOrder(columnName)
-        } else
-            this.deleteHeaderAttributeFromOrder(columnName)
+
+        isDisplay?            this.addHeaderAttributeToOrder(columnName):this.deleteHeaderAttributeFromOrder(columnName)
         this.redrawTable()
     }
 

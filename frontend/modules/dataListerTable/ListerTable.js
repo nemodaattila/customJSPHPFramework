@@ -35,7 +35,7 @@ class ListerTable {
     }
 
     destruct() {
-        this.observer.unobserve(this._view.tBody);
+        // this.observer.unobserve(this._view.tBody);
         this._view.destruct()
         this._view = undefined
         //DO destruct interals
@@ -87,7 +87,7 @@ class ListerTable {
                     this._controllerPointer.onTableFilterChange()
                 }, 300);
             })
-            if (this._headerAttributeParams[attribName]?.hidden === true)
+            if (this._headerAttributeParams[attribName]?.hidden)
                 document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
         })
     }
@@ -226,7 +226,7 @@ class ListerTable {
                 finalFilterData.push([name].concat(values))
         })
         Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
-            if (headerParams.filterType === 'hidden' && headerParams.defaultOperator !== undefined)
+            if (headerParams.filterType === 'hidden' && headerParams.defaultOperator)
                 finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
         })
         console.log(finalFilterData)

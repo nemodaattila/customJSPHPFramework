@@ -6,9 +6,9 @@ class ServiceParent {
     _restParameter = undefined
 
     constructor() {
-        if (self._instance) {
+        if (self._instance)
             self._instance = this;
-        }
+
         return self._instance;
     }
 

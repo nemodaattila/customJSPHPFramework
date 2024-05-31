@@ -46,14 +46,14 @@ class DesktopController {
         console.dir(typeof this._model.activeWindow)
         if (windowName === this._model.activeWindow)
             return
-        if (this._model.activeWindow !== undefined) {
+        if (this._model.activeWindow) {
             this._model.previousWindow = this._model.activeWindow
             console.log(this._model.previousWindow)
             this._model.inActivateWindow(this._model.activeWindow)
             this._model.activeWindow = undefined
             console.log(this._model)
         }
-        if (windowName !== undefined) {
+        if (windowName) {
             console.log(windowName)
             this._model.activeWindow = windowName
             console.log(this._model.activeWindow)

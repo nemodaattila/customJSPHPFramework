@@ -125,7 +125,7 @@ class DesktopWindowView {
     }
 
     resetSize() {
-        if (this.windowSize !== undefined)
+        if (this.windowSize )
             this.maximizeWindow()
         this.windowDiv.style.left = '0'
         this.windowDiv.style.top = '25px'
@@ -136,7 +136,7 @@ class DesktopWindowView {
     }
 
     maximizeWindow() {
-        if (this.windowSize === undefined) {
+        if (!this.windowSize) {
             this.windowSize = {}
             this.windowSize.left = this.windowDiv.style.left;
             this.windowSize.top = this.windowDiv.style.top;
