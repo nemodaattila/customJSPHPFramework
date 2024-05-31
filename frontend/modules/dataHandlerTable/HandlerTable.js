@@ -9,7 +9,7 @@ class HandlerTable {
         this._view = new HandlerTableView(container, this)
         this._controllerPointer = controllerPointer
         this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
-        this._view.displayTableElements(this._headerAttributeParams, type === 'multipleEditor')
+        this._view.displayTableElements(this._headerAttributeParams,type, type === 'multipleEditor')
         this._type=type
     }
 

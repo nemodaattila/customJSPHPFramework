@@ -11,7 +11,7 @@ class HandlerTableView {
         this._mainContainer.style.overflow = 'auto'
     }
 
-    displayTableElements(tableHeaderAttributes, isMultiple)
+    displayTableElements(tableHeaderAttributes, handlerType, isMultiple)
     {
         console.log(this._mainContainer)
         console.log(tableHeaderAttributes)
@@ -25,17 +25,20 @@ class HandlerTableView {
         for (let i = 0; i < inputPerRows; i++)
             cols += ' 524px '
         this.tallTable.style.gridTemplateColumns += cols
-        let key = -1
+        let colorKey = -1
         let colorOffset = 0;
         Object.entries(tableHeaderAttributes).forEach(([id, input]) => {
-            key++;
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+            return
+
+            colorKey++;
             if (input.gridRowEnd !== undefined)
                 colorOffset += input.gridRowEnd + 1;
             if (colorOffset > 0) {
-                key++;
+                colorKey++;
                 colorOffset--;
             }
-            if (key % inputPerRows === 0)
+            if (colorKey % inputPerRows === 0)
                 evenRow = !evenRow
             tr = HtmlElementCreator.createSimpleHtmlElement('div', this.tallTable, {
                 class: 'tableRow'
@@ -147,12 +150,12 @@ class HandlerTableView {
             } else
                 this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id].firstChild))
         })
-        if (this._inputs[Object.keys(tableHeaderAttributes)[0]].tagName === 'DIV') {
-            this._inputs[Object.keys(tableHeaderAttributes)[0]].firstChild.focus()
-            this.setFocusedCustomInput(this._inputs[Object.keys(tableHeaderAttributes)[0]].firstChild)
+        if (this._inputs[Object.keys(this._inputs)[0]].tagName === 'DIV') {
+            this._inputs[Object.keys(this._inputs)[0]].firstChild.focus()
+            this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]].firstChild)
         } else {
-            this._inputs[Object.keys(tableHeaderAttributes)[0]].focus()
-            this.setFocusedCustomInput(this._inputs[Object.keys(tableHeaderAttributes)[0]])
+            this._inputs[Object.keys(this._inputs)[0]].focus()
+            this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]])
         }
 
 
@@ -170,6 +173,8 @@ class HandlerTableView {
         let values = {}
         Object.entries(this._inputs).forEach(([id, input]) => {
             console.log(input)
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+                return
             switch (tableHeaderAttributes[id].type) {
                 case 'customInput':
                     values[id] = this._inputs[id].firstChild.value
@@ -209,6 +214,8 @@ class HandlerTableView {
 
     resetTable(tableHeaderAttributes, isMultiple = false) {
         Object.entries(this._inputs).forEach(([id, input]) => {
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+                return
             let type = tableHeaderAttributes[id].type
             if (type === 'customInput') {
                 this._inputs[id].firstChild.value = ''

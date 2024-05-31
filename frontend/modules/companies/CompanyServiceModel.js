@@ -71,7 +71,7 @@ class CompanyServiceModel extends ServiceModelParent {
     }
 
     _tableHeaderAttributes = {
-        id: {label: 'Azonosító', type: 'int'},
+        id: {label: 'Azonosító', type: 'int', inModule: ['lister']},
         name: {label: 'Név', type: 'string',required: true},
         address: {label: 'cím', type: 'string',required: true},
         vat_number: {label: 'Adószám',required: true},
