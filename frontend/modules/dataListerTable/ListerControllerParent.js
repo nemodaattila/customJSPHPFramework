@@ -5,6 +5,7 @@ class ListerControllerParent extends ControllerParent {
     _serviceModelPointer
     _rowHeight = 20
     _searchParamConnector
+    _tableHeaderAttributeOrder
 
     init() {
         //DO check zoom with search and scroll
@@ -14,6 +15,15 @@ class ListerControllerParent extends ControllerParent {
         this._searchParamConnector.orderAndLimitParameterObject = new SearchAndOrderParameters()
         this._searchParamConnector.defaultRowHeight = this._rowHeight
         this._searchParamConnector.controllerPointer = this;
+    }
+
+    setHeaderAttributeOrder() {
+        let params = this.getHeaderAttributeParams()
+        this._tableHeaderAttributeOrder = Object.keys(params).filter((name) => {
+            if (params[name].inModule === undefined || params[name].inModule.findIndex(module => module === 'lister') !== -1)
+                return name
+        })
+
     }
 
     destruct() {
@@ -33,12 +43,13 @@ class ListerControllerParent extends ControllerParent {
 
     async displayView() {
         this._serviceModelPointer = this.service.model
+        this.setHeaderAttributeOrder()
         let listerTable = new ListerTable(this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
         listerTable.drawHeaders(
-            this._serviceModelPointer.tableHeaderAttributeOrder,
+            this._tableHeaderAttributeOrder,
             this._serviceModelPointer.defaultOrder
         )
         this._searchParamConnector.orderSourceObject = listerTable.view
@@ -107,7 +118,7 @@ class ListerControllerParent extends ControllerParent {
             await this.redrawTable()
         }
         if (records !== false) {
-            this._view.getComponent('listerTable').displayRecordsInTable(records)
+            this._view.getComponent('listerTable').displayRecordsInTable(records,this._tableHeaderAttributeOrder)
             if (!params.reDrawHeader)
                 this._searchParamConnector.hidePageElementsAccordingToPageNum(hasNext)
             // this._view.getComponent('pageTurner')?.hideElementsAccordingToPageNum?.(pageNum, hasNext)
@@ -134,30 +145,44 @@ class ListerControllerParent extends ControllerParent {
     // }
     displayHideColumn(isDisplay, columnName) {
         if (isDisplay) {
-            this._serviceModelPointer.addHeaderAttributeToOrder(columnName)
+            this.addHeaderAttributeToOrder(columnName)
         } else
-            this._serviceModelPointer.deleteHeaderAttributeFromOrder(columnName)
+            this.deleteHeaderAttributeFromOrder(columnName)
         this.redrawTable()
-        console.log(this._serviceModelPointer)
+    }
+
+    deleteHeaderAttributeFromOrder(headerName) {
+        const index = this._tableHeaderAttributeOrder.indexOf(headerName);
+        if (index > -1)  // only splice array when item is found
+            this._tableHeaderAttributeOrder.splice(index, 1); // 2nd parameter means remove one item only
+    }
+
+    addHeaderAttributeToOrder(headerName) {
+        this._tableHeaderAttributeOrder.unshift(headerName)
+    }
+
+    moveColumnInOrder(moveCellFrom, moveCellTo) {
+        let headerName = this._tableHeaderAttributeOrder.splice(moveCellFrom, 1)[0];
+        this._tableHeaderAttributeOrder.splice(moveCellTo, 0, headerName);
     }
 
     moveColumn(moveCellFrom, moveCellTo) {
-        this._serviceModelPointer.moveColumnInOrder(moveCellFrom, moveCellTo)
+        this.moveColumnInOrder(moveCellFrom, moveCellTo)
         this.redrawTable()
     }
 
     async redrawTable() {
         let recordIds = this._view.getComponent('listerTable').getDisplayRowIds()
         console.log(recordIds)
-        console.log(this._serviceModelPointer.tableHeaderAttributeOrder)
+        console.log(this._tableHeaderAttributeOrder)
         this._view.getComponent('listerTable').flushTable()
         this._view.getComponent('listerTable').drawHeaders(
-            this._serviceModelPointer.tableHeaderAttributeOrder,
+            this._tableHeaderAttributeOrder,
             // this._serviceModelPointer.tableHeaderAttributes,
             this._serviceModelPointer.defaultOrder,
             true
         )
-        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds))
+        this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds),this._tableHeaderAttributeOrder)
     }
 
     async openHandlerWindow(operationType) {
