@@ -106,6 +106,7 @@ class ListerTable {
     }
 
     moveColumn(moveCellFrom, moveCellTo) {
+
         this._controllerPointer.moveColumn(moveCellFrom, moveCellTo)
     }
 
@@ -273,9 +274,22 @@ class ListerTable {
 //         })
     }
 
-    displayRecordsInTable(records) {
+    displayRecordsInTable(records, order) {
             records.forEach(record => {
-            let row = this._view.createRowWithRecord(record[1], record[0])
+                let orderedAttributes = []
+                let attribs = record[1]
+                // console.log(attribs)
+
+                order.forEach((orderAttrib)=>{
+                    // console.log(orderAttrib)
+                    orderedAttributes.push(attribs.find(attrib => {
+                        // console.log(attrib[2])
+                        return  attrib[2]=== orderAttrib
+                    }))
+
+                })
+
+            let row = this._view.createRowWithRecord(orderedAttributes, record[0])
         })
 //         data.forEach(record => {
 //             row.connectedObjectId = record.id
