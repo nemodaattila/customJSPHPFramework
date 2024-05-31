@@ -8,7 +8,7 @@ class CompanyCreatorController extends HandlerControllerParent {
      displayView(windowBody) {
           super.displayView(windowBody)
 
-          this._view.addButtonToTallTable(1, {value: 'Cég hozzáadása'}, () =>
+          this._view.addButtonContainer(1, {value: 'Cég hozzáadása'}, () =>
               this.collectAndSaveRecord())
      }
      //
