@@ -166,10 +166,11 @@ class HandlerTableView {
             this._focusedCustomInput.classList.add('focusedInput')
     }
 
-    getInputValues() {
+    getInputValues(tableHeaderAttributes) {
         let values = {}
         Object.entries(this._inputs).forEach(([id, input]) => {
-            switch (input.type) {
+            console.log(input)
+            switch (tableHeaderAttributes[id].type) {
                 case 'customInput':
                     values[id] = this._inputs[id].firstChild.value
                     if (values[id] === '') values[id] = null
@@ -204,6 +205,29 @@ class HandlerTableView {
             }
         })
         return values
+    }
+
+    resetTable(tableHeaderAttributes, isMultiple = false) {
+        Object.entries(this._inputs).forEach(([id, input]) => {
+            let type = tableHeaderAttributes[id].type
+            if (type === 'customInput') {
+                this._inputs[id].firstChild.value = ''
+                this._inputs[id].children[1].innerHTML = ''
+            } else if (type === 'dataListSelect') {
+                this._inputs[id].firstChild.value = ''
+                HtmlElementCreator.emptyDOMElement(this._inputs[id].children[1])
+            } else if (type === 'select') {
+                this._inputs[id].selectedIndex = 0;
+            } else if (type === 'date') {
+                if (isMultiple === false) {
+                    this._inputs[id].value = (new Date()).toISOString().split('T')[0]
+                } else this._inputs[id].value = ''
+            } else {
+                this._inputs[id].value = ''
+                if (type === 'file')
+                    this._inputs[id].nextElementSibling.hidden = true
+            }
+        })
     }
 
     // /**
@@ -385,28 +409,7 @@ class HandlerTableView {
     // /**
     //  * magas tábla értékeinek kiürítése
     //  */
-    // resetTallTable() {
-    //     let _inputs = this.windowContentPointer.content._inputs
-    //     Object.entries(_inputs).forEach(([id, input]) => {
-    //         if (input.type === 'customInput') {
-    //             this._inputs[id].firstChild.value = ''
-    //             this._inputs[id].children[1].innerHTML = ''
-    //         } else if (input.type === 'dataListSelect') {
-    //             this._inputs[id].firstChild.value = ''
-    //             HtmlElementCreator.emptyDOMElement(this._inputs[id].children[1])
-    //         } else if (input.type === 'select') {
-    //             this._inputs[id].selectedIndex = 0;
-    //         } else if (input.type === 'date') {
-    //             if (this.isMultiple === false) {
-    //                 this._inputs[id].value = (new Date()).toISOString().split('T')[0]
-    //             } else this._inputs[id].value = ''
-    //         } else {
-    //             this._inputs[id].value = ''
-    //             if (input.type === 'file')
-    //                 this._inputs[id].nextElementSibling.hidden = true
-    //         }
-    //     })
-    // }
+
     //
     // /**
     //  * entitásválasztó speciális input (input + label) megjelenítése

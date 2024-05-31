@@ -18,5 +18,10 @@ class HandlerTable {
        return this._view.getInputValues(this._headerAttributeParams)
     }
 
+    resetTable()
+    {
+        this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor')
+    }
+
 
 }
