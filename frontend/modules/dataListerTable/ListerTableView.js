@@ -250,6 +250,7 @@ class ListerTableView {
     }
 
     displayTableHeaders(attributeOrder, attributeParams,defaultOrderParamName, isReDraw = false) {
+        console.log(attributeOrder)
         if (this._tHead.hasChildNodes())
             HtmlElementCreator.emptyDOMElement(this._tHead)
         this._headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
@@ -260,7 +261,7 @@ class ListerTableView {
             th.addEventListener('mousedown', (event) =>
                 this.startMoveTh(event, th))
             let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
-            if ((modelParams !== undefined) && ((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
+            if (((!('sortable' in modelParams)) || (modelParams['sortable'] === true))) {
                 orderDiv.classList.add('order')
                 if (columnName === defaultOrderParamName) {
                     orderDiv.classList.add('ordered')
@@ -428,9 +429,9 @@ class ListerTableView {
             // floatingHeader.tableParent = tableObject.tableDiv
             // floatingHeader.tableHeadPointer = tableObject.tHead
             // floatingHeader.tableBodyPointer = tableObject.tBody
-            // for (let e in table.rows)
-            //     if (table.rows[e].cells && table.rows[e].cells[headerObject.cellIndex])
-            //         table.rows[e].cells[headerObject.cellIndex].style.display = "none";
+            for (let row of this._dataTable.rows)
+                if (row.cells && row.cells[headerObject.cellIndex])
+                    row.cells[headerObject.cellIndex].style.display = "none";
             this._inMoveTh.object = floatingHeader;
             this._inMoveTh.object.zoomVal = zoomVal;
         }
@@ -458,10 +459,13 @@ class ListerTableView {
                 head.style.borderRight = "";
             }
         })
+
+
         if (swapCellIndex < inMove.actualCellIndex) {
             this._headerRow.children[swapCellIndex].style.borderLeft = "2px solid red";
         } else
             this._headerRow.children[swapCellIndex].style.borderRight = "2px solid red";
+
         this._inMoveTh.mouseX = newX;
         this._inMoveTh.mouseY = newY;
     }
@@ -469,19 +473,23 @@ class ListerTableView {
     endMoveTh(event) {
         if (this._inMoveTh === undefined)
             return
-        let inMove = this._inMoveTh.object
+        let inMoveTh = this._inMoveTh.object
         let swapCellIndex = 0;
+        console.dir(inMoveTh)
         Array.from(this._headerRow.children).forEach((head, i) => {
             if (head.nodeName === 'DIV')
                 return
-            if (head.getBoundingClientRect().x * inMove.zoomVal < event.pageX &&
-                i !== inMove.actualCellIndex && head.style.display !== "none")
+            if (head.getBoundingClientRect().x * inMoveTh.zoomVal < event.pageX &&
+                i !== inMoveTh.actualCellIndex && head.style.display !== "none")
                 swapCellIndex = i;
             head.style.borderLeft = "";
             head.style.borderRight = "";
         })
-        this._headerRow.removeChild(inMove);
-        this._controllerPointer.moveColumn(inMove.actualCellIndex, swapCellIndex)
+        this._headerRow.removeChild(inMoveTh);
+        console.dir(inMoveTh.actualCellIndex)
+
+        console.dir(swapCellIndex)
+        this._controllerPointer.moveColumn(inMoveTh.actualCellIndex, swapCellIndex)
         this._inMoveTh = undefined
         // let headerRow = inMove.tableHeadPointer.firstElementChild
         // headerRow.cells[inMove.actualCellIndex].style.display = "";
@@ -515,6 +523,7 @@ class ListerTableView {
         this._filterRow = HtmlElementCreator.createSimpleHtmlElement('tr', this._tHead, {'class': 'filterRow'})
         this._filterInputs = {}
         attributeOrder.forEach(id => {
+
             let modelParams = attributeParams[id]
             let td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
             let filter = modelParams?.type ?? 'string'
@@ -625,12 +634,11 @@ class ListerTableView {
         return this._tableContainer.style.zoom === '' ? 1 : this._tableContainer.style.zoom
     }
 
-    createRowWithRecord(values, id) {
+    createRowWithRecord(attributes, id, order) {
         let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
         row.setAttribute("recordId", id)
         this._rows.push(row)
-        values.forEach(([value, type, paramName],key) => {
-
+        attributes.forEach(([value, type, paramName],key) => {
             let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
             td.style.width=this._headerRow.children[key].style.width
             if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
