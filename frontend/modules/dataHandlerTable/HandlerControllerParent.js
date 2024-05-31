@@ -88,7 +88,7 @@ class HandlerControllerParent extends ControllerParent{
             return
         if (this._type === 'creator') {
             await this.service.sendCreateRequest(collectedData)
-                this.view.resetTallTable()
+            this._view.getComponent('handlerTable').resetTable()
         } else {
             if (await this.service.sendEditRequest(collectedData, this.multiple))
                 if (!this.multiple) {
