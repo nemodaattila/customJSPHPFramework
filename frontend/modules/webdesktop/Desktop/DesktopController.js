@@ -21,8 +21,8 @@ class DesktopController {
         return this._view.tabsBarDOMElement
     }
 
-    static openWindow(moduleGroupName, moduleName, windowName = undefined) {
-        WindowOpener.openWindow(moduleGroupName, moduleName, windowName)
+    static async openWindow(moduleGroupName, moduleName, windowName = undefined) {
+        await WindowOpener.openWindow(moduleGroupName, moduleName, windowName)
     }
 
     static isWindowOpen(windowId) {
@@ -39,10 +39,9 @@ class DesktopController {
     //  * @param window DesktopWindow - beállítandó aktív ablak
     //  */
     static switchActiveWindow(windowName = undefined) {
+        console.trace()
         console.log(windowName)
-        console.log(typeof windowName)
-        console.dir(this)
-        console.dir({...this._model.activeWindow})
+        console.dir({...this._model})
         console.dir(typeof this._model.activeWindow)
         if (windowName === this._model.activeWindow)
             return
@@ -62,8 +61,15 @@ class DesktopController {
         console.log(this._model)
         console.dir(this._model.activeWindow)
         console.dir(typeof this._model.activeWindow)
-        // Object.values(this._model.windows).forEach(actWindow =>
-        //     actWindow.windowDiv.style.zIndex = actWindow === windowName ? '100' : (parseInt(actWindow.windowDiv.style.zIndex) - 1).toString())
+        Object.values(this._model._windows).forEach(actWindow => {
+            console.log(actWindow)
+            console.log(this._model._windows[this._model.activeWindow])
+
+            console.log(actWindow ===this._model._windows[this._model.activeWindow])
+            actWindow._view.windowDiv.style.zIndex = actWindow ===
+            this._model._windows[this._model.activeWindow] ? '100' : (parseInt(actWindow._view.windowDiv.style.zIndex) - 1).toString()
+
+        })
     }
 
     static removeWindow(windowName) {

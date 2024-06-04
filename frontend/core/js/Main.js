@@ -48,9 +48,11 @@ class Main {
 
     }
 
-    static initComponents() {
+    static async initComponents() {
         DesktopController.init()
         WindowMover.init(DesktopController)
-        DesktopController.openWindow('companies', 'companyLister')
+        await DesktopController.openWindow('companies', 'companyLister')
+        await DesktopController.openWindow('companies', 'companyCreator')
+
     }
 }
