@@ -23,11 +23,11 @@ class ViewParent {
             this._components[name].destruct?.()
             delete this._components[name];
         })
-        Object.keys(this._components).forEach(name => {
+        for (name in this._components){
             console.log(name)
             this._components[name].destruct()
             delete this._components[name];
-        })
+        }
         // HtmlElementCreator.emptyDOMElement(this._windowTab)
         // this.windowTab.remove()
     }
