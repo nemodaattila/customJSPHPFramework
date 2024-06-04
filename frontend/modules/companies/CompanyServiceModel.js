@@ -140,10 +140,10 @@ class CompanyServiceModel extends ServiceModelParent {
 
     getEnabledOperations() {
         return {
-            list: this._moduleParams.list !== undefined,
-            edit: this._moduleParams.edit !== undefined,
-            multiEdit: this._moduleParams.multiEdit !== undefined,
-            add: this._moduleParams.add !== undefined,
+            lister: this._moduleParams.lister !== undefined,
+            editor: this._moduleParams.editor !== undefined,
+            multiEditor: this._moduleParams.multipleEditor !== undefined,
+            creator: this._moduleParams.creator !== undefined,
             deletable: this._moduleParams.deletable
         }
     }

@@ -65,6 +65,22 @@ class ListerTableView {
 
     _firstSortClick=true
 
+    set selectedRows(value) {
+        this._selectedRows = value;
+    }
+
+    get selectedRows() {
+        return this._selectedRows;
+    }
+
+    get lastClickedRow() {
+        return this._lastClickedRow;
+    }
+
+    set lastClickedRow(value) {
+        this._lastClickedRow = value;
+    }
+
     displayTableElements() {
         this._tableContainerHeader = HtmlElementCreator.createHtmlElement('div', this._mainContainer, {
             class: 'listerTableHeader'
@@ -143,16 +159,19 @@ class ListerTableView {
     }
 
     displayOperationIcons(enabledOperations) {
+        console.log(enabledOperations)
         this._tableIconContainer = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
-        let adder = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
-            src: this._iconPath + '/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
-        })
-        if (enabledOperations.add)
-            adder.addEventListener('click', async (event) => {
+        if (enabledOperations.creator)
+        {
+            let creatorIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+                src: this._iconPath + '/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
+            })
+            creatorIcon.addEventListener('click', async (event) => {
                 event.stopPropagation()
                 // await WindowHandler.createWindow(this.content.addModule, this.content.addModuleParams)
-                this._controllerPointer.openHandlerWindow('creator');
+                this._controllerPointer.operationIconClicked('creator');
             })
+        }
         let editor = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
         })
