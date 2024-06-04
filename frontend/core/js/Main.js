@@ -52,7 +52,6 @@ class Main {
         DesktopController.init()
         WindowMover.init(DesktopController)
         await DesktopController.openWindow('companies', 'companyLister')
-        await DesktopController.openWindow('companies', 'companyCreator')
 
     }
 }

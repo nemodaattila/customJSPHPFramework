@@ -58,7 +58,6 @@ class ListerControllerParent extends ControllerParent {
         this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
         // this._searchParamConnector.setAutoLimit()
         // this.getRecordsFromServer("refresh")
-        this.openHandlerWindow('creator')
     }
 
     //reset
