@@ -178,3 +178,8 @@
     cursor: col-resize;
     border-right: 2px solid red
 }
+
+tr[data-select="1"] {
+    background: rgba(0, 0, 255, .6) !important;
+    color: #fafac4 !important
+}

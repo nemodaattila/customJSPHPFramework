@@ -179,16 +179,45 @@ class ListerControllerParent extends ControllerParent {
         this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds),this._tableHeaderAttributeOrder)
     }
 
-    async openHandlerWindow(operationType) {
+    async operationIconClicked(operationType) {
         // await Includer.loadFileSource('dataHandlerTable')
         console.log(this)
         switch (operationType) {
             case 'creator':
-                DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.creator.module)
+               await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.creator.module)
                 break
             default:
                 Messenger.showAlert('there is no operation type as ' + operationType)
         }
+    }
+    rowClicked(recordId, rowClickEvent)
+    {
+        console.log(rowClickEvent)
+        // if (rowClickEvent.button === 1 || this.service.selectedRecord !== null)
+            // this.showDetailed(false)
+
+
+        if (rowClickEvent.ctrlKey) {
+            this.addRemoveSelectedRow(row)
+            return
+        }
+        if (rowClickEvent.shiftKey) {
+            this.setSelectedRowWithShift(row)
+            return;
+        }
+        this._serviceModelPointer.selectedId=[]
+        this._serviceModelPointer.selected.push(recordId)
+
+        // console.dir(this._view)
+        // this._view.selectedRows = []
+        // this._view.selectedRows.push(newRow)
+        // this._view.lastClickedRow = newRow
+        // if (triggerDataSend === true) {
+        //     //     let eventParams = {}
+        //     //     let dataIndex = this.controllerPointer.model.serverData.findIndex(entity => entity.id === newRow.connectedObjectId)
+        //     //     this.content.onClickEventAttribs?.forEach(attrib => eventParams[attrib] = this.controllerPointer.model.serverData[dataIndex][attrib])
+        //     //     setTimeout(() => EventSubscriptionHandler.triggerSubscriptionCall(this.content.entityTriggerName + "DataForEntity", eventParams, {sendData: true}), 200)
+        // }
     }
 
     // async refreshRows() {

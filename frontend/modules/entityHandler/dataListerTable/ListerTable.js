@@ -1,5 +1,4 @@
 class ListerTable {
-
     static _id = -1
     _view
     _interval // refreshInterval
@@ -8,8 +7,9 @@ class ListerTable {
     _headerAttributeParams
     _resizeTimeOut
     // autoHeaderSetting = false
-    // dblClickTimer = false
-    constructor( controllerPointer) {
+    _dblClickTimer = false
+
+    constructor(controllerPointer) {
         ListerTable._id++
         this._view = new ListerTableView(ListerTable._id, controllerPointer.getWindowContentMainContainer(), this)
         this._view.displayTableElements()
@@ -29,7 +29,6 @@ class ListerTable {
     //         object._controllerPointer._controllerPointer.softRefreshTable()
     //     }, 200);
     // }
-
     get view() {
         return this._view;
     }
@@ -59,7 +58,7 @@ class ListerTable {
     }
 
     drawHeaders(tableAttributeOrder, defaultOrderParamName, isReDraw = false) {
-        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams,defaultOrderParamName, isReDraw)
+        this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams, defaultOrderParamName, isReDraw)
         this._view.displayFilters(tableAttributeOrder, this._headerAttributeParams)
         this.addFilterEvents(tableAttributeOrder)
     }
@@ -106,7 +105,6 @@ class ListerTable {
     }
 
     moveColumn(moveCellFrom, moveCellTo) {
-
         this._controllerPointer.moveColumn(moveCellFrom, moveCellTo)
     }
 
@@ -275,56 +273,87 @@ class ListerTable {
     }
 
     displayRecordsInTable(records, order) {
-            records.forEach(record => {
-                let orderedAttributes = []
-                let attribs = record[1]
-                // console.log(attribs)
-
-                order.forEach((orderAttrib)=>{
-                    // console.log(orderAttrib)
-                    orderedAttributes.push(attribs.find(attrib => {
-                        // console.log(attrib[2])
-                        return  attrib[2]=== orderAttrib
-                    }))
-
-                })
-
+        records.forEach(record => {
+            let orderedAttributes = []
+            let attribs = record[1]
+            console.log(attribs)
+           let recordIdIndex = attribs.findIndex(attr => attr[2] === 'id')
+            console.log(recordIdIndex)
+            order.forEach((orderAttrib) => {
+                // console.log(orderAttrib)
+                orderedAttributes.push(attribs.find(attrib => {
+                    // console.log(attrib[2])
+                    return attrib[2] === orderAttrib
+                }))
+            })
             let row = this._view.createRowWithRecord(orderedAttributes, record[0])
+            if (recordIdIndex !== -1)
+            row.connectedObjectId = attribs[recordIdIndex][0]
+            row.addEventListener('click', (event) => {
+                event.preventDefault()
+                if (this._dblClickTimer) {
+                    clearTimeout(this._dblClickTimer);
+                    this._dblClickTimer = false;
+                }
+                switch (event.detail) {
+                    case 1:
+                        this._dblClickTimer = setTimeout(() => {
+                            this.rowClicked(row,event)
+                        }, 200);
+                        break;
+                    case 2:
+                        this.rowClicked(row,event)
+
+                        // this.showDetailed()
+                        break;
+                    default:
+                        break;
+                }
+            })
         })
-//         data.forEach(record => {
-//             row.connectedObjectId = record.id
-//             this.rows.push(row)
-//             row.addEventListener('click', (event) => {
-//                 event.preventDefault()
-//                 if (this.dblClickTimer) {
-//                     clearTimeout(this.dblClickTimer);
-//                     this.dblClickTimer = false;
-//                 }
-//                 switch (event.detail) {
-//                     case 1:
-//                         this.dblClickTimer = setTimeout(() => {
-//                             this.selectRow(row, event, event.detail === 1)
-//                             if (event.button === 1 || this.service.selectedRecord !== null)
-//                                 this.showDetailed(false)
-//                             this.showImage(record)
-//                         }, 200);
-//                         break;
-//                     case 2:
-//                         this.selectRow(row, event, event.detail === 1)
-//                         this.showDetailed()
-//                         break;
-//                     default:
-//                         break;
-//                 }
-//             })
-//
-//             })
-//         })
     }
 
-    openHandlerWindow(operationType)
+    rowClicked(row, event)
     {
-        this._controllerPointer.openHandlerWindow(operationType)
+        if (!isNaN(row.connectedObjectId))
+            this._controllerPointer.rowClicked(row.connectedObjectId, event)
+        this.selectRow(row, event, )
+    }
+
+    operationIconClicked(operationType) {
+        this._controllerPointer.operationIconClicked(operationType)
+    }
+
+    selectRow(row, event) {
+        if (event.ctrlKey) {
+            this.addRemoveSelectedRow(row)
+            return
+        }
+        if (event.shiftKey) {
+            this.setSelectedRowWithShift(row)
+            return;
+        }
+        this._view._rows.forEach((row) => {
+            row.setAttribute("data-select", "0");
+        })
+
+        row.setAttribute("data-select", "1");
+
+        // if (index === false)
+        //     return
+        // if (index >= this.pageScrollData.rowTo)
+        //     this.tableContainer.scrollTo(0, this.pageScrollData.getScrollCoord('up', index));
+        // if (index <= this.pageScrollData.rowFrom)
+        //     this.tableContainer.scrollTo(0, this.pageScrollData.getScrollCoord('down', index));
+        // if (index === this.rows.length - 1) {
+        //     this.controllerPointer.collectSearchParamsForRequest('next')
+        // }
+    }
+
+    setSelectedRow(newRow, index, triggerDataSend = false) {
+
+
+
     }
 
 //      * lefelé görgetésnél timer, akkor indul ha a göretés befejeződőtt, tábla alsó 80 %-ában
@@ -509,17 +538,6 @@ class ListerTable {
 //      * @param event {MouseEvent} mouse click event
 //      * @param triggerDataSend {boolean}, vissza kell-e adni adatot a rekordról
 //      */
-//     selectRow(row, event, triggerDataSend = false) {
-//         if (event.ctrlKey) {
-//             this.addRemoveSelectedRow(row)
-//         } else {
-//             if (!event.shiftKey) {
-//                 this.setSelectedRow(row, false, triggerDataSend)
-//                 this.lastClickedRow = row
-//             } else
-//                 this.setSelectedRowWithShift(row)
-//         }
-//     }
 //
 //     /**
 //      * sima bal click, egy sor kijelölése
@@ -527,30 +545,6 @@ class ListerTable {
 //      * @param index {number|boolean} kattintorr sor indexe
 //      * @param triggerDataSend {boolean} ha true akkor a record bizonyos adatait elküldi egy feliratkozott ablaknak, entitás felételéhez például
 //      */
-//     setSelectedRow(newRow, index, triggerDataSend = false) {
-//         this.selectedRows.forEach((row) => {
-//             row.setAttribute("data-select", "0");
-//         })
-//         this.selectedRows = []
-//         newRow.setAttribute("data-select", "1");
-//         this.selectedRows.push(newRow)
-//         this.lastClickedRow = newRow
-//         if (triggerDataSend === true) {
-//             let eventParams = {}
-//             let index = this.controllerPointer.model.serverData.findIndex(entity => entity.id === newRow.connectedObjectId)
-//             this.content.onClickEventAttribs?.forEach(attrib => eventParams[attrib] = this.controllerPointer.model.serverData[index][attrib])
-//             setTimeout(() => EventSubscriptionHandler.triggerSubscriptionCall(this.content.entityTriggerName + "DataForEntity", eventParams, {sendData: true}), 200)
-//         }
-//         if (index === false)
-//             return
-//         if (index >= this.pageScrollData.rowTo)
-//             this.tableContainer.scrollTo(0, this.pageScrollData.getScrollCoord('up', index));
-//         if (index <= this.pageScrollData.rowFrom)
-//             this.tableContainer.scrollTo(0, this.pageScrollData.getScrollCoord('down', index));
-//         if (index === this.rows.length - 1) {
-//             this.controllerPointer.collectSearchParamsForRequest('next')
-//         }
-//     }
 //
 //     /**
 //      * kép megjelenítése sorra egyszeri kattintásra

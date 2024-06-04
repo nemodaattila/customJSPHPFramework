@@ -1,4 +1,4 @@
-class ServiceModelParent {
+class DataServiceModelParent {
     _records = {}
 
     _tableHeaderAttributes = {}
