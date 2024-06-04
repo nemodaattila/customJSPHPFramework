@@ -14,6 +14,7 @@ class DesktopWindowController {
         this._model.increaseCount();
         this._model.setIdToCount()
         this._view.displayWindow(container)
+        this._view.windowDiv.addEventListener('click', () => DesktopController.switchActiveWindow(this._model.name))
         this.calcDefaultParameters()
         WindowMover?.addMoveEventToWindow(this)
         this._view.windowDiv.controllerPointer = this
