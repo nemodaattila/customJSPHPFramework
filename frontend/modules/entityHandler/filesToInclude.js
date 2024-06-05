@@ -54,7 +54,7 @@ Includer.setIncludableFileSource(
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityServiceParent',
             fileNames: [
-                'EntityServiceParent.js',
-                'EntityDataServiceModelParent.js',
+                'EntityServiceControllerParent.js',
+                'EntityServiceModelParent.js',
             ]
         }])
