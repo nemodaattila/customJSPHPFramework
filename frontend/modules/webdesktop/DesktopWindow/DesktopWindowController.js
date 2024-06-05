@@ -18,8 +18,7 @@ class DesktopWindowController {
         this.calcDefaultParameters()
         WindowMover?.addMoveEventToWindow(this)
         this._view.windowDiv.controllerPointer = this
-        this.observer = new ResizeObserver(this.onWindowResize)
-        this.observer.observe(this._view.windowDiv);
+
     }
 
     _tabPointer
@@ -30,6 +29,12 @@ class DesktopWindowController {
 
     setName(windowName) {
         this._model.name = windowName;
+    }
+
+    addObserver()
+    {
+        this.observer = new ResizeObserver(this.onWindowResize)
+        this.observer.observe(this._view.windowDiv);
     }
 
     getName() {
@@ -81,12 +86,12 @@ class DesktopWindowController {
         this._view.setLeftAndTopParameters(left, top)
     }
 
-    displayContent(controller) {
-        this._view.setTitle(controller.getTitle())
-        this._tabPointer.setTitle(controller.getTitle())
-        controller.setWindowMainContentContainer(this._view.windowBody)
-        controller.displayView();
-        this._contentControllerPointer = controller
+    async displayContent(contentController) {
+        this._view.setTitle(contentController.getTitle())
+        this._tabPointer.setTitle(contentController.getTitle())
+        contentController.setWindowMainContentContainer(this._view.windowBody)
+        await contentController.displayView();
+        this._contentControllerPointer = contentController
     }
 
     zoomContent(zoomValue) {

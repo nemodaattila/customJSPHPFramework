@@ -54,7 +54,7 @@ class EntityListerControllerParent extends ControllerParent {
         )
         this._searchParamConnector.orderSourceObject = listerTable.view
         console.trace()
-        this._view.addComponent("pageTurner", await this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
+        await this._view.addComponent("pageTurner", await this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
         this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
         // this._searchParamConnector.setAutoLimit()
         // this.getRecordsFromServer("refresh")
@@ -194,7 +194,7 @@ class EntityListerControllerParent extends ControllerParent {
     }
     async rowClicked(recordId, rowClickEvent)
     {
-        console.log(rowClickEvent)
+        // console.log(rowClickEvent)
         // if (rowClickEvent.button === 1 || this.service.selectedRecord !== null)
             // this.showDetailed(false)
 
@@ -207,8 +207,9 @@ class EntityListerControllerParent extends ControllerParent {
             this.setSelectedRowWithShift(row)
             return;
         }
-        this._serviceModelPointer.selectedId=[]
-        this._serviceModelPointer.selectedId.push(recordId)
+        console.log(recordId)
+        this._serviceModelPointer.selectedIds=[]
+        this._serviceModelPointer.addSelectedId(recordId)
 
         if (rowClickEvent.detail === 2)
            await this.operationIconClicked('editor')

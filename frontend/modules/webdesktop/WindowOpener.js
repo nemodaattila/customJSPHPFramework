@@ -15,7 +15,9 @@ class WindowOpener {
             DesktopController.addNewWindow(windowName, window, tab)
             DesktopController.switchActiveWindow(windowName)
             // await controller.init()
-            window.displayContent(controller)
+           await window.displayContent(controller)
+            console.trace()
+            window.addObserver()
             console.log('window')
             console.dir(window)
         }
