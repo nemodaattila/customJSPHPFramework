@@ -1,4 +1,4 @@
-class CompanyServiceModel extends EntityDataServiceModelParent {
+class CompanyServiceModel extends EntityServiceModelParent {
     _companyTypes = {0: 'Nem vevő'}
 
     _moduleDirName = "companies"
@@ -16,14 +16,7 @@ class CompanyServiceModel extends EntityDataServiceModelParent {
             this._companyTypes[type.id] = type.name)
     }
 
-    _selectedId
-    get selectedId() {
-        return this._selectedId;
-    }
 
-    set selectedId(value) {
-        this._selectedId = value;
-    }
 
     // _selectedRecord = null
     // get selectedRecord() {
@@ -103,7 +96,7 @@ class CompanyServiceModel extends EntityDataServiceModelParent {
             windowName: 'companyEditor',
             tableSearchParams: [{
                 type: 'company',
-                value: this._selectedId,
+                value: this._selectedIds[0],
                 operator: 'eq'
             }],
         },
@@ -114,7 +107,7 @@ class CompanyServiceModel extends EntityDataServiceModelParent {
             task: 'worksheetLister',
             tableSearchParams: [{
                 type: 'company',
-                value: this._selectedId,
+                value: this._selectedIds[0],
                 operator: 'eq'
             }],
         },
@@ -128,7 +121,7 @@ class CompanyServiceModel extends EntityDataServiceModelParent {
                 operator: 'eq'
             }, {
                 type: 'element',
-                value: this._selectedId,
+                value: this._selectedIds[0],
                 operator: 'eq'
             }],
         }

@@ -1,7 +1,24 @@
-class EntityDataServiceModelParent {
+class EntityServiceModelParent {
     _records = {}
 
     _tableHeaderAttributes = {}
+
+    _selectedIds = []
+    get selectedIds() {
+        return this._selectedIds;
+    }
+
+    set selectedIds(value) {
+        this._selectedIds = value;
+    }
+
+    addSelectedId(value)
+    {
+        console.log(value)
+        this._selectedIds.push(value)
+        console.log(this._selectedIds)
+
+    }
 
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
@@ -20,7 +37,7 @@ class EntityDataServiceModelParent {
     setTableHeaderAttributeOrder() {
         console.log('setTableHeaderAttributeOrder')
         console.log(this._tableHeaderAttributes)
-        if (this._tableHeaderAttributes)
+        if (Object.keys(this._tableHeaderAttributes).length !== 0)
             this._tableHeaderAttributeOrder = Object.keys(this._tableHeaderAttributes)
 
         console.log(this)
@@ -62,6 +79,7 @@ class EntityDataServiceModelParent {
 
     getRecordByIdForListTable(id) {
         const record = {...this._records[id]}
+        console.log(this)
         let recordData = this._tableHeaderAttributeOrder.map(param => {
             const filterType = this._tableHeaderAttributes[param].type ?? 'string'
             let tdContent
