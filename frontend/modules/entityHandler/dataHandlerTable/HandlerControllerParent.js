@@ -39,8 +39,7 @@ class HandlerControllerParent extends ControllerParent{
 
      displayView(windowBody) {
         this._serviceModelPointer = this.service.model
-        let handlerTable = new HandlerTable(this.getWindowContentMainContainer(), this)
-        this._view.addComponent('handlerTable', handlerTable, this._type)
+        this._view.addComponent('handlerTable', new HandlerTable(this.getWindowContentMainContainer(), this), this._type)
          console.log(this)
         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         //
@@ -63,10 +62,9 @@ class HandlerControllerParent extends ControllerParent{
 
     collectAndSaveRecord()
     {
-        let hasError = false
-             let collectedData = this._view.getComponent('handlerTable').getInputValues()
-        let attributes = this.getHeaderAttributeParams()
-            let hasNoError = Object.entries(collectedData).every(([key,value])=>{
+             const collectedData = this._view.getComponent('handlerTable').getInputValues()
+        const attributes = this.getHeaderAttributeParams()
+            const hasNoError = Object.entries(collectedData).every(([key,value])=>{
                 if (attributes[key]?.required)
                 {
                     if (value === '')

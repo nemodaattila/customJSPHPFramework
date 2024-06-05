@@ -7,7 +7,7 @@ class AlertPopupView {
 
     constructor() {
         this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id: "alertContainer"})
-        let container = HtmlElementCreator.createSimpleHtmlElement('div', this._alertContainer)
+        const container = HtmlElementCreator.createSimpleHtmlElement('div', this._alertContainer)
         this._alertMessageContainer = HtmlElementCreator.createSimpleHtmlElement('div', container);
         this._alertButton = HtmlElementCreator.createNestedHtmlElement(['div', 'input'], container, {
             type: 'button',

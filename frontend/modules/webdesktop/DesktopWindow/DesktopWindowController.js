@@ -39,7 +39,7 @@ class DesktopWindowController {
     onWindowResize(object) {
         if (!(object instanceof Element))
             object = object[0].target
-        let controller = object.controllerPointer
+        const controller = object.controllerPointer
         clearTimeout(this.resizeTimeOut);
         this.resizeTimeOut = setTimeout(async () => {
             if (object.style.width !== '100%' && parseInt(object.style.width) < 400)
@@ -59,7 +59,7 @@ class DesktopWindowController {
 
     calcDefaultParameters() {
         let top, left
-        let id = parseInt(this._model.id)
+        const id = parseInt(this._model.id)
         switch (id % 4) {
             case 0:
                 top = '25px'

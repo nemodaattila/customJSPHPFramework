@@ -65,8 +65,7 @@ class ListerTable {
 
     addFilterEvents(tableAttributeOrder) {
         tableAttributeOrder.forEach(attribName => {
-            let type = this._headerAttributeParams[attribName]?.type
-            if (type === 'none')
+            if (this._headerAttributeParams[attribName]?.type === 'none')
                 return
             let filters = this._view.getFilterInput(attribName)
             filters[0].addEventListener('input', (event) => {
@@ -117,14 +116,14 @@ class ListerTable {
     }
 
     collectAndConvertFilterParams() {
-        let finalFilterData = []
+        const finalFilterData = []
         console.log(this)
         Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
-            let filterType = headerParams.type ?? 'string'
-            let inputs = this._view.getFilterInput(name)
+            const filterType = headerParams.type ?? 'string'
+            const inputs = this._view.getFilterInput(name)
             if (inputs === undefined)
                 return;
-            let inputValues = [inputs[0].value, inputs[1].value];
+            const inputValues = [inputs[0].value, inputs[1].value];
             let values = ''
             switch (filterType) {
                 case 'number':
@@ -154,7 +153,7 @@ class ListerTable {
                 case 'time':
                     let timeFrom = '';
                     if (inputValues[0] !== '') {
-                        let tf = inputValues[0].split(':')
+                        const tf = inputValues[0].split(':')
                         timeFrom = new Date()
                         timeFrom.setHours(tf[0])
                         timeFrom.setMinutes(tf[1])
@@ -162,7 +161,7 @@ class ListerTable {
                     }
                     let timeTo = '';
                     if (inputValues[1] !== '') {
-                        let tt = inputValues[1].split(':')
+                        const tt = inputValues[1].split(':')
                         timeTo = new Date()
                         timeTo.setHours(tt[0])
                         timeTo.setMinutes(tt[1])
@@ -195,7 +194,7 @@ class ListerTable {
                     }
                     break;
                 case 'date':
-                    let temp2 = []
+                    const temp2 = []
                     if (inputValues[0] !== '')
                         temp2[0] = inputValues[0].toString().replace('T', ' ')
                     if (inputValues[1] !== '')
@@ -274,10 +273,10 @@ class ListerTable {
 
     displayRecordsInTable(records, order) {
         records.forEach(record => {
-            let orderedAttributes = []
-            let attribs = record[1]
+            const orderedAttributes = []
+            const attribs = record[1]
             console.log(attribs)
-           let recordIdIndex = attribs.findIndex(attr => attr[2] === 'id')
+           const recordIdIndex = attribs.findIndex(attr => attr[2] === 'id')
             console.log(recordIdIndex)
             order.forEach((orderAttrib) => {
                 // console.log(orderAttrib)
@@ -286,7 +285,7 @@ class ListerTable {
                     return attrib[2] === orderAttrib
                 }))
             })
-            let row = this._view.createRowWithRecord(orderedAttributes, record[0])
+            const row = this._view.createRowWithRecord(orderedAttributes, record[0])
             if (recordIdIndex !== -1)
             row.connectedObjectId = attribs[recordIdIndex][0]
             row.addEventListener('click', (event) => {

@@ -15,7 +15,7 @@ class WindowMover {
     }
 
     static addEventsToDesktop(desktopPointer) {
-        let container = desktopPointer.getDesktopDOMElement();
+        const container = desktopPointer.getDesktopDOMElement();
         container.addEventListener('mouseup', (event) =>
             this.endMoveWindow(event))
         container.addEventListener('mousemove', (event) => {
@@ -41,12 +41,12 @@ class WindowMover {
     static moveWindow(event) {
         if (!this._moveParameters)
             return
-        let time = Date.now()
+        const time = Date.now()
         if ((time - this._moveTime) < 11)
             return;
         this._moveTime = time
-        let newX = event.pageX || event.clientX;
-        let newY = event.pageY || event.clientY;
+        const newX = event.pageX || event.clientX;
+        const newY = event.pageY || event.clientY;
         let leftPos = this._moveParameters.object.style.left !== '' ? this._moveParameters.object.style.left : this._moveParameters.objectPos.left
         let topPos = this._moveParameters.object.style.top !== '' ? this._moveParameters.object.style.top : this._moveParameters.objectPos.top
         if (leftPos === '50%')

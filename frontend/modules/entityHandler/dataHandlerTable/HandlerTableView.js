@@ -18,8 +18,7 @@ class HandlerTableView {
         this.tallTable = HtmlElementCreator.createSimpleHtmlElement('div', this._mainContainer, {class: 'handlerTable'})
         //DO inputPerRow
         // let inputPerNums = this.windowContentPointer.content.inputPerRow ?? 1
-        let inputPerRows = 1
-        let tr
+        const inputPerRows = 1
         let evenRow = true
         let cols = ''
         for (let i = 0; i < inputPerRows; i++)
@@ -40,7 +39,7 @@ class HandlerTableView {
             }
             if (colorKey % inputPerRows === 0)
                 evenRow = !evenRow
-            tr = HtmlElementCreator.createSimpleHtmlElement('div', this.tallTable, {
+            const tr = HtmlElementCreator.createSimpleHtmlElement('div', this.tallTable, {
                 class: 'tableRow'
             })
             if (evenRow)
@@ -49,15 +48,15 @@ class HandlerTableView {
                 tr.style.gridRowEnd = 'span ' + input.gridRowEnd
                 evenRow = !evenRow
             }
-            let defaultTdParams = {class: 'tableCell'}
-            let tdParamForLabel = {...defaultTdParams, ...{innerHTML: input.label ?? id}}
-            let label = HtmlElementCreator.createSimpleHtmlElement('div', tr, tdParamForLabel)
+            const defaultTdParams = {class: 'tableCell'}
+            const tdParamForLabel = {...defaultTdParams, ...{innerHTML: input.label ?? id}}
+            const label = HtmlElementCreator.createSimpleHtmlElement('div', tr, tdParamForLabel)
             if (input.required )
                 HtmlElementCreator.createSimpleHtmlElement('span', label, {innerHTML: '*', class: 'requiredInput'})
             if (!input.params)
                 input.params = {}
-            let type = input.type ?? 'string'
-            let tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
+            const type = input.type ?? 'string'
+            const tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
             switch (type) {
                 case 'number':
                 case 'bigint':
@@ -98,14 +97,14 @@ class HandlerTableView {
                 case 'datetime':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'datetime-local'})
                     if (!isMultiple) {
-                        let now = new Date();
+                        const now = new Date();
                         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                         this._inputs[id].value = now.toISOString().slice(0, 16);
                     }
                     break
                 case 'file':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {...{type: 'file'}, ...input.params})
-                    let delIcon = HtmlElementCreator.createSimpleHtmlElement('img', tdElem, {
+                    const delIcon = HtmlElementCreator.createSimpleHtmlElement('img', tdElem, {
                         src: './image/icons/del_icon.png',
                         class: 'columnMoveIcon',
                         title: 'kép/fájl törlése',
@@ -124,10 +123,9 @@ class HandlerTableView {
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('select', tdElem, {})
                     if (input.multiple)
                         this._inputs[id].multiple = true
-                    let options = {...input.values}
                     if (isMultiple)
                         HtmlElementCreator.addOptionToSelect(this._inputs[id], {'-1': 'Nincs változás'}, true)
-                    HtmlElementCreator.addOptionToSelect(this._inputs[id], options, true)
+                    HtmlElementCreator.addOptionToSelect(this._inputs[id], {...input.values}, true)
                     if (input.defaultValue)
                         this._inputs[id].value = input.defaultValue
                     break
@@ -186,7 +184,7 @@ class HandlerTableView {
                     if (values[id] === '') values[id] = null
                     break;
                 case 'dataListSelect':
-                    let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
+                    const index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
                     values[id] = (index === -1)? null: this._inputs[id].children[1].options[index].getAttribute('data-value')
                     break
                 case 'string':
@@ -218,7 +216,7 @@ class HandlerTableView {
         Object.entries(this._inputs).forEach(([id, input]) => {
             if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
                 return
-            let type = tableHeaderAttributes[id].type
+            const type = tableHeaderAttributes[id].type
             if (type === 'customInput') {
                 this._inputs[id].firstChild.value = ''
                 this._inputs[id].children[1].innerHTML = ''

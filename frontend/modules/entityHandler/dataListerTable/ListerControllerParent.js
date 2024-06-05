@@ -18,7 +18,7 @@ class ListerControllerParent extends ControllerParent {
     }
 
     setHeaderAttributeOrder() {
-        let params = this.getHeaderAttributeParams()
+        const params = this.getHeaderAttributeParams()
         this._tableHeaderAttributeOrder = Object.keys(params).filter((name) => {
             if (!params[name].inModule || params[name].inModule.findIndex(module => module === 'lister') !== -1)
                 return name
@@ -44,7 +44,7 @@ class ListerControllerParent extends ControllerParent {
     async displayView() {
         this._serviceModelPointer = this.service.model
         this.setHeaderAttributeOrder()
-        let listerTable = new ListerTable(this)
+        const listerTable = new ListerTable(this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
@@ -99,14 +99,14 @@ class ListerControllerParent extends ControllerParent {
         this._searchParamConnector.setAutoLimit(params.maxValueChange)
         if (params.resetOffset ?? false)
             this._searchParamConnector.resetOffset()
-        let searchParams = await this.collectSearchParamsForRequest(params)
+        const searchParams = await this.collectSearchParamsForRequest(params)
         let recordIds, hasNext
         if (params.ids) {
             recordIds = params.ids;
         } else {
-            let res = await this.service.getRecordsFromServer(searchParams)
-            recordIds = res.ids
-            hasNext = res.hasNext
+            ({
+                ids: recordIds, hasNext: hasNext
+            } = await this.service.getRecordsFromServer(searchParams))
         }
         console.log(recordIds)
         console.log(hasNext)
@@ -126,7 +126,7 @@ class ListerControllerParent extends ControllerParent {
 
     async collectSearchParamsForRequest({ redrawHeaders = false}) {
 
-        let searchParams = {}
+        const searchParams = {}
         searchParams.orderAndLimitParams = this._searchParamConnector.getSearchParameters()
         searchParams.additionalParams = null
         if (typeof this.getConnectedSearchParams === "function")
@@ -156,8 +156,7 @@ class ListerControllerParent extends ControllerParent {
     }
 
     moveColumnInOrder(moveCellFrom, moveCellTo) {
-        let headerName = this._tableHeaderAttributeOrder.splice(moveCellFrom, 1)[0];
-        this._tableHeaderAttributeOrder.splice(moveCellTo, 0, headerName);
+        this._tableHeaderAttributeOrder.splice(moveCellTo, 0, this._tableHeaderAttributeOrder.splice(moveCellFrom, 1)[0]);
     }
 
     moveColumn(moveCellFrom, moveCellTo) {

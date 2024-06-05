@@ -46,7 +46,7 @@ class EventSubscriptionHandler {
     static unSubscribe(callWord, objectPointer) {
         if (!this.subscriptions[callWord])
             return
-        let index = this.subscriptions[callWord].findIndex(([obj]) => obj === objectPointer)
+        const index = this.subscriptions[callWord].findIndex(([obj]) => obj === objectPointer)
         if (index !== -1) {
             this.subscriptions[callWord].splice(index, 1)
             if (this.subscriptions[callWord].length === 0)
@@ -60,8 +60,7 @@ class EventSubscriptionHandler {
      * @param objectPointer {Object} az objektum, ami le akar iratkozni az eventekről
      */
     static massUnSubscribe(objectPointer) {
-        let names = Object.keys(this.subscriptions)
-        names.forEach((word) => EventSubscriptionHandler.unSubscribe(word, objectPointer))
+            Object.keys(this.subscriptions).forEach((word) => EventSubscriptionHandler.unSubscribe(word, objectPointer))
     }
 
     /**
@@ -86,14 +85,14 @@ class EventSubscriptionHandler {
 
     /**
      * kiváltott eseményhez kapcsolt függvényeek meghívása
-     * @param callwords {string | Array} a kiváltandó (kulcsszó/szavak)
+     * @param callWords {string | Array} a kiváltandó (kulcsszó/szavak)
      * @param resultData {any} eseményhez kapcsolt/ kiváltott adat
      */
-    static callSubscribedFunctions(callwords, resultData) {
-        for (let callword of callwords) {
-            if (!this.subscriptions[callword])
+    static callSubscribedFunctions(callWords, resultData) {
+        for (const callWord of callWords) {
+            if (!this.subscriptions[callWord])
                 continue
-            for (let [classPointer, functionName] of this.subscriptions[callword]) {
+            for (const [classPointer, functionName] of this.subscriptions[callWord]) {
                 classPointer[functionName] ? classPointer[functionName](resultData) :
                     console.log(classPointer.constructor.name + ' - ' + functionName + '  not exists')
             }

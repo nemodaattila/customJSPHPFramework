@@ -61,9 +61,9 @@ class DataServiceModelParent {
     }
 
     getRecordByIdForListTable(id) {
-        let record = {...this._records[id]}
+        const record = {...this._records[id]}
         let recordData = this._tableHeaderAttributeOrder.map(param => {
-            let filterType = this._tableHeaderAttributes[param].type ?? 'string'
+            const filterType = this._tableHeaderAttributes[param].type ?? 'string'
             let tdContent
             if (filterType === 'select') {
                 tdContent = this._tableHeaderAttributes[param].values[record[param]]

@@ -39,33 +39,18 @@ class DesktopController {
     //  * @param window DesktopWindow - beállítandó aktív ablak
     //  */
     static switchActiveWindow(windowName = undefined) {
-        console.trace()
-        console.log(windowName)
-        console.dir({...this._model})
-        console.dir(typeof this._model.activeWindow)
         if (windowName === this._model.activeWindow)
             return
         if (this._model.activeWindow) {
             this._model.previousWindow = this._model.activeWindow
-            console.log(this._model.previousWindow)
             this._model.inActivateWindow(this._model.activeWindow)
             this._model.activeWindow = undefined
-            console.log(this._model)
         }
         if (windowName) {
-            console.log(windowName)
             this._model.activeWindow = windowName
-            console.log(this._model.activeWindow)
             this._model.activateWindow(this._model.activeWindow)
         }
-        console.log(this._model)
-        console.dir(this._model.activeWindow)
-        console.dir(typeof this._model.activeWindow)
         Object.values(this._model._windows).forEach(actWindow => {
-            console.log(actWindow)
-            console.log(this._model._windows[this._model.activeWindow])
-
-            console.log(actWindow ===this._model._windows[this._model.activeWindow])
             actWindow._view.windowDiv.style.zIndex = actWindow ===
             this._model._windows[this._model.activeWindow] ? '100' : (parseInt(actWindow._view.windowDiv.style.zIndex) - 1).toString()
 
@@ -73,8 +58,6 @@ class DesktopController {
     }
 
     static removeWindow(windowName) {
-        console.trace()
-        console.log(windowName)
         this._model.removeWindow(windowName)
     }
 

@@ -14,8 +14,8 @@ class Includer {
     }
 
     static getIncludableFileSourceFileNamesOnly(name) {
-        let files = this._model.getIncludableFileSource(name);
-        let fileNames = []
+        const files = this._model.getIncludableFileSource(name);
+        const fileNames = []
         files.forEach((group) => {
             group.fileNames.forEach((file) => {
                 fileNames.push(file)
@@ -53,13 +53,12 @@ class Includer {
      */
     static async startLoad() {
         return new Promise(async (resolve, reject) => {
-            let filesToLoad = this._model.filesToLoad
+            const filesToLoad = this._model.filesToLoad
             if (filesToLoad.length === 0)
                 resolve(true)
-            let res
             for (const file of filesToLoad) {
                 try {
-                    res = await this.loadScript(file)
+                    await this.loadScript(file)
                 } catch (e) {
                     Messenger.showAlert('file load failed: ' + e)
                     // alertPopup.showAlert('file load failed: ' + e)
@@ -77,10 +76,10 @@ class Includer {
      * fájl (konkrét) betöltése, load eseményhívás
      */
     static loadScript(file) {
-        let extension = file.split('.').pop().toLowerCase()
+        const extension = file.split('.').pop().toLowerCase()
         if (extension === 'js')
             return new Promise((resolve, reject) => {
-                let script = document.createElement("script");
+                const script = document.createElement("script");
                 script.type = "text/javascript";
                 script.src = file;
                 document.getElementsByTagName("head")[0].appendChild(script);
@@ -92,7 +91,7 @@ class Includer {
             })
         if (extension === 'css')
             return new Promise((resolve, reject) => {
-                let link = document.createElement('link');
+                const link = document.createElement('link');
                 link.rel = 'stylesheet';
                 link.type = 'text/css';
                 link.href = file;
@@ -104,7 +103,6 @@ class Includer {
                 }
                 link.onerror = () => reject(file)
             })
-        Z
     }
 
     /**

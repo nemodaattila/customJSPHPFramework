@@ -14,8 +14,8 @@ class Main {
             },
                 {
                     directory: CORE_FILE_DIR,
-                    fileNames: ['Messenger.js', 'HtmlElementCreator.js','EventSubscriptionHandler.js', 'ModuleLoader.js', 'ControllerParent.js'
-                        , 'ServiceParent.js', 'ServiceModelParent.js', 'RESTHandler.js', 'ViewParent.js'],
+                    fileNames: ['Messenger.js', 'HtmlElementCreator.js','EventSubscriptionHandler.js',
+                        'ModuleLoader.js', 'ControllerParent.js',  'RESTHandler.js', 'ViewParent.js'],
                 },
                 {
                     directory: WEB_DESKTOP_DIR,
@@ -24,11 +24,7 @@ class Main {
                 directory: MODULE_FILE_DIR + 'alertPopup',
                 fileNames: ['filesToInclude.js']
             }, {
-                directory: MODULE_FILE_DIR + 'dataListerTable',
-                fileNames: ['filesToInclude.js']
-            }
-                , {
-                directory: MODULE_FILE_DIR + 'dataHandlerTable',
+                directory: MODULE_FILE_DIR + 'entityHandler',
                 fileNames: ['filesToInclude.js']
             }
             ]
@@ -44,7 +40,7 @@ class Main {
         await Includer.loadFileSource('listerTableSearchConnector')
 
         await Includer.loadFileSource('dataHandlerTable')
-
+        await Includer.loadFileSource('dataServiceParent')
 
     }
 

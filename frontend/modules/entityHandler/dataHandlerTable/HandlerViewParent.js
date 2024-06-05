@@ -7,10 +7,10 @@ class HandlerViewParent extends ViewParent{
             this._buttonContainer = HtmlElementCreator.createSimpleHtmlElement('div', this._windowContentMainContainer, {class: 'buttonContainer'})
         //DO columncount
         // let columnCount = (this.windowContentPointer.content.inputPerRow ?? 1) * 2
-        let columnCount=2
+        const columnCount=2
 
         let cols = ''
-        for (let i = 0; i < columnCount; i++)
+        for (const i = 0; i < columnCount; i++)
             cols += ' 262px '
         let tds = [];
         let tr = sameLine === true && this._buttonContainer.childNodes.length !== 0 ? this._buttonContainer.lastChild : HtmlElementCreator.createSimpleHtmlElement('div', this._buttonContainer)
@@ -18,7 +18,7 @@ class HandlerViewParent extends ViewParent{
             tr.style.gridTemplateColumns += cols
         if (!sameLine) {
             tr.style.display = 'grid'
-            for (let i = 0; i < columnCount; i++)
+            for (const i = 0; i < columnCount; i++)
                 tds.push(HtmlElementCreator.createSimpleHtmlElement('div', tr, {class: 'tableCell'}))
         } else tds = this._buttonContainer.lastChild.children
         buttonParams.type = 'button';

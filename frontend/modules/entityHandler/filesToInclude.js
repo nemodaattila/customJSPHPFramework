@@ -1,6 +1,6 @@
 Includer.setIncludableFileSource(
     'dataHandlerTable', [{
-        directory: MODULE_FILE_DIR + 'dataHandlerTable',
+        directory: MODULE_FILE_DIR + 'entityHandler/dataHandlerTable',
         fileNames: [
             'HandlerTable.js',
             'HandlerTableView.js',
@@ -13,7 +13,7 @@ Includer.setIncludableFileSource(
 Includer.setIncludableFileSource(
     'listerTable', [
         {
-            directory: MODULE_FILE_DIR + 'dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
             fileNames: [
                 'ListerTable.js',
                 'ListerTableView.js',
@@ -25,7 +25,7 @@ Includer.setIncludableFileSource(
 Includer.setIncludableFileSource(
     'pageTurner', [
         {
-            directory: MODULE_FILE_DIR + 'dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
             fileNames: [
                 'PageTurnerController.js',
                 'PageTurner.css',
@@ -35,7 +35,7 @@ Includer.setIncludableFileSource(
     //DO rename
     'listerTableSearchConnector', [
         {
-            directory: MODULE_FILE_DIR + 'dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
             fileNames: [
                 'ListerTableSearchConnector.js',
             ]
@@ -43,7 +43,7 @@ Includer.setIncludableFileSource(
 Includer.setIncludableFileSource(
     'infinityScroller', [
         {
-            directory: MODULE_FILE_DIR + 'dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
             fileNames: [
                 'InfinityScrollerController.js',
                 'InfinityScroller.css',
@@ -52,7 +52,7 @@ Includer.setIncludableFileSource(
 Includer.setIncludableFileSource(
     'dataServiceParent', [
         {
-            directory: MODULE_FILE_DIR + 'dataServiceParent',
+            directory: MODULE_FILE_DIR + 'entityHandler/dataServiceParent',
             fileNames: [
                 'ServiceParent.js',
                 'DataServiceModelParent.js',

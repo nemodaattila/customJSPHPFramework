@@ -5,10 +5,10 @@ class WindowOpener {
         if (DesktopController.isWindowOpen(windowName)) {
         } else {
             // DesktopController.openWindow(moduleGroupName, moduleName,windowName)
-            let controller = await ModuleLoader.loadModule(moduleGroupName, moduleName)
+            const controller = await ModuleLoader.loadModule(moduleGroupName, moduleName)
             console.log('controller')
-            let tab = new DesktopWindowTabController(DesktopController.getTaskBarContainer())
-            let window = new DesktopWindowController(DesktopController.getWindowContainer())
+            const tab = new DesktopWindowTabController(DesktopController.getTaskBarContainer())
+            const window = new DesktopWindowController(DesktopController.getWindowContainer())
             window.setName(windowName)
             tab.windowPointer = window
             window.tabPointer = tab

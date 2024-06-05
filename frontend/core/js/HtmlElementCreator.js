@@ -38,12 +38,12 @@ class HtmlElementCreator {
             if (typeof type !== "string")
                 throw new Error('createHtmlSimpleElement type must be a string');
         }
-        let newDiv = document.createElement(type);
+        const newDiv = document.createElement(type);
         if ('innerHTML' in params) {
             newDiv.innerHTML = params.innerHTML
             delete params.innerHTML
         }
-        for (let key in params)
+        for (const key in params)
                 newDiv.setAttribute(key, params[key]);
 
         if (parent !== null)
@@ -64,7 +64,7 @@ class HtmlElementCreator {
         if (typeof type !== "object")
             throw new Error('createHtmlNestedElement type must be an array');
         let param, temp, returnObject;
-        for (let key in type)
+        for (const key in type)
             if (type.hasOwnProperty(key)) {
                 param = {}
                 if (parseInt(key) === type.length - 1) param = params;
@@ -86,8 +86,8 @@ class HtmlElementCreator {
     static addHeaderRowToTable(parentDOMElement, headerStrings) {
         if (parentDOMElement.nodeName !== "TABLE" && parentDOMElement.nodeName !== "THEAD")
             throw new Error('addHeaderRowToTable tableDOMElement must be a TABLE OR THEAD');
-        let row = HtmlElementCreator.createNestedHtmlElement(parentDOMElement.nodeName === 'TABLE' ? ['thead', 'tr'] : ['tr'], parentDOMElement)
-        for (let headerString of headerStrings)
+        const row = HtmlElementCreator.createNestedHtmlElement(parentDOMElement.nodeName === 'TABLE' ? ['thead', 'tr'] : ['tr'], parentDOMElement)
+        for (const headerString of headerStrings)
             HtmlElementCreator.createSimpleHtmlElement('th', row, {'innerHTML': headerString})
         return row
     }
@@ -103,7 +103,7 @@ class HtmlElementCreator {
      * @see addOptionToSelect
      */
     static createSelectWithOptions(parent, params = {}, options = [], addOptionValue = true, filterable = false) {
-        let newDiv = document.createElement("select");
+        const newDiv = document.createElement("select");
         if ('innerHTML' in params) {
             newDiv.innerHTML = params.innerHTML
             delete params.innerHTML
@@ -112,7 +112,7 @@ class HtmlElementCreator {
             newDiv.selectedIndex = params.selectedIndex
             delete params.selectedIndex
         }
-        for (let key in params)
+        for ( const key in params)
             if (params.hasOwnProperty(key))
                  newDiv.setAttribute(key, params[key]);
 
@@ -136,9 +136,9 @@ class HtmlElementCreator {
             addOptionValue = true;
         if (filterable)
             element.add(document.createElement("option"));
-        for (let i in options)
+        for (const i in options)
             if (options.hasOwnProperty(i)) {
-                let option = document.createElement("option");
+                const option = document.createElement("option");
                 if (addOptionValue)
                     option.value = i;
                 option.text = options[i];

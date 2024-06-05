@@ -20,13 +20,13 @@ class ModuleLoader {
             }]
         );
         await Includer.startLoad()
-        let moduleFiles = Includer.getIncludableFileSource(module)
+        const moduleFiles = Includer.getIncludableFileSource(module)
         let temp = await this.getComponent(moduleFiles, 'Controller')
         if (!temp) {
             Messenger.showAlert('controller file missing from: ' + moduleGroupName)
             return false
         }
-        let controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
+        const controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
         let serviceModel = undefined
         temp = await this.getComponent(moduleFiles, 'ServiceModel')
         if (temp)
@@ -34,7 +34,7 @@ class ModuleLoader {
 
         temp = await this.getComponent(moduleFiles, 'Service')
         if (temp) {
-            let service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
+            const service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
             if (serviceModel)
                 service.model = serviceModel
             await service.init()
@@ -124,7 +124,7 @@ class ModuleLoader {
 
     static getComponent(files, componentName) {
         let fileIndex
-        let groupIndex = files.findIndex((group) => {
+        const groupIndex = files.findIndex((group) => {
             if (group.fileNames.length === 0)
                 return false
             fileIndex = group.fileNames.findIndex((file) => {
@@ -133,7 +133,7 @@ class ModuleLoader {
             return fileIndex >= 0
         })
         if (groupIndex === -1) return false
-        let data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
+        const data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
         delete files[groupIndex].fileNames[fileIndex];
         files[groupIndex].fileNames = files[groupIndex].fileNames.filter((val) => val !== null);
         return data

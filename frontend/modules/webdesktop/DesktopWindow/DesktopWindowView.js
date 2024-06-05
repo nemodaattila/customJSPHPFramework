@@ -62,43 +62,43 @@ class DesktopWindowView {
             class: 'zoom', title: 'Nagyítás',
         })
         this.zoomDiv.addEventListener('mousedown', (event) => event.stopPropagation())
-        let zoomChanger = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
+        const zoomChangerIcon = HtmlElementCreator.createHtmlElement('input', this.zoomDiv, {
             type: 'range', step: "0.1", min: "0.5", max: "2", class: "zoomInput", value: "1"
         })
-        this._zoomChanger = zoomChanger
-        zoomChanger.addEventListener('change', (event) => {
+        this._zoomChanger = zoomChangerIcon
+        zoomChangerIcon.addEventListener('change', (event) => {
             event.stopPropagation()
-            this.zoomWindow(zoomChanger.value)
+            this.zoomWindow(zoomChangerIcon.value)
         })
-        let zoomIconDiv = HtmlElementCreator.createHtmlElement('div', this.zoomDiv, {
+        const zoomIconDiv = HtmlElementCreator.createHtmlElement('div', this.zoomDiv, {
             class: "zoomIcon"
         })
         zoomIconDiv.addEventListener('click', () => {
-            zoomChanger.value = 1
-            zoomChanger.dispatchEvent(new window.Event('change', {bubbles: true}))
+            zoomChangerIcon.value = 1
+            zoomChangerIcon.dispatchEvent(new window.Event('change', {bubbles: true}))
         })
-        let pinner = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
+        const pinnerIcon = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'pin', title: 'Rögzítés mint legfelső ablak',
         })
-        pinner.addEventListener('click', (event) => {
+        pinnerIcon.addEventListener('click', (event) => {
             event.stopPropagation()
             this.windowDiv.classList.toggle('pinned')
         })
-        let miniaturizer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
+        const miniaturizerIcon = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'miniaturise', title: 'kis méret',
         })
-        miniaturizer.addEventListener('click', (event) => {
+        miniaturizerIcon.addEventListener('click', (event) => {
             event.stopPropagation()
             this.miniaturizeWindow()
         })
-        let maximalizer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
+        const maximalizerIcon = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'maximise', title: 'Teljes méret',
         })
-        maximalizer.addEventListener('click', () => this.maximizeWindow())
-        let closer = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
+        maximalizerIcon.addEventListener('click', () => this.maximizeWindow())
+        const closerIcon = HtmlElementCreator.createHtmlElement('div', this._windowHeaderDiv, {
             class: 'close', title: 'Bezárás',
         })
-        closer.addEventListener('click', (event) => {
+        closerIcon.addEventListener('click', (event) => {
             event.stopPropagation()
             this._controllerPointer.close()
         })

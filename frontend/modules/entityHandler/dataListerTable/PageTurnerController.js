@@ -6,11 +6,11 @@ class PageTurnerController {
     constructor(listerTable, controllerPointer,searchConnector) {
         this._searchConnector = searchConnector
         this._listerControllerPointer = controllerPointer
-       let container =  listerTable.getTableContainerFooter()
+       const container =  listerTable.getTableContainerFooter()
         listerTable.getTableContainerBody().firstChild.style.height="calc(100% - 60px)";
         listerTable.getTableContainerBody().firstChild.style.overflow="auto";
         container.style.height =  "30px";
-        let navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
+        const navContainer = HtmlElementCreator.createHtmlElement("div", container, {"class": "pagerNavContainer"});
         this._navElements['first'] = HtmlElementCreator.createHtmlElement("span", navContainer, {
             "class": "navLink",
             "innerHTML": "Első"
@@ -38,7 +38,7 @@ class PageTurnerController {
     }
 
     destruct() {
-        let parent = this._navElements['first'].parentElement
+        const parent = this._navElements['first'].parentElement
         console.log(this._navElements)
         HtmlElementCreator.emptyDOMElement(parent);
         parent.parentElement.remove()

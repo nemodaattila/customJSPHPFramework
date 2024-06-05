@@ -66,19 +66,17 @@ class RESTHandler {
             this.postFields = params.values
 
         return new Promise(async (resolve, reject) => {
-            let request = new XMLHttpRequest();
+            const request = new XMLHttpRequest();
             request.open(this._requestType, this._targetUrl, true);
             if (this._customHeader !== [])
-                for (let [name, value] of this._customHeader)
+                for (const [name, value] of this._customHeader)
                     request.setRequestHeader(name, value);
             request.onreadystatechange = () => {
-                let resultData
                 if (request.readyState !== 4)
                     return;
                 if (request.status !== 200 && request.status !== 304) {
                     try {
-                        let resp = JSON.parse(request.response);
-                        Messenger.showAlert(resp.errorMessage);
+                        Messenger.showAlert(JSON.parse(request.response).errorMessage);
                         // if (resp.errorMessage === 'AUTHERROR') {
                         //     AuthService.onLogout()
                         //     window.location.reload()
@@ -90,11 +88,10 @@ class RESTHandler {
                     }
                 } else {
                     try {
-                        resultData = JSON.parse(request.responseText);
+                        resolve(JSON.parse(request.responseText));
                     } catch (e) {
-                        resultData = request.responseText;
+                         resolve(request.responseText);
                     }
-                    resolve(resultData);
                 }
             };
             if (request.readyState === 4)
@@ -103,7 +100,7 @@ class RESTHandler {
                 request.send()
             } else {
                 let param = "";
-                for (let key in this._postFields)
+                for (const key in this._postFields)
                     if (this._postFields.hasOwnProperty(key)) {
                         param += key + "=" + this._postFields[key];
                         param += "&"

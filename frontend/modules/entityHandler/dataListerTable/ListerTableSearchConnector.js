@@ -75,7 +75,7 @@ class ListerTableSearchConnector {
     }
 
     hidePageElementsAccordingToPageNum(hasNext) {
-        let pageNum = Math.floor(this._orderAndLimitParameterObject.offset / this._orderAndLimitParameterObject.limit) + 1
+        const pageNum = Math.floor(this._orderAndLimitParameterObject.offset / this._orderAndLimitParameterObject.limit) + 1
         this._offsetSourceObject?.hideElementsAccordingToPageNum(pageNum, hasNext)
     }
 
@@ -85,9 +85,7 @@ class ListerTableSearchConnector {
     }
 
     async setOffset(num, maxChange = false) {
-        let rows = this._offsetSourceObject.getNewOffsetForScroll(num)
-        console.log(rows)
-        this._orderAndLimitParameterObject.offset = rows;
+        this._orderAndLimitParameterObject.offset = this._offsetSourceObject.getNewOffsetForScroll(num)
         await this._controllerPointer.refreshRows({maxValueChange: maxChange})
         // this.windowContentPointer.increaseScrollHeight()
     }

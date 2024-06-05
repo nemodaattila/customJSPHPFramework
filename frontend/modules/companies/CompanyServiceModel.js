@@ -1,4 +1,4 @@
-class CompanyServiceModel extends ServiceModelParent {
+class CompanyServiceModel extends DataServiceModelParent {
     _companyTypes = {0: 'Nem vevő'}
 
     _moduleDirName = "companies"
@@ -21,10 +21,14 @@ class CompanyServiceModel extends ServiceModelParent {
         return this._selectedId;
     }
 
-    _selectedRecord = null
-    get selectedRecord() {
-        return this._selectedRecord;
+    set selectedId(value) {
+        this._selectedId = value;
     }
+
+    // _selectedRecord = null
+    // get selectedRecord() {
+    //     return this._selectedRecord;
+    // }
 
     _moduleParams = {
         lister: {

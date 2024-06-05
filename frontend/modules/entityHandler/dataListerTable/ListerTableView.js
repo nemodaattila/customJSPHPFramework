@@ -7,7 +7,7 @@ class ListerTableView {
     _dataTable
     _tHead
     _tableIconContainer
-    _iconPath = "./modules/dataListerTable/"
+    _iconPath = "./modules/entityHandler/dataListerTable/"
     _headerRow
     _filterRow
     _filterInputs = {}
@@ -163,7 +163,7 @@ class ListerTableView {
         this._tableIconContainer = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
         if (enabledOperations.creator)
         {
-            let creatorIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+            const creatorIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
                 src: this._iconPath + '/add_new_icon.png', class: 'tableIcon', title: 'Új rekord felvétele'
             })
             creatorIcon.addEventListener('click', async (event) => {
@@ -172,37 +172,37 @@ class ListerTableView {
                 this._controllerPointer.operationIconClicked('creator');
             })
         }
-        let editor = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+        const editorIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
         })
         if (enabledOperations.edit)
-            editor.addEventListener('click', (event) => {
+            editorIcon.addEventListener('click', (event) => {
                 event.stopPropagation()
                 this.showDetailed()
             })
-        let eraser = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+        const eraserIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'del_icon.png', class: 'tableIcon', title: 'Kijelölt rekord(ok) törlése'
         })
         if (enabledOperations.deletable)
-            eraser.addEventListener('click', (event) => {
+            eraserIcon.addEventListener('click', (event) => {
                 event.stopPropagation()
                 this.service.sendDeleteRequest(this.selectedRows.map(row => row.connectedObjectId))
             })
-        let printer = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+        const printerIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'print_icon.png',
             class: 'tableIcon',
             title: 'Megjelenített rekordok exportálása csv-be'
         })
-        printer.addEventListener('click', (event) => {
+        printerIcon.addEventListener('click', (event) => {
             event.stopPropagation()
             this.exportTableContentToCsv()
         })
-        let refresher = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
+        const refresherIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'refresh_icon.png',
             class: 'tableIcon',
             title: 'Tábla tartalom frissítése'
         })
-        refresher.addEventListener('click', (event) => {
+        refresherIcon.addEventListener('click', (event) => {
             event.stopPropagation()
             this._controllerPointer.refreshRows()
             // clearInterval(this.interval)
@@ -211,19 +211,19 @@ class ListerTableView {
     }
 
     addColumnMoveEnabler() {
-        let columnMoveEnablerDiv = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
+        const columnMoveEnablerDiv = HtmlElementCreator.createHtmlElement('div', this._operationDiv)
         this._columnMoveEnablerCB = HtmlElementCreator.createHtmlElement('input', columnMoveEnablerDiv, {
             type: 'checkbox', id: "enableColumnMove" + this._id
         })
-        let moveLabel = HtmlElementCreator.createHtmlElement('label', columnMoveEnablerDiv, {
+        const moveLabel = HtmlElementCreator.createHtmlElement('label', columnMoveEnablerDiv, {
             for: "enableColumnMove" + this._id
         })
         HtmlElementCreator.createHtmlElement('img', moveLabel, {
             src: this._iconPath + 'column_mover.png', class: 'tableIcon', title: 'Oszlop mozgatás engedélyezése'
         })
         this._columnMoveEnablerCB.addEventListener('change', () => this.changeCursor())
-        let columnHiderParent = HtmlElementCreator.createHtmlElement('span', columnMoveEnablerDiv, {})
-        let columnHider = HtmlElementCreator.createHtmlElement('img', columnHiderParent, {
+        const columnHiderParent = HtmlElementCreator.createHtmlElement('span', columnMoveEnablerDiv, {})
+        const columnHider = HtmlElementCreator.createHtmlElement('img', columnHiderParent, {
             src: this._iconPath + 'column_editor.png',
             class: 'tableIcon',
             title: 'Oszlopok megjelenítése/elrejtése'
@@ -254,13 +254,10 @@ class ListerTableView {
             content.push(rowContent)
         })
         content = content.join("\n")
-        let blob = new Blob(["\uFEFF" + content], {type: 'text/csv;charset=utf-8;'});
-        let url = URL.createObjectURL(blob);
-        let pom = document.createElement('a');
-        pom.href = url;
+        const pom = document.createElement('a');
+        pom.href = URL.createObjectURL(new Blob(["\uFEFF" + content], {type: 'text/csv;charset=utf-8;'}));
         pom.setAttribute('download', 'tableContent.csv');
         pom.click();
-        blob = null
     }
 
     changeCursor() {
@@ -274,12 +271,12 @@ class ListerTableView {
             HtmlElementCreator.emptyDOMElement(this._tHead)
         this._headerRow = HtmlElementCreator.createHtmlElement('tr', this._tHead)
         attributeOrder.forEach((columnName) => {
-            let modelParams = attributeParams[columnName]
-            let th = HtmlElementCreator.createHtmlElement('th', this._headerRow, {})
+            const modelParams = attributeParams[columnName]
+            const th = HtmlElementCreator.createHtmlElement('th', this._headerRow, {})
             th.setAttribute('moveCheckBoxName', 'hcb-' + this._id + "-" + columnName)
             th.addEventListener('mousedown', (event) =>
                 this.startMoveTh(event, th))
-            let orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
+            const orderDiv = HtmlElementCreator.createHtmlElement('div', th, {})
             if (((!('sortable' in modelParams)) || (modelParams['sortable'] ))) {
                 orderDiv.classList.add('order')
                 if (columnName === defaultOrderParamName) {
@@ -290,13 +287,13 @@ class ListerTableView {
                     this.initSorting(columnName, orderDiv)
                 })
             }
-            let nameDiv = HtmlElementCreator.createHtmlElement('div', th, {
+            HtmlElementCreator.createHtmlElement('div', th, {
                 class: 'text',
                 innerHTML: modelParams?.label ?? columnName
             })
             if (this._columnMoveEnablerCB.checked)
                 th.style.cursor = 'grab'
-            let resizeElement = HtmlElementCreator.createHtmlElement('div', th,
+            const resizeElement = HtmlElementCreator.createHtmlElement('div', th,
                 {class: 'resize'})
             resizeElement.addEventListener('mousedown', (event) => {
                 event.stopImmediatePropagation()
@@ -309,8 +306,8 @@ class ListerTableView {
             })
             if (isReDraw)
                 return
-            let span = HtmlElementCreator.createSimpleHtmlElement('span', this.columnHiderDiv,)
-            let hcb = HtmlElementCreator.createSimpleHtmlElement('input', span, {
+            const span = HtmlElementCreator.createSimpleHtmlElement('span', this.columnHiderDiv,)
+            const hcb = HtmlElementCreator.createSimpleHtmlElement('input', span, {
                 type: 'checkbox',
                 id: 'hcb-' + this._id + "-" + columnName,
                 checked: 'checked'
@@ -358,12 +355,12 @@ class ListerTableView {
     resizeThOptimal(event, object) {
         let minAutoWidth = 128;
         let actWidth
-        let num = object.cellIndex
+        const num = object.cellIndex
         Object.values(this._rows).forEach(row => {
             actWidth = this.getTextWidth(row.children[num])
             minAutoWidth = Math.max(actWidth, minAutoWidth)
         })
-        let columnWith = (minAutoWidth + 10) + "px"
+        const columnWith = (minAutoWidth + 10) + "px"
         object.style.width = columnWith;
         this._filterRow.children[num].style.width = columnWith
         Object.values(this._rows).forEach(row => {
@@ -372,10 +369,10 @@ class ListerTableView {
     }
 
     getTextWidth(element) {
-        let canvas = document.createElement("canvas");
-        let context = canvas.getContext("2d");
-        let fontSize = window.getComputedStyle(element).getPropertyValue("font-size");
-        let fontFamily = window.getComputedStyle(element).getPropertyValue("font-family");
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const fontSize = window.getComputedStyle(element).getPropertyValue("font-size");
+        const fontFamily = window.getComputedStyle(element).getPropertyValue("font-family");
         context.font = fontSize + " " + fontFamily
         return context.measureText(element.textContent).width;
     }
@@ -394,13 +391,13 @@ class ListerTableView {
     moveResizeTh(event) {
         if (!this._reSizeObject)
             return
-        let newX = event.pageX || event.clientX;
-        let newY = event.pageY || event.clientY;
+        const newX = event.pageX || event.clientX;
+        const newY = event.pageY || event.clientY;
         this._reSizeObject.resizeWidth = parseInt(this._reSizeObject.resizeWidth, 10) + ((newX - this._reSizeObject.mouseX) / this._reSizeObject.zoomVal);
         this._reSizeObject.object.style.width = this._reSizeObject.resizeWidth + "px";
         this._reSizeObject.mouseX = newX;
         this._reSizeObject.mouseY = newY;
-        let num = this._reSizeObject.object.cellIndex
+        const num = this._reSizeObject.object.cellIndex
         this._filterRow.children[num].style.width = this._reSizeObject.resizeWidth + "px"
         Object.values(this._rows).forEach(row => {
             row.children[num].style.width = this._reSizeObject.resizeWidth + "px";
@@ -410,7 +407,7 @@ class ListerTableView {
     endResizeTh(event) {
         if (!this._reSizeObject)
             return
-        let num = this._reSizeObject.object.cellIndex
+        const num = this._reSizeObject.object.cellIndex
         this._filterRow.children[num].style.width = this._reSizeObject.resizeWidth + "px"
         Object.values(this._rows).forEach(row => {
             row.children[num].style.width = this._reSizeObject.resizeWidth + "px";
@@ -429,9 +426,9 @@ class ListerTableView {
         this._inMoveTh.objectPos = headerObject.getBoundingClientRect();
         // this.inMoveTh.moveCbChecked = tableObject.moveEnablerCB.checked;
         // let zoomVal = window.getComputedStyle(tableObject.tableDiv).zoom;
-        let zoomVal = this.getZoom()
+        const zoomVal = this.getZoom()
         if ((this._inMoveTh.objectPos.x + this._inMoveTh.objectPos.width - 10) * zoomVal > this._inMoveTh.mouseX) {
-            let floatingHeader = HtmlElementCreator.createHtmlElement('div',
+            const floatingHeader = HtmlElementCreator.createHtmlElement('div',
                 this._headerRow)
             floatingHeader.style.background = "lightgray";
             floatingHeader.style.border = "2px solid rgb(0,0,0)";
@@ -448,7 +445,7 @@ class ListerTableView {
             // floatingHeader.tableParent = tableObject.tableDiv
             // floatingHeader.tableHeadPointer = tableObject.tHead
             // floatingHeader.tableBodyPointer = tableObject.tBody
-            for (let row of this._dataTable.rows)
+            for (const row of this._dataTable.rows)
                 if (row.cells && row.cells[headerObject.cellIndex])
                     row.cells[headerObject.cellIndex].style.display = "none";
             this._inMoveTh.object = floatingHeader;
@@ -459,13 +456,13 @@ class ListerTableView {
     moveTh(event) {
         if (!this._inMoveTh)
             return
-        let newX = event.pageX || event.clientX;
-        let newY = event.pageY || event.clientY;
+        const newX = event.pageX || event.clientX;
+        const newY = event.pageY || event.clientY;
         this._inMoveTh.object.style.left =
             parseInt(this._inMoveTh.object.style.left, 10) +
             ((newX - this._inMoveTh.mouseX) / this._inMoveTh.object.zoomVal) + 'px';
         let swapCellIndex = 0;
-        let inMove = this._inMoveTh.object
+        const inMove = this._inMoveTh.object
         Array.from(this._headerRow.children).forEach((head, i) => {
             if (head.nodeName === 'DIV')
                 return
@@ -492,7 +489,7 @@ class ListerTableView {
     endMoveTh(event) {
         if (!this._inMoveTh)
             return
-        let inMoveTh = this._inMoveTh.object
+        const inMoveTh = this._inMoveTh.object
         let swapCellIndex = 0;
         console.dir(inMoveTh)
         Array.from(this._headerRow.children).forEach((head, i) => {
@@ -543,10 +540,10 @@ class ListerTableView {
         this._filterInputs = {}
         attributeOrder.forEach(id => {
 
-            let modelParams = attributeParams[id]
-            let td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
-            let filter = modelParams?.type ?? 'string'
-            switch (filter) {
+            const modelParams = attributeParams[id]
+            const td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
+            const filterType = modelParams?.type ?? 'string'
+            switch (filterType) {
                 case 'number':
                 case 'bigint':
                 case 'decimal':
@@ -580,7 +577,7 @@ class ListerTableView {
                         }, true),
                         HtmlElementCreator.createSimpleHtmlElement('input', td, {
                             type: (['string', 'char', 'longtext', 'mediumtext', 'text', 'tinytext', 'varchar'].findIndex(
-                                value => filter === value) === -1) ? "number" : 'text',
+                                value => filterType === value) === -1) ? "number" : 'text',
                             min: 0,
                             size: 20,
                         })
@@ -600,7 +597,7 @@ class ListerTableView {
                             notnull: 'Nem üres',
                         }, true),
                         HtmlElementCreator.createSelectWithOptions(td, {},
-                            modelParams.values, filter === 'select', true)
+                            modelParams.values, filterType === 'select', true)
                     ];
                     break;
                 case 'date':
@@ -625,7 +622,7 @@ class ListerTableView {
                 case 'none':
                     break
                 default:
-                    console.log('unkown filtertype: ' + filter)
+                    console.log('unkown filtertype: ' + filterType)
             }
             if (modelParams) {
                 if (modelParams['defaultValue'] && !modelParams.hidden)
@@ -660,7 +657,7 @@ class ListerTableView {
         row.setAttribute("recordId", id)
         this._rows.push(row)
         attributes.forEach(([value, type, paramName],key) => {
-            let td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+            const td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
             td.style.width=this._headerRow.children[key].style.width
             if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
                 td.classList.add('rightAlign')

@@ -7,7 +7,6 @@ class DesktopModel {
     }
 
     set activeWindow(value) {
-        console.trace()
         this._activeWindow = value;
     }
 
@@ -43,7 +42,6 @@ class DesktopModel {
     }
 
     activateWindow(windowName) {
-        console.log(windowName)
         this._windows[windowName].activateWindow()
     }
 

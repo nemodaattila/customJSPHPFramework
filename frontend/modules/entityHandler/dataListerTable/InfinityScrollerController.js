@@ -18,11 +18,11 @@ class InfinityScrollerController {
     constructor(listerTable, controllerPointer,searchConnector) {
         this._searchConnector=searchConnector
         this._listerControllerPointer = controllerPointer
-        let tableContainerBody = listerTable.getTableContainerBody()
+        const tableContainerBody = listerTable.getTableContainerBody()
         tableContainerBody.classList.add('scrollContainer')
-        let tableDOMContainer=tableContainerBody.firstChild
+        const tableDOMContainer=tableContainerBody.firstChild
         tableDOMContainer.classList.add('scrollTableContainer')
-        let tBody = tableDOMContainer.getElementsByTagName('tbody')[0]
+        // let tBody = tableDOMContainer.getElementsByTagName('tbody')[0]
         // tHead.style.position='sticky'
         // let tableDOM = tableDOMContainer.firstChild
         // tableDOM.classList.add('scrollTable')
@@ -32,17 +32,17 @@ class InfinityScrollerController {
 
 
         let lastScrollTop = 0;
-        let newScrollTop
+        // let newScrollTop
         tableContainerBody.addEventListener('scroll', async () => {
             clearTimeout(this._scrollTimer);
             this._scrollTimer = setTimeout(async () =>
             {
-                newScrollTop = tableContainerBody.scrollTop
+                const newScrollTop = tableContainerBody.scrollTop
                 if (newScrollTop === lastScrollTop)
                     return
                 await this._searchConnector.setOffset()
                 if (newScrollTop > lastScrollTop) {
-                    let scrollPercent = this.getScrollPercent()
+                    const scrollPercent = this.getScrollPercent()
                     if (isNaN(scrollPercent))
                         scrollPercent = 100
                     if (scrollPercent > 80) {
