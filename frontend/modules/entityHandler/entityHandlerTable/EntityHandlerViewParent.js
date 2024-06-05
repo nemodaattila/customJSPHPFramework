@@ -2,6 +2,14 @@ class EntityHandlerViewParent extends ViewParent{
 
     _buttonContainer
 
+    addIdLabel(idLabelText)
+    {
+        HtmlElementCreator.createSimpleHtmlElement('caption', this._windowContentMainContainer, {
+            innerHTML: 'Kiválasztott rekord(ok): ' + idLabelText,
+            class: 'recordIdIndicator'
+        })
+    }
+
     addButtonContainer(columnNum, buttonParams, onclickEvent, sameLine = false) {
         if (!this._buttonContainer)
             this._buttonContainer = HtmlElementCreator.createSimpleHtmlElement('div', this._windowContentMainContainer, {class: 'buttonContainer'})

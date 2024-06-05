@@ -15,9 +15,9 @@ class EntityHandlerControllerParent extends ControllerParent{
         super();
         this._type = type
         this._multiple = this._type === 'multipleEditor'
-        if (this._type === 'editor') {
-            this.getOneEntity()
-        }
+        // if (this._type === 'editor') {
+        //     this.getOneEntity()
+        // }
         // else
         //     this.init()
     }
@@ -39,7 +39,16 @@ class EntityHandlerControllerParent extends ControllerParent{
 
      displayView(windowBody) {
         this._serviceModelPointer = this.service.model
-        this._view.addComponent('handlerTable', new EntityHandlerTableController(this.getWindowContentMainContainer(), this), this._type)
+         console.log({...this._serviceModelPointer})
+
+         console.log(this._serviceModelPointer.selectedIds.length)
+         if (this._serviceModelPointer.selectedIds.length !== 0) {
+             let idLabel = this._serviceModelPointer.selectedIds.length === 1 ?
+                 this._serviceModelPointer.selectedIds[0]:
+                 this._serviceModelPointer.selectedIds.join(', ')
+                this._view.addIdLabel(idLabel)
+         }
+         this._view.addComponent('handlerTable', new EntityHandlerTableController(this.getWindowContentMainContainer(), this), this._type)
          console.log(this)
         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         //
