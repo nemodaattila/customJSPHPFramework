@@ -4,6 +4,11 @@ class EntityServiceModelParent {
     _tableHeaderAttributes = {}
 
     _selectedIds = []
+
+    constructor() {
+        // console.trace()
+        console.log('modelInit')
+    }
     get selectedIds() {
         return this._selectedIds;
     }
@@ -27,6 +32,10 @@ class EntityServiceModelParent {
     _loaded = false
     set loaded(value) {
         this._loaded = value;
+    }
+
+    get loaded() {
+        return this._loaded;
     }
 
     _tableHeaderAttributeOrder = undefined

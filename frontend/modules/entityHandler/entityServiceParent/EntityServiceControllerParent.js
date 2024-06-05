@@ -1,15 +1,32 @@
 /**
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
-class EntityServiceParent {
-    static _instance
+class EntityServiceControllerParent {
+    static _instance = undefined
     _restParameter = undefined
 
     constructor() {
-        if (self._instance)
-            self._instance = this;
 
-        return self._instance;
+        // if (self._instance) {
+        //     self._instance = this;
+        //     console.log({...self._instance})
+        //
+        //
+        // }
+        console.log(self._instance)
+        // return self._instance;
+        console.log(this.constructor.name)
+        console.log(performance.now())
+        console.trace()
+
+        if(self._instance !== undefined)
+            return self._instance;
+        self._instance = this;
+        console.log({...self._instance})
+        // if(this.constructor.instance)
+        //     return this.constructor.instance;
+        // this.constructor.instance = this;
+
     }
 
     _model

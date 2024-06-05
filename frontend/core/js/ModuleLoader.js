@@ -27,17 +27,24 @@ class ModuleLoader {
             return false
         }
         const controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
-        let serviceModel = undefined
-        temp = await this.getComponent(moduleFiles, 'ServiceModel')
-        if (temp)
-            serviceModel = new (eval(await this.loadFile(temp)))()
+        console.log(performance.now())
+        console.trace()
+        console.log(controller.constructor.name)
+
 
         temp = await this.getComponent(moduleFiles, 'Service')
         if (temp) {
             const service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
-            if (serviceModel)
-                service.model = serviceModel
-            await service.init()
+            console.log(service.model)
+            if (service.model === undefined) {
+                let serviceModel = undefined
+                temp = await this.getComponent(moduleFiles, 'ServiceModel')
+                if (temp)
+                    serviceModel = new (eval(await this.loadFile(temp)))()
+                if (serviceModel)
+                    service.model = serviceModel
+                await service.init()
+            }
             controller.service = service
         }
         temp = await this.getComponent(moduleFiles, 'View')
@@ -134,7 +141,7 @@ class ModuleLoader {
         })
         if (groupIndex === -1) return false
         const data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
-        delete files[groupIndex].fileNames[fileIndex];
+        // delete files[groupIndex].fileNames[fileIndex];
         files[groupIndex].fileNames = files[groupIndex].fileNames.filter((val) => val !== null);
         return data
     }
