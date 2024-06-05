@@ -1,4 +1,4 @@
-class CompanyCreatorController extends HandlerControllerParent {
+class CompanyCreatorController extends EntityHandlerControllerParent {
 
      constructor(module) {
           super('creator');

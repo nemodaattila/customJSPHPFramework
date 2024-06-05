@@ -1,4 +1,4 @@
-class ListerControllerParent extends ControllerParent {
+class EntityListerControllerParent extends ControllerParent {
     _type = 'lister'
     // _searchAndOrderParameters
     _pageTurnerType = 'infinityScroller'
@@ -11,7 +11,7 @@ class ListerControllerParent extends ControllerParent {
         //DO check zoom with search and scroll
         super.init()
         console.log(this)
-        this._searchParamConnector = new ListerTableSearchConnector()
+        this._searchParamConnector = new EntityListerTableSearchConnector()
         this._searchParamConnector.orderAndLimitParameterObject = new SearchAndOrderParameters()
         this._searchParamConnector.defaultRowHeight = this._rowHeight
         this._searchParamConnector.controllerPointer = this;
@@ -44,7 +44,7 @@ class ListerControllerParent extends ControllerParent {
     async displayView() {
         this._serviceModelPointer = this.service.model
         this.setHeaderAttributeOrder()
-        const listerTable = new ListerTable(this)
+        const listerTable = new EntityListerTableController(this)
         this._view.addComponent('listerTable', listerTable)
         listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
@@ -179,7 +179,7 @@ class ListerControllerParent extends ControllerParent {
     }
 
     async operationIconClicked(operationType) {
-        // await Includer.loadFileSource('dataHandlerTable')
+        // await Includer.loadFileSource('entityHandlerTable')
         console.log(this)
         switch (operationType) {
             case 'creator':

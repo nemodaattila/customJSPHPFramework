@@ -1,4 +1,4 @@
-class ListerTable {
+class EntityListerTableController {
     static _id = -1
     _view
     _interval // refreshInterval
@@ -10,8 +10,8 @@ class ListerTable {
     _dblClickTimer = false
 
     constructor(controllerPointer) {
-        ListerTable._id++
-        this._view = new ListerTableView(ListerTable._id, controllerPointer.getWindowContentMainContainer(), this)
+        EntityListerTableController._id++
+        this._view = new EntityListerTableView(EntityListerTableController._id, controllerPointer.getWindowContentMainContainer(), this)
         this._view.displayTableElements()
         this._controllerPointer = controllerPointer
         this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
@@ -731,7 +731,7 @@ class ListerTable {
 //             headerStats.headerParams.push([name, headerRow.children[num].style.width])
 //             headerStats.order = this.actualSort
 //         })
-//         ServiceParent.sendSaveTableHeaderParams(this.content.serviceTable, headerStats)
+//         EntityServiceParent.sendSaveTableHeaderParams(this.content.serviceTable, headerStats)
 //     }
 //
 //     /**

@@ -1,4 +1,4 @@
-class HandlerViewParent extends ViewParent{
+class EntityHandlerViewParent extends ViewParent{
 
     _buttonContainer
 

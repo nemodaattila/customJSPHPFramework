@@ -1,7 +1,7 @@
 /**
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
-class ServiceParent {
+class EntityServiceParent {
     static _instance
     _restParameter = undefined
 

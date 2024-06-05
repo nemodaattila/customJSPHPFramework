@@ -1,4 +1,4 @@
-class CompanyServiceModel extends DataServiceModelParent {
+class CompanyServiceModel extends EntityDataServiceModelParent {
     _companyTypes = {0: 'Nem vevő'}
 
     _moduleDirName = "companies"

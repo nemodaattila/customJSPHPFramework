@@ -1,4 +1,4 @@
-class ListerTableSearchConnector {
+class EntityListerTableSearchConnector {
     _defaultRowHeight
     set defaultRowHeight(value) {
         this._defaultRowHeight = value;

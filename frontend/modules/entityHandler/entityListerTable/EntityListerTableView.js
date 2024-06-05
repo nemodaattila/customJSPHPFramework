@@ -1,4 +1,4 @@
-class ListerTableView {
+class EntityListerTableView {
     _columnMoveEnablerCB
     _mainContainer
     _operationDiv
@@ -7,7 +7,7 @@ class ListerTableView {
     _dataTable
     _tHead
     _tableIconContainer
-    _iconPath = "./modules/entityHandler/dataListerTable/"
+    _iconPath = "./modules/entityHandler/entityListerTable/"
     _headerRow
     _filterRow
     _filterInputs = {}

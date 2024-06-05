@@ -1,4 +1,4 @@
-class DataServiceModelParent {
+class EntityDataServiceModelParent {
     _records = {}
 
     _tableHeaderAttributes = {}

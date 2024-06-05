@@ -1,4 +1,4 @@
-class HandlerControllerParent extends ControllerParent{
+class EntityHandlerControllerParent extends ControllerParent{
     /**
      * több adatot kezel?
      * @type {boolean}
@@ -34,12 +34,12 @@ class HandlerControllerParent extends ControllerParent{
     onDesktopWindowResize() {}
 
     init(){
-        this._view = new HandlerViewParent()
+        this._view = new EntityHandlerViewParent()
     }
 
      displayView(windowBody) {
         this._serviceModelPointer = this.service.model
-        this._view.addComponent('handlerTable', new HandlerTable(this.getWindowContentMainContainer(), this), this._type)
+        this._view.addComponent('handlerTable', new EntityHandlerTableController(this.getWindowContentMainContainer(), this), this._type)
          console.log(this)
         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
         //

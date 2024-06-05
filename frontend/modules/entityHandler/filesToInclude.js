@@ -1,31 +1,31 @@
 Includer.setIncludableFileSource(
-    'dataHandlerTable', [{
-        directory: MODULE_FILE_DIR + 'entityHandler/dataHandlerTable',
+    'entityHandlerTable', [{
+        directory: MODULE_FILE_DIR + 'entityHandler/entityHandlerTable',
         fileNames: [
-            'HandlerTable.js',
-            'HandlerTableView.js',
-            'HandlerTable.css',
+            'EntityHandlerTableController.js',
+            'EntityHandlerTableView.js',
+            'EntityHandlerTable.css',
             // 'SearchAndOrderParameters.js',
-            'HandlerControllerParent.js',
-            'HandlerViewParent.js'
+            'EntityHandlerControllerParent.js',
+            'EntityHandlerViewParent.js'
         ]
     }])
 Includer.setIncludableFileSource(
     'listerTable', [
         {
-            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
             fileNames: [
-                'ListerTable.js',
-                'ListerTableView.js',
-                'ListerTable.css',
+                'EntityListerTableController.js',
+                'EntityListerTableView.js',
+                'EntityListerTable.css',
                 'SearchAndOrderParameters.js',
-                'ListerControllerParent.js'
+                'EntityListerControllerParent.js'
             ]
         }])
 Includer.setIncludableFileSource(
     'pageTurner', [
         {
-            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
             fileNames: [
                 'PageTurnerController.js',
                 'PageTurner.css',
@@ -35,26 +35,26 @@ Includer.setIncludableFileSource(
     //DO rename
     'listerTableSearchConnector', [
         {
-            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
             fileNames: [
-                'ListerTableSearchConnector.js',
+                'EntityListerTableSearchConnector.js',
             ]
         }])
 Includer.setIncludableFileSource(
     'infinityScroller', [
         {
-            directory: MODULE_FILE_DIR + 'entityHandler/dataListerTable',
+            directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
             fileNames: [
                 'InfinityScrollerController.js',
                 'InfinityScroller.css',
             ]
         }])
 Includer.setIncludableFileSource(
-    'dataServiceParent', [
+    'entityServiceParent', [
         {
-            directory: MODULE_FILE_DIR + 'entityHandler/dataServiceParent',
+            directory: MODULE_FILE_DIR + 'entityHandler/entityServiceParent',
             fileNames: [
-                'ServiceParent.js',
-                'DataServiceModelParent.js',
+                'EntityServiceParent.js',
+                'EntityDataServiceModelParent.js',
             ]
         }])

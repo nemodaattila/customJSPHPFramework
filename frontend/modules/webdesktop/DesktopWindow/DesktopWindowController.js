@@ -178,7 +178,7 @@ class DesktopWindowController {
     //  * @returns {Promise<void>}
     //  */
     // async checkWindowParamsFromServer() {
-    //     let params = JSON.parse(await ServiceParent.sendGetWindowParams(this.moduleGroupName))
+    //     let params = JSON.parse(await EntityServiceParent.sendGetWindowParams(this.moduleGroupName))
     //     if (params !== false)
     //         this.initWindowParams(params)
     // }

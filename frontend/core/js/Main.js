@@ -39,8 +39,8 @@ class Main {
         // await Includer.loadFileSource('infinityScroller')
         await Includer.loadFileSource('listerTableSearchConnector')
 
-        await Includer.loadFileSource('dataHandlerTable')
-        await Includer.loadFileSource('dataServiceParent')
+        await Includer.loadFileSource('entityHandlerTable')
+        await Includer.loadFileSource('entityServiceParent')
 
     }
 

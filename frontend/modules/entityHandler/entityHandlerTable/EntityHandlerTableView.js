@@ -1,4 +1,4 @@
-class HandlerTableView {
+class EntityHandlerTableView {
     _mainContainer
     _controllerPointer
     _inputs = {}

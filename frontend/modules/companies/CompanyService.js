@@ -1,4 +1,4 @@
-class CompanyService extends ServiceParent {
+class CompanyService extends EntityServiceParent {
     _restParameter = 'company'
 
     async init() {

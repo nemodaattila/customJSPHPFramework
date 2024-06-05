@@ -1,7 +1,7 @@
 /**
  * controller a cégek kilistázására táblás formában
  */
-class CompanyListerController extends ListerControllerParent {
+class CompanyListerController extends EntityListerControllerParent {
     subscribeToEvents() {
         EventSubscriptionHandler.subscribe('companyHandlerEvent', this, 'refreshRows')
     }
