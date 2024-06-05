@@ -26,7 +26,23 @@ Includer.setIncludableFileSource(
         {
             directory: MODULE_FILE_DIR + 'companies/CompanyCreator',
             fileNames: [
-                'CompanyCreatorController.js',
+                'CompanyEditorController.js',
+            ]
+        },
+    ])
+Includer.setIncludableFileSource(
+    'companyEditor', [
+        {
+            directory: MODULE_FILE_DIR + 'companies',
+            fileNames: [
+                'CompanyService.js',
+                'CompanyServiceModel.js',
+            ]
+        },
+        {
+            directory: MODULE_FILE_DIR + 'companies/CompanyEditor',
+            fileNames: [
+                'CompanyEditorController.js',
             ]
         },
     ])
