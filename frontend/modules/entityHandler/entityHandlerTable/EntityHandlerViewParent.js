@@ -10,7 +10,7 @@ class EntityHandlerViewParent extends ViewParent{
         const columnCount=2
 
         let cols = ''
-        for (const i = 0; i < columnCount; i++)
+        for (let i = 0; i < columnCount; i++)
             cols += ' 262px '
         let tds = [];
         let tr = sameLine === true && this._buttonContainer.childNodes.length !== 0 ? this._buttonContainer.lastChild : HtmlElementCreator.createSimpleHtmlElement('div', this._buttonContainer)
@@ -18,7 +18,7 @@ class EntityHandlerViewParent extends ViewParent{
             tr.style.gridTemplateColumns += cols
         if (!sameLine) {
             tr.style.display = 'grid'
-            for (const i = 0; i < columnCount; i++)
+            for (let i = 0; i < columnCount; i++)
                 tds.push(HtmlElementCreator.createSimpleHtmlElement('div', tr, {class: 'tableCell'}))
         } else tds = this._buttonContainer.lastChild.children
         buttonParams.type = 'button';
