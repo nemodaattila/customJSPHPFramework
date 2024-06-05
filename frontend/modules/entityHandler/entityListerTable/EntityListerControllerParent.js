@@ -185,11 +185,14 @@ class EntityListerControllerParent extends ControllerParent {
             case 'creator':
                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.creator.module)
                 break
+            case 'editor':
+                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.editor.module)
+                break
             default:
-                Messenger.showAlert('there is no operation type as ' + operationType)
+                Messenger.showAlert('EntityListerControllerParent - there is no operation type as ' + operationType)
         }
     }
-    rowClicked(recordId, rowClickEvent)
+    async rowClicked(recordId, rowClickEvent)
     {
         console.log(rowClickEvent)
         // if (rowClickEvent.button === 1 || this.service.selectedRecord !== null)
@@ -205,8 +208,10 @@ class EntityListerControllerParent extends ControllerParent {
             return;
         }
         this._serviceModelPointer.selectedId=[]
-        this._serviceModelPointer.selected.push(recordId)
+        this._serviceModelPointer.selectedId.push(recordId)
 
+        if (rowClickEvent.detail === 2)
+           await this.operationIconClicked('editor')
         // console.dir(this._view)
         // this._view.selectedRows = []
         // this._view.selectedRows.push(newRow)
