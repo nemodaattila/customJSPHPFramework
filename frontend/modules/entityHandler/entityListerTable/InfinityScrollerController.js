@@ -42,7 +42,7 @@ class InfinityScrollerController {
                     return
                 await this._searchConnector.setOffset()
                 if (newScrollTop > lastScrollTop) {
-                    const scrollPercent = this.getScrollPercent()
+                    let scrollPercent = this.getScrollPercent()
                     if (isNaN(scrollPercent))
                         scrollPercent = 100
                     if (scrollPercent > 80) {
