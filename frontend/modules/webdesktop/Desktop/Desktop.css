@@ -1,18 +1,18 @@
 body {
     background-image: url("desktop.webp");
+
 }
 
 .tabsBar {
-    display: table-row;
+    /*display: table-row;*/
     height: 25px;
     background: #8897a7;
     z-index: 109;
-    position: absolute;
-    width: 100%;
 }
 
 .desktop {
-    display: table-row;
+    /*display: table-row;*/
     overflow: auto;
+    height: calc(100% - 25px);
 
 }
