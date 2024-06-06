@@ -1,5 +1,14 @@
 class WindowContentControllerParent extends ControllerParent{
 
+    _service
+    get service() {
+        return this._service;
+    }
+
+    set service(value) {
+        this._service = value;
+    }
+
     setWindowMainContentContainer(container)
     {
         this._view.windowContentMainContainer=container
@@ -11,7 +20,7 @@ class WindowContentControllerParent extends ControllerParent{
     }
 
     getTitle() {
-        return this.service.getTitle(this._type)
+        return this._service.getTitle(this._type)
     }
 
 }
