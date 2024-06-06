@@ -46,37 +46,38 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
     }
 
 
-     displayView(windowBody) {
-        this._serviceModelPointer = this.service.model
+     async displayView(windowBody) {
+         this._serviceModelPointer = this.service.model
          console.log({...this._serviceModelPointer})
 
          console.log(this._serviceModelPointer.selectedIds.length)
          if (this._serviceModelPointer.selectedIds.length !== 0) {
              let idLabel = this._serviceModelPointer.selectedIds.length === 1 ?
-                 this._serviceModelPointer.selectedIds[0]:
+                 this._serviceModelPointer.selectedIds[0] :
                  this._serviceModelPointer.selectedIds.join(', ')
-                this._view.addIdLabel(idLabel)
+             this._view.addIdLabel(idLabel)
          }
          this._view.addComponent('handlerTable', new EntityHandlerTableController(this.getWindowContentMainContainer(), this), this._type)
-         console.log(this)
-        // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
-        //
-        // this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
-        // listerTable.drawHeaders(
-        //     this._serviceModelPointer.tableHeaderAttributeOrder,
-        //     this._serviceModelPointer.defaultOrder
-        // )
-        // this._searchParamConnector.orderSourceObject = listerTable.view
-        // console.trace()
-        //
-        // this._view.addComponent("pageTurner", this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
-        // console.dir(windowBody)
-        // this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
-        // // this._searchParamConnector.setAutoLimit()
-        // // this.getRecordsFromServer("refresh")
-        // this.openHandlerWindow('creator')
-
-    }
+         console.log(this._view.getComponent('handlerTable'))
+         if (this._type === 'editor')
+             this._view.getComponent('handlerTable').fillTable(await this.service.getSelectedDataFromLocalDatabase(), this.getHeaderAttributeParams())
+         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
+         //
+         // this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
+         // listerTable.drawHeaders(
+         //     this._serviceModelPointer.tableHeaderAttributeOrder,
+         //     this._serviceModelPointer.defaultOrder
+         // )
+         // this._searchParamConnector.orderSourceObject = listerTable.view
+         // console.trace()
+         //
+         // this._view.addComponent("pageTurner", this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
+         // console.dir(windowBody)
+         // this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
+         // // this._searchParamConnector.setAutoLimit()
+         // // this.getRecordsFromServer("refresh")
+         // this.openHandlerWindow('creator')
+     }
 
     collectAndSaveRecord()
     {

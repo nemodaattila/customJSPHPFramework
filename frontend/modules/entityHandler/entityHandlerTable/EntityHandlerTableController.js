@@ -20,8 +20,11 @@ class EntityHandlerTableController {
 
     resetTable()
     {
-        this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor')
+        this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor', this._type)
     }
 
-
+    fillTable(record, headerAttributeParams)
+    {
+        this._view.fillTable(record, headerAttributeParams, this._type)
+    }
 }

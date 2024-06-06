@@ -97,6 +97,12 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         return this.getDataFromLocalDatabase(recordIds);
     }
 
+   async getSelectedDataFromLocalDatabase()
+    {
+        await this.refreshLocalDatabase([this._model.selectedIds], true)
+        return  (await this._model.getRecordByIdForListHandling(this._model.selectedIds))
+    }
+
     // /**
     //  * különböző modulokhoz tartozó betöltendő fájlok: C: controller, M: model, V:View
     //  * @type {{}}

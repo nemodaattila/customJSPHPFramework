@@ -220,20 +220,50 @@ class EntityHandlerTableView {
             if (type === 'customInput') {
                 this._inputs[id].firstChild.value = ''
                 this._inputs[id].children[1].innerHTML = ''
-            } else if (type === 'dataListSelect') {
+                return;
+            }
+            if (type === 'dataListSelect') {
                 this._inputs[id].firstChild.value = ''
                 HtmlElementCreator.emptyDOMElement(this._inputs[id].children[1])
-            } else if (type === 'select') {
-                this._inputs[id].selectedIndex = 0;
-            } else if (type === 'date') {
-                if (!isMultiple) {
-                    this._inputs[id].value = (new Date()).toISOString().split('T')[0]
-                } else this._inputs[id].value = ''
-            } else {
-                this._inputs[id].value = ''
-                if (type === 'file')
-                    this._inputs[id].nextElementSibling.hidden = true
+                return;
             }
+            if (type === 'select') {
+                this._inputs[id].selectedIndex = 0;
+                return;
+            }
+             if (type === 'date') {
+                 this._inputs[id].value = (!isMultiple) ?
+                     (new Date()).toISOString().split('T')[0]: ''
+                return;
+             }
+                this._inputs[id].value = ''
+                if (type === 'file')                    this._inputs[id].nextElementSibling.hidden = true
+
+        })
+    }
+
+    fillTable(record,tableHeaderAttributes,handlerType ) {
+        console.log(record)
+        console.log(tableHeaderAttributes)
+        if (record === null)
+            return
+
+        Object.entries(this._inputs).forEach(([id, input]) => {
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+                return
+            const type = tableHeaderAttributes[id].type
+            if (type === 'customInput') {
+                this._inputs[id].firstChild.value = record[id]
+            } else if (type === 'dataListSelect') {
+                if (this.service.selectedRecord[input.params.fillParam] !== undefined && this.service.selectedRecord[id] !== null) {
+                    this._inputs[id].firstChild.value = this.service.selectedRecord[input.params.fillParam] ?? ''
+                    let opt = HtmlElementCreator.createHtmlElement('option', this._inputs[id].children[1], {value: this.service.selectedRecord[input.params.fillParam]})
+                    opt.setAttribute('data-value', this.service.selectedRecord[id])
+                }
+            } else if (input.type === 'currency') {
+                this._inputs[id].value = this.formatValue(record[id])
+            } else
+                this._inputs[id].value = record[id]
         })
     }
 
@@ -391,27 +421,7 @@ class EntityHandlerTableView {
     //  * magas tábla feltöltése értékekkel
     //  * @param record {{}} értékek
     //  */
-    // fillTallTable(record) {
-    //     if (record === null)
-    //         return
-    //     let _inputs = this.windowContentPointer.content._inputs
-    //     Object.entries(_inputs).forEach(([id, input]) => {
-    //         if (record[id] === undefined)
-    //             return
-    //         if (input.type === 'customInput') {
-    //             this._inputs[id].firstChild.value = record[id]
-    //         } else if (input.type === 'dataListSelect') {
-    //             if (this.service.selectedRecord[input.params.fillParam] !== undefined && this.service.selectedRecord[id] !== null) {
-    //                 this._inputs[id].firstChild.value = this.service.selectedRecord[input.params.fillParam] ?? ''
-    //                 let opt = HtmlElementCreator.createHtmlElement('option', this._inputs[id].children[1], {value: this.service.selectedRecord[input.params.fillParam]})
-    //                 opt.setAttribute('data-value', this.service.selectedRecord[id])
-    //             }
-    //         } else if (input.type === 'currency') {
-    //             this._inputs[id].value = this.formatValue(record[id])
-    //         } else
-    //             this._inputs[id].value = record[id]
-    //     })
-    // }
+
     //
     // /**
     //  * magas tábla értékeinek kiürítése

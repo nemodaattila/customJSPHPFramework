@@ -86,6 +86,11 @@ class EntityServiceModelParent {
         record._queryed = Date.now()
     }
 
+    getRecordByIdForListHandling(id)
+    {
+        return {...this._records[id]}
+    }
+
     getRecordByIdForListTable(id) {
         const record = {...this._records[id]}
         console.log(this)
