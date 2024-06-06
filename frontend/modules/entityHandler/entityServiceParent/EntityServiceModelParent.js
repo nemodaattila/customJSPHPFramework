@@ -89,21 +89,26 @@ class EntityServiceModelParent {
     getRecordByIdForListTable(id) {
         const record = {...this._records[id]}
         console.log(this)
-        let recordData = this._tableHeaderAttributeOrder.map(param => {
+        let recordData = {}
+
+
+
+        this._tableHeaderAttributeOrder.forEach(param  =>{
             const filterType = this._tableHeaderAttributes[param].type ?? 'string'
-            let tdContent
+
             if (filterType === 'select') {
-                tdContent = this._tableHeaderAttributes[param].values[record[param]]
-            } else {
-                try {
-                    tdContent = record[param] === null || record[param] === undefined ? '' : decodeURIComponent(record[param])
-                } catch (e) {
-                    tdContent = record[param]
-                }
+                recordData[param] = [this._tableHeaderAttributes[param].values[record[param]],'select']
+                return
             }
-            return [tdContent, filterType, param]
+
+                try {
+                    recordData[param] = [record[param] === null || record[param] === undefined ? '' : decodeURIComponent(record[param])]
+                } catch (e) {
+                    recordData[param] = [record[param]]
+                }
+
+            recordData[param].push(filterType)
         })
-        recordData = [record.id, recordData]
         return recordData
     }
 }

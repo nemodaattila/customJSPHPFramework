@@ -33,11 +33,11 @@ class EntityListerTableController {
         return this._view;
     }
 
-    destruct() {
+    destructor() {
         // this.observer.unobserve(this._view.tBody);
-        this._view.destruct()
+        this._view.destructor()
         this._view = undefined
-        //TODO destruct interals
+        //TODO destructor interals
     }
 
     getTableContainerFooter() {
@@ -273,21 +273,13 @@ class EntityListerTableController {
 
     displayRecordsInTable(records, order) {
         records.forEach(record => {
-            const orderedAttributes = []
-            const attribs = record[1]
-            console.log(attribs)
-           const recordIdIndex = attribs.findIndex(attr => attr[2] === 'id')
-            console.log(recordIdIndex)
-            order.forEach((orderAttrib) => {
-                // console.log(orderAttrib)
-                orderedAttributes.push(attribs.find(attrib => {
-                    // console.log(attrib[2])
-                    return attrib[2] === orderAttrib
-                }))
-            })
-            const row = this._view.createRowWithRecord(orderedAttributes, record[0])
-            if (recordIdIndex !== -1)
-            row.connectedObjectId = attribs[recordIdIndex][0]
+            console.log(record)
+            console.log(record)
+           // const recordIdIndex = record.findIndex(attr => attr[2] === 'id')
+           //  console.log(recordIdIndex)
+            const orderedAttributes = order.map((orderAttrib) =>        [      ...record[orderAttrib],orderAttrib]            )
+            const row = this._view.createRowWithRecord(orderedAttributes, record.id[0])
+            // row.connectedObjectId = record.id
             row.addEventListener('click', (event) => {
                 event.preventDefault()
                 if (this._dblClickTimer) {
