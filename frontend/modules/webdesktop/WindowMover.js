@@ -76,7 +76,7 @@ class WindowMover {
             return
         this._moveTime = 0
         this._moveParameters.object.parentElement.setAttribute("data-inmove", "0");
-        //DO savwindowparams
+        //TODO savewindowparams
         // this.saveWindowParams(this._moveParameters.object)
         this._moveParameters = undefined
     }

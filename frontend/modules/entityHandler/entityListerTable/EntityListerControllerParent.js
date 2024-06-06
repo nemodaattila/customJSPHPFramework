@@ -8,7 +8,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
     _tableHeaderAttributeOrder
 
     init() {
-        //DO check zoom with search and scroll
+        //TODO check zoom with search and scroll
         this.subscribeToEvents?.()
         console.log(this)
         this._searchParamConnector = new EntityListerTableSearchConnector()
@@ -232,7 +232,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
     //     this._view.getComponent('listerTable').flushTable()
     //     this._view.getComponent('listerTable').displayRecordsInTable(await this._service.getRecordsFromLocalDatabase(recordIds, true))
     // }
-    // getEnabledOperations() {   //DO rethink with AUTH in mind
+    // getEnabledOperations() {   //TODO rethink with AUTH in mind
     //     return this.service.getEnabledOperations()
     // }
     //

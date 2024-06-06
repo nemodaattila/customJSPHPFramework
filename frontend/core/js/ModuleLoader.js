@@ -34,7 +34,7 @@ class ModuleLoader {
 
         temp = await this.getComponent(moduleFiles, 'Service')
         if (temp) {
-            const service = new (eval(await this.loadFile(temp)))() //DO nicer solution?
+            const service = new (eval(await this.loadFile(temp)))() //TODO nicer solution?
             console.log(service.model)
             if (service.model === undefined) {
                 let serviceModel = undefined

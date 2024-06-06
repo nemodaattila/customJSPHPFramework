@@ -86,7 +86,7 @@ class CustomPDO implements DatabaseConnectionInterface
         foreach ($conditionalAttributes as $value)
             $what[] = 't1.' . $value;
         foreach ($filters as $filter)
-            $what[] = 't1.' . $filter[0]; //DO
+            $what[] = 't1.' . $filter[0]; //TODO ???
         $joins = '';
         $id = 2;
         if (isset($params['connectedTableParams'])) {

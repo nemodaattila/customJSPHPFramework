@@ -13,7 +13,7 @@ class EntityHandlerViewParent extends ViewParent{
     addButtonContainer(columnNum, buttonParams, onclickEvent, sameLine = false) {
         if (!this._buttonContainer)
             this._buttonContainer = HtmlElementCreator.createSimpleHtmlElement('div', this._windowContentMainContainer, {class: 'buttonContainer'})
-        //DO columncount
+        //TODO columncount
         // let columnCount = (this.windowContentPointer.content.inputPerRow ?? 1) * 2
         const columnCount=2
 

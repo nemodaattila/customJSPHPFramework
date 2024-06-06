@@ -108,7 +108,7 @@ class DesktopWindowModel {
 //  */
 // lastLoadedContentModule
 // /**
-//  * legutolsó ablakba betöltött modul paraméterei //DO összevonás
+//  * legutolsó ablakba betöltött modul paraméterei //TODO összevonás
 //  * @type {{}} modulnév, tasknév
 //  */
 // lastOpenedModuleParams

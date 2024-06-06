@@ -32,7 +32,6 @@ Includer.setIncludableFileSource(
             ]
         }])
 Includer.setIncludableFileSource(
-    //DO rename
     'listerTableSearchConnector', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',

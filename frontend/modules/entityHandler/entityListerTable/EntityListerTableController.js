@@ -37,7 +37,7 @@ class EntityListerTableController {
         // this.observer.unobserve(this._view.tBody);
         this._view.destruct()
         this._view = undefined
-        //DO destruct interals
+        //TODO destruct interals
     }
 
     getTableContainerFooter() {
@@ -92,7 +92,7 @@ class EntityListerTableController {
 
     zoomContent(zoomValue) {
         this._view.zoomContent(zoomValue)
-        //DO refresh
+        //TODO refresh
     }
 
     displayHideColumn(isDisplay, columnName) {

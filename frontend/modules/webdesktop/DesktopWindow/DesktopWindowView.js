@@ -111,7 +111,7 @@ class DesktopWindowView {
     zoomWindow(zoomValue, save = true) {
         console.log(zoomValue)
         this._controllerPointer.zoomContent(zoomValue)
-        //DO save window params
+        //TODO save window params
         // this.zoom = value
         // this.pageScrollData.zoom = value
         // this.tableContainer.style.zoom = value

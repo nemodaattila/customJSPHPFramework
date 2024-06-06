@@ -33,7 +33,7 @@ class RESTHandler
      */
     private RequestParameters $parameters;
 
-    //DO authentication
+    //TODO authentication
     public function __construct() {
 //        var_dump($_SERVER);
         try {
@@ -68,7 +68,7 @@ class RESTHandler
      * sends cors headers
      */
     private function addCorsHeaders(): void {
-        //DO expand cors handling
+        //TODO expand cors handling
 //        header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Origin: http://localhost:4200');
         header('Access-Control-Allow-Headers: X-Requested-With, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding,Content-Type');
@@ -176,7 +176,7 @@ class RESTHandler
      * @param int $line line from which the error was thrown
      */
     private function sendResponseBasedOnError(string $message, string $file, int $line): void {
-        //DO save message to log instead of echo
+        //TODO save message to database
 //        $this->addTokenExpirationTimeToHeader();
         header($_SERVER['SERVER_PROTOCOL'] . ' ' . 500);
         echo $message . ' - ' . $file . ':' . $line;

@@ -1,7 +1,7 @@
 class Main {
     static async init() {
         Includer.init()
-        //DO Auth
+        //TODO Auth
         await this.loadCoreFiles()
         this.initComponents()
     }

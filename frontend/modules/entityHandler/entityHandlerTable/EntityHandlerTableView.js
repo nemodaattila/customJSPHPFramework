@@ -16,7 +16,7 @@ class EntityHandlerTableView {
         console.log(this._mainContainer)
         console.log(tableHeaderAttributes)
         this.tallTable = HtmlElementCreator.createSimpleHtmlElement('div', this._mainContainer, {class: 'handlerTable'})
-        //DO inputPerRow
+        //TODO inputPerRow
         // let inputPerNums = this.windowContentPointer.content.inputPerRow ?? 1
         const inputPerRows = 1
         let evenRow = true

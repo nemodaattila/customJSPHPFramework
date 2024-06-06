@@ -57,7 +57,7 @@ class PageTurnerController {
         this._navElements.actual.disabled = pageNum === 1 && hasNext === false
         this._navElements.next.style.display = hasNext ? 'inline' : 'none'
         this._navElements.last.style.display = 'none'
-        //DO last page - lastPageNum
+        //TODO last page - lastPageNum
     }
 
     resetScroll(){}

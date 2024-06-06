@@ -81,7 +81,7 @@ class RouteAnalyser
                 }
                 $this->parameters->addUrlParameter(htmlentities($url[$i]));
             } else
-                $this->parameters->addUrlParameter(htmlentities($url[$i])); //DO check
+                $this->parameters->addUrlParameter(htmlentities($url[$i])); //TODO check
         }
         return true;
     }
