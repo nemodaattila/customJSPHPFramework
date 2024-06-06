@@ -1,75 +1,77 @@
 /**
- * esemény-feliratkozás kezelő osztály
- * fel lehet iratkozni bizonyos eseményekre, bizonyos kulcsszavak alapján
- *  !! a lehetséges kulcsszavak nincsenek mentve !!
+ * subscription handler class to events - communication between modules
+ * a module can subscribe to an event for e.g. CompanyLister subscribes to 'userCreated' event
+ * (when a user was created), when event triggers, CompanyLister refreshes its table
+ * it works on a trigger word (keyword) basis (for e.g. userCreated), trigger words are not stored
+ *
  */
 class EventSubscriptionHandler {
     /**
-     * feliratkozások kulcsszavak alapján
-     * @type {{string : Array}}
+     * existing subscriptions
+     * @type {{string : Array}} [[objectPointer: Object, functionName: string][]]
      */
     static subscriptions = {};
 
     /**
-     * feliratkozás eseményre
-     * @param callWord {string} a kulcsszó (trigger-word), amire fel lehet iratkozni
-     * @param objectPointer {Object} az osztályra mutató pointer, ami feliratkozik
-     * @param functionName {string} a trigger kiváltásakor lefuttatandó function neve
-     * @param prioritized {boolean} ha true (és több elem iratkozott fel ugyanarra az eventre) előre kerül a feliratkozó, előbb fut le
-     */
-    static subscribe(callWord, objectPointer, functionName, prioritized = false) {
+     * subscription to events
+     * @param triggerWord {string} trigger-word to witch the object can subscribe
+     * @param objectPointer {Object} object's pointer, which is subscribing
+     * @param functionName {string} name of the function, which will run when the event triggers
+     * @param prioritized {boolean} if true this subscription will run first if the event triggers
+     * */
+    static subscribe(triggerWord, objectPointer, functionName, prioritized = false) {
         if (!this.subscriptions)
             this.subscriptions = {};
-        if (!this.subscriptions[callWord])
-            this.subscriptions[callWord] = [];
-        if (this.checkIfAlreadySubscribed(callWord, objectPointer) !== -1)
+        if (!this.subscriptions[triggerWord])
+            this.subscriptions[triggerWord] = [];
+        if (this.checkIfAlreadySubscribed(triggerWord, objectPointer))
             return
-        prioritized?            this.subscriptions[callWord].unshift([objectPointer, functionName]):
-        this.subscriptions[callWord].push([objectPointer, functionName]);
+        prioritized ? this.subscriptions[triggerWord].unshift([objectPointer, functionName]) :
+            this.subscriptions[triggerWord].push([objectPointer, functionName]);
     }
 
     /**
-     * ellenőrzi, hogy egy object feliratkozott-e már az eseményre
-     * @param callWord {string} trigger-word
-     * @param objectPointer {Object}  az osztályra mutató pointer, ami feliratkozik
-     * @returns {number} ha az object már feliratkozott 0 vagy nagyobb, ha nem -1
+     * checks if an object is already subscribed to an event
+     * @param triggerWord {string} trigger-word
+     * @param objectPointer {Object}  class pointer
+     * @returns {boolean} true if subscribed, false if not
      */
-    static checkIfAlreadySubscribed(callWord, objectPointer) {
-        return this.subscriptions[callWord].findIndex(sub => sub[0] === objectPointer)
+    static checkIfAlreadySubscribed(triggerWord, objectPointer) {
+        return this.subscriptions[triggerWord].findIndex(sub => sub[0] === objectPointer) !== -1
     }
 
     /**
-     * leiratkozás esemény
-     * @param callWord {string} kulcsszó amiről leiratkozik
-     * @param objectPointer {Object} az objektum ami leiratkozik
+     * unsubscribing from event
+     * @param triggerWord {string} trigger-word from witch the object wants to unsubscribe
+     * @param objectPointer {Object} object which is
      */
-    static unSubscribe(callWord, objectPointer) {
-        if (!this.subscriptions[callWord])
+    static unSubscribe(triggerWord, objectPointer) {
+        if (!this.subscriptions[triggerWord])
             return
-        const index = this.subscriptions[callWord].findIndex(([obj]) => obj === objectPointer)
-        if (index !== -1) {
-            this.subscriptions[callWord].splice(index, 1)
-            if (this.subscriptions[callWord].length === 0)
-                delete this.subscriptions[callWord]
-            this.unSubscribe(callWord, objectPointer)
-        }
+        const index = this.subscriptions[triggerWord].findIndex(([obj]) => obj === objectPointer)
+        if (index === -1)
+            return;
+        this.subscriptions[triggerWord].splice(index, 1)
+        if (this.subscriptions[triggerWord].length === 0)
+            delete this.subscriptions[triggerWord]
+        // this.unSubscribe(triggerWord, objectPointer)
     }
 
     /**
-     * leiratkozás az összes eventről, amire az objektum feliratkozott
-     * @param objectPointer {Object} az objektum, ami le akar iratkozni az eventekről
+     * unsubscribing object from all subscribed event
+     * @param objectPointer {Object} object which wants to unsubscribe from events
      */
     static massUnSubscribe(objectPointer) {
-            Object.keys(this.subscriptions).forEach((word) => EventSubscriptionHandler.unSubscribe(word, objectPointer))
+        Object.keys(this.subscriptions).forEach((word) => this.unSubscribe(word, objectPointer))
     }
 
     /**
-     * event trigger kiváltása/meghívása, paraméterellenőrzések
-     * @param callwords {string | Array} a kiváltandó (kulcsszó/szavak)
-     * @param resultData {any} eseményhez kapcsolt/ kiváltott adat
-     * @param interWindowParams
+     * triggering subscription event(s)
+     * @param triggerWord {string | Array} trigger word(s) to be triggered
+     * @param eventData {any} data sent with event - not Event object
+     * @param interWindowParams data sent to another browser window //TODO implement
      */
-    static triggerSubscriptionCall(callwords, resultData = null, interWindowParams = null) {
+    static triggerSubscriptionCall(triggerWord, eventData = null, interWindowParams = null) {
         // if (interWindowParams === null || interWindowParams.triggerInterWindowMessage !== false || interWindowParams.triggerInterWindowMessage === undefined)
         //     Main.channel.postMessage({
         //         event: callwords,
@@ -79,21 +81,21 @@ class EventSubscriptionHandler {
             alert('ERROR - SubscriptionHandler is empty');
             return;
         }
-        if (!Array.isArray(callwords)) callwords = [callwords]
-        this.callSubscribedFunctions(callwords, resultData);
+        if (!Array.isArray(triggerWord)) triggerWord = [triggerWord]
+        this.callSubscribedFunctions(triggerWord, eventData);
     }
 
     /**
-     * kiváltott eseményhez kapcsolt függvényeek meghívása
-     * @param callWords {string | Array} a kiváltandó (kulcsszó/szavak)
-     * @param resultData {any} eseményhez kapcsolt/ kiváltott adat
+     * calling functions triggered by event
+     * @param triggerWords {string | Array} trigger words to be triggered
+     * @param eventData {any}  data sent with event - not Event object
      */
-    static callSubscribedFunctions(callWords, resultData) {
-        for (const callWord of callWords) {
+    static callSubscribedFunctions(triggerWords, eventData) {
+        for (const callWord of triggerWords) {
             if (!this.subscriptions[callWord])
                 continue
             for (const [classPointer, functionName] of this.subscriptions[callWord]) {
-                classPointer[functionName] ? classPointer[functionName](resultData) :
+                classPointer[functionName] ? classPointer[functionName](eventData) :
                     console.log(classPointer.constructor.name + ' - ' + functionName + '  not exists')
             }
         }
