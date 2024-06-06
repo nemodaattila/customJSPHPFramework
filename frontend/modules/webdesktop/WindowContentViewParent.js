@@ -1,4 +1,4 @@
-class ViewParent {
+class WindowContentViewParent {
     _components = {};
 
     _windowContentMainContainer

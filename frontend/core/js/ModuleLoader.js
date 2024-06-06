@@ -49,7 +49,7 @@ class ModuleLoader {
         }
         temp = await this.getComponent(moduleFiles, 'View')
 
-        controller.view=temp?new (eval(await this.loadFile(temp)))():new ViewParent()
+        controller.view=temp?new (eval(await this.loadFile(temp)))():new WindowContentViewParent()
         controller.init();
         // let index = moduleFiles.findIndex(file => file.includes('Service'))
         //

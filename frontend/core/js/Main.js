@@ -15,7 +15,7 @@ class Main {
                 {
                     directory: CORE_FILE_DIR,
                     fileNames: ['Messenger.js', 'HtmlElementCreator.js','EventSubscriptionHandler.js',
-                        'ModuleLoader.js', 'ControllerParent.js',  'RESTHandler.js', 'ViewParent.js'],
+                        'ModuleLoader.js', 'ControllerParent.js',  'RESTHandler.js'],
                 },
                 {
                     directory: WEB_DESKTOP_MODULE_DIR,
