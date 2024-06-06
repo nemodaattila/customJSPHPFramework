@@ -18,7 +18,7 @@ class Main {
                         'ModuleLoader.js', 'ControllerParent.js',  'RESTHandler.js', 'ViewParent.js'],
                 },
                 {
-                    directory: WEB_DESKTOP_DIR,
+                    directory: WEB_DESKTOP_MODULE_DIR,
                     fileNames: ['filesToInclude.js'],
                 }, {
                 directory: MODULE_FILE_DIR + 'alertPopup',
