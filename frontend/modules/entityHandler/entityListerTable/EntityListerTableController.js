@@ -273,8 +273,6 @@ class EntityListerTableController {
 
     displayRecordsInTable(records, order) {
         records.forEach(record => {
-            console.log(record)
-            console.log(record)
            // const recordIdIndex = record.findIndex(attr => attr[2] === 'id')
            //  console.log(recordIdIndex)
             const orderedAttributes = order.map((orderAttrib) =>        [      ...record[orderAttrib],orderAttrib]            )
@@ -282,6 +280,8 @@ class EntityListerTableController {
             // row.connectedObjectId = record.id
             row.addEventListener('click', (event) => {
                 event.preventDefault()
+                console.log(event)
+                console.log(record)
                 if (this._dblClickTimer) {
                     clearTimeout(this._dblClickTimer);
                     this._dblClickTimer = false;
@@ -289,11 +289,11 @@ class EntityListerTableController {
                 switch (event.detail) {
                     case 1:
                         this._dblClickTimer = setTimeout(() => {
-                            this.rowClicked(row,event)
+                            this.rowClicked(row,event, record.id[0])
                         }, 200);
                         break;
                     case 2:
-                        this.rowClicked(row,event)
+                        this.rowClicked(row,event, record.id[0])
 
                         // this.showDetailed()
                         break;
@@ -304,11 +304,15 @@ class EntityListerTableController {
         })
     }
 
-    rowClicked(row, event)
+    rowClicked(row, event, recordId)
     {
-        if (!isNaN(row.connectedObjectId))
-            this._controllerPointer.rowClicked(row.connectedObjectId, event)
-        this.selectRow(row, event, )
+        this.selectRow(row, event)
+
+        if (isNaN(recordId)) {
+            Messenger.showAlert('record id parameter type is not right: ', recordId)
+            return
+        }
+            this._controllerPointer.rowClicked(recordId, event)
     }
 
     operationIconClicked(operationType) {
