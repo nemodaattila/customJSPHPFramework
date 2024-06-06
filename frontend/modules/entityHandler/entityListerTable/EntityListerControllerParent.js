@@ -26,10 +26,13 @@ class EntityListerControllerParent extends WindowContentControllerParent {
 
     }
 
-    destruct() {
+    destructor() {
+        this._view.destructor(['pageTurner'])
+
         super.destructor?.()
+
         EventSubscriptionHandler.massUnSubscribe(this)
-        this._view.destruct(['pageTurner'])
+
         this._serviceModelPointer = null
         this._service = null
         this._searchParamConnector = undefined

@@ -18,14 +18,14 @@ class WindowContentViewParent {
         return this._components[name];
     }
 
-    destruct(prioritizedComponentNames = []) {
+    destructor(prioritizedComponentNames = []) {
         prioritizedComponentNames.forEach((name) => {
-            this._components[name].destruct?.()
+            this._components[name].destructor?.()
             delete this._components[name];
         })
         for (name in this._components){
             console.log(name)
-            this._components[name].destruct()
+            this._components[name].destructor?.()
             delete this._components[name];
         }
         // HtmlElementCreator.emptyDOMElement(this._windowTab)

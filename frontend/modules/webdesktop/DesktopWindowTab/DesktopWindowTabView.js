@@ -12,7 +12,7 @@ class DesktopWindowTabView {
         return this._windowTab;
     }
 
-    destruct() {
+    destructor() {
         HtmlElementCreator.emptyDOMElement(this._windowTab)
         this.windowTab.remove()
     }

@@ -37,7 +37,7 @@ class PageTurnerController {
         });
     }
 
-    destruct() {
+    destructor() {
         const parent = this._navElements['first'].parentElement
         console.log(this._navElements)
         HtmlElementCreator.emptyDOMElement(parent);

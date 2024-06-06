@@ -55,7 +55,7 @@ class EntityListerTableView {
         return this._filterInputs[name];
     }
 
-    destruct() {
+    destructor() {
         HtmlElementCreator.emptyDOMElement(this._mainContainer)
     }
 

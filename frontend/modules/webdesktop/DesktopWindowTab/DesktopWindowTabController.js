@@ -39,8 +39,8 @@ class DesktopWindowTabController {
         this._windowPointer.resetSize()
     }
 
-    destruct() {
-        this._view.destruct()
+    destructor() {
+        this._view.destructor()
         this._view = undefined
     }
 }

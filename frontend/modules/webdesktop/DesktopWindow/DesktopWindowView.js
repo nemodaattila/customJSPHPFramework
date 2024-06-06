@@ -31,7 +31,7 @@ class DesktopWindowView {
         return this._windowBody;
     }
 
-    destruct() {
+    destructor() {
         HtmlElementCreator.emptyDOMElement(this._windowDiv)
         this._windowDiv.remove()
     }

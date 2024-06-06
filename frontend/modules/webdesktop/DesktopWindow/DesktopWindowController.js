@@ -138,10 +138,10 @@ class DesktopWindowController {
         this.observer.unobserve(this._view.windowDiv);
         DesktopController.switchActiveWindow()
         DesktopController.removeWindow(this._model.name)
-        this._tabPointer.destruct()
+        this._tabPointer.destructor()
         console.log(this._contentControllerPointer)
-        this._contentControllerPointer.destruct?.()
-        this._view.destruct()
+        this._contentControllerPointer.destructor?.()
+        this._view.destructor()
         delete this
         // if (this.connectedParams?.connectedService)
         //     this.connectedParams.connectedService.selectedRecord = null
