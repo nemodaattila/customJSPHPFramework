@@ -1,12 +1,14 @@
 /**
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
-class EntityServiceControllerParent {
+class EntityServiceControllerParent extends WindowContentControllerParent {
     static _instance = undefined
     _restParameter = undefined
 
-    constructor() {
 
+
+    constructor() {
+        super();
         // if (self._instance) {
         //     self._instance = this;
         //     console.log({...self._instance})
@@ -29,14 +31,7 @@ class EntityServiceControllerParent {
 
     }
 
-    _model
-    get model() {
-        return this._model;
-    }
 
-    set model(value) {
-        this._model = value;
-    }
 
     async init() {
         console.log('initSp')

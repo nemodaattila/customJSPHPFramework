@@ -1,4 +1,4 @@
-class EntityHandlerControllerParent extends ControllerParent{
+class EntityHandlerControllerParent extends WindowContentControllerParent{
     /**
      * több adatot kezel?
      * @type {boolean}
@@ -11,6 +11,12 @@ class EntityHandlerControllerParent extends ControllerParent{
 
     _serviceModelPointer
 
+
+    getTitle() {
+        return this.service.getTitle(this._type)
+    }
+
+
     constructor(type) {
         super();
         this._type = type
@@ -22,9 +28,11 @@ class EntityHandlerControllerParent extends ControllerParent{
         //     this.init()
     }
 
-    destruct()
+    destructor()
     {
+        super.destructor?.()
         this._serviceModelPointer = undefined
+
     }
 
     getHeaderAttributeParams() {
@@ -34,8 +42,11 @@ class EntityHandlerControllerParent extends ControllerParent{
     onDesktopWindowResize() {}
 
     init(){
+        this.subscribeToEvents?.()
+        EventSubscriptionHandler.massUnSubscribe(this)
         this._view = new EntityHandlerViewParent()
     }
+
 
      displayView(windowBody) {
         this._serviceModelPointer = this.service.model

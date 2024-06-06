@@ -1,4 +1,4 @@
-class EntityListerControllerParent extends ControllerParent {
+class EntityListerControllerParent extends WindowContentControllerParent {
     _type = 'lister'
     // _searchAndOrderParameters
     _pageTurnerType = 'infinityScroller'
@@ -9,7 +9,7 @@ class EntityListerControllerParent extends ControllerParent {
 
     init() {
         //DO check zoom with search and scroll
-        super.init()
+        this.subscribeToEvents?.()
         console.log(this)
         this._searchParamConnector = new EntityListerTableSearchConnector()
         this._searchParamConnector.orderAndLimitParameterObject = new SearchAndOrderParameters()
@@ -27,6 +27,8 @@ class EntityListerControllerParent extends ControllerParent {
     }
 
     destruct() {
+        super.destructor?.()
+        EventSubscriptionHandler.massUnSubscribe(this)
         this._view.destruct(['pageTurner'])
         this._serviceModelPointer = null
         this._service = null
