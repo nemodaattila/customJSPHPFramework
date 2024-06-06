@@ -87,6 +87,7 @@ class DesktopWindowController {
     }
 
     async displayContent(contentController) {
+        console.log(contentController)
         this._view.setTitle(contentController.getTitle())
         this._tabPointer.setTitle(contentController.getTitle())
         contentController.setWindowMainContentContainer(this._view.windowBody)

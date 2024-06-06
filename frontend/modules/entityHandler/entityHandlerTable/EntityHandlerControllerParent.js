@@ -12,9 +12,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
     _serviceModelPointer
 
 
-    getTitle() {
-        return this.service.getTitle(this._type)
-    }
+
 
 
     constructor(type) {

@@ -10,4 +10,8 @@ class WindowContentControllerParent extends ControllerParent{
         return this._view.windowContentMainContainer
     }
 
+    getTitle() {
+        return this.service.getTitle(this._type)
+    }
+
 }
