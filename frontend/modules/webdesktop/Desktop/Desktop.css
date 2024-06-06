@@ -6,11 +6,13 @@ body {
     display: table-row;
     height: 25px;
     background: #8897a7;
-    z-index: 109
+    z-index: 109;
+    position: absolute;
+    width: 100%;
 }
 
 .desktop {
     display: table-row;
     overflow: auto;
-    /*background: url(../image/bg1.jpg) 0 0/cover*/
+
 }
