@@ -116,7 +116,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
         this.encodeStringParameters(collectedData)
         collectedData.id = originalData.id
         console.log(collectedData)
-        // await this.service.sendEditRequest(collectedData)
+        await this.service.sendEditRequest(collectedData)
         // this._view.getComponent('handlerTable').resetTable()
     }
 
