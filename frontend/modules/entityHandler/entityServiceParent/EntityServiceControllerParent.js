@@ -5,7 +5,9 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     static _instance = undefined
     _restParameter = undefined
 
+    _handlerEventTrigger = undefined
 
+    _successMessages = {}
 
     constructor() {
         super();
@@ -101,6 +103,49 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     {
         await this.refreshLocalDatabase([this._model.selectedIds], true)
         return  (await this._model.getRecordByIdForListHandling(this._model.selectedIds))
+    }
+
+    async getMetaParameters() {
+        this._model.companyTypes = await RESTHandler.send({url: this._restParameter+'/meta', requestType: 'GET'})
+        this._model.loaded = true
+    }
+
+    async sendCreateRequest(record) {
+
+        await RESTHandler.send({
+            url: this._restParameter, requestType: 'POST',
+            customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
+            values : record
+        })
+        Messenger.showSuccess(this._successMessages['creator'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this._handlerEventTrigger)
+    }
+
+    async sendEditRequest(record, multiple = false) {
+
+        console.log(record)
+
+        if (multiple === false)
+            record.id = [record.id]
+        const dataIds = record.id
+        for (const id of dataIds) {
+            record.id = id
+            console.log(record)
+            await RESTHandler.send({
+                url: this._restParameter+'/'+id, requestType: 'PATCH',
+                customHeader: {"Content-type": 'application/json-patch+json'},
+                values : record
+            })
+        }
+        Messenger.showSuccess(this._successMessages['editor'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this._handlerEventTrigger)
+            // let value = await this.createAndSendRequest(multiple ? 'editMultipleCompany' : 'editCompany', JSON.stringify(data))
+        // if (value.success === true) {
+        //     Messenger.showSuccess(this._successMessages['editor'])
+        //
+        //     EventSubscriptionHandler.triggerSubscriptionCall('companyEdited')
+        // }
+        // return value.success
     }
 
     // /**

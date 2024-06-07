@@ -1,6 +1,11 @@
 class CompanyService extends EntityServiceControllerParent {
     _restParameter = 'company'
 
+    _handlerEventTrigger = 'companyHandlerEvent'
+
+    _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva'}
+
+
     async init() {
         console.log('init')
         console.log(this)
@@ -12,39 +17,20 @@ class CompanyService extends EntityServiceControllerParent {
         })
     }
 
-    async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.send({url: 'company/meta', requestType: 'GET'})
-        this._model.loaded = true
-    }
+
 
     /**
      * új cég beküldése
      * @param data {Object} cégadatok
      */
-    async sendCreateRequest(data) {
 
-          await RESTHandler.send({
-            url: this._restParameter, requestType: 'POST',
-            customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
-            values : data
-        })
-        EventSubscriptionHandler.triggerSubscriptionCall('companyHandlerEvent')
-
-    }
     //
     // /**
     //  * cég módosítási adatok beküldése
     //  * @param data {Object} módosított adatok
     //  * @param multiple {boolean} egy vagy több cég van szerkesztve
     //  */
-    // static async sendEditRequest(data, multiple = false) {
-    //     let value = await this.createAndSendRequest(multiple ? 'editMultipleCompany' : 'editCompany', JSON.stringify(data))
-    //     if (value.success === true) {
-    //         AlertPopup.showSuccess('Cég módosítás')
-    //         EventSubscriptionHandler.triggerSubscriptionCall('companyEdited')
-    //     }
-    //     return value.success
-    // }
+
     //
     // /**
     //  * egy cég adatainak lekérése
