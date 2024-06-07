@@ -1,38 +1,51 @@
 /**
  * class Includer
- * futásidőben hozzáadott JS fájlokat tölti be , egymás után
+ * loads javascript/css files in runtime, synchronously
  */
 class Includer {
+    /**
+     * @type IncluderModel
+     * @private
+     */
     static _model
 
     static init() {
         this._model = new IncluderModel()
     }
 
-    static getIncludableFileSource(name) {
-        return this._model.getIncludableFileSource(name);
+    /**
+     * returns module files to be loaded (directory and filenames) based on module name
+     * @param {string} modulName module name
+     * @returns {boolean|*} module files or false if module not exists
+     */
+    static getIncludableModuleSource(modulName) {
+        return this._model.getIncludableModuleSource(modulName);
     }
 
-    static getIncludableFileSourceFileNamesOnly(name) {
-        const files = this._model.getIncludableFileSource(name);
-        const fileNames = []
-        files.forEach((group) => {
-            group.fileNames.forEach((file) => {
-                fileNames.push(file)
-            })
-        })
-        return fileNames;
+
+    /**
+     * saves module file parameters in model
+     * @param {string} modulName module name
+     * @param {{directory: string, fileNames: string[]}[]} files file parameters {directory: string, fileNames: string[]}[]
+     */
+    static setIncludableModuleSource(modulName, files) {
+        this._model.setIncludableModuleSource(modulName, files);
     }
 
-    static setIncludableFileSource(name, value) {
-        this._model.setIncludableFileSource(name, value);
-    }
-
-    static async loadFileSource(name) {
-        this.addFilesToLoad(this._model.getIncludableFileSource(name))
+    /**
+     * loads a module
+     * @param moduleName module name
+     * @returns {Promise<void>}
+     */
+    static async loadModuleSource(moduleName) {
+        this.addFilesToLoad(this._model.getIncludableModuleSource(moduleName))
         await this.startLoad()
     }
 
+    /**
+     * prepares files to load
+     * @param filesToLoad {{directory: string, fileNames: string[]}[]|{directory: string, fileNames: string[]}} files to load
+     */
     static addFilesToLoad(filesToLoad) {
         if (!filesToLoad) {
             Messenger.showAlert('file load error - addFilesToLoad param type not correct')
@@ -49,7 +62,8 @@ class Includer {
     };
 
     /**
-     * fájlbetöltések elindítéása
+     * starts file loading, calls files to load one by one, stops on error
+     * @returns {Promise<unknown>}
      */
     static async startLoad() {
         return new Promise(async (resolve, reject) => {
@@ -61,7 +75,6 @@ class Includer {
                     await this.loadScript(file)
                 } catch (e) {
                     Messenger.showAlert('file load failed: ' + e)
-                    // alertPopup.showAlert('file load failed: ' + e)
                     this.stopLoad()
                     reject(false)
                     break;
@@ -73,7 +86,9 @@ class Includer {
     }
 
     /**
-     * fájl (konkrét) betöltése, load eseményhívás
+     * loads a file (javascript/css)
+     * @param file {string} file path
+     * @returns {Promise<unknown>}
      */
     static loadScript(file) {
         const extension = file.split('.').pop().toLowerCase()
@@ -106,9 +121,9 @@ class Includer {
     }
 
     /**
-     * fájltöltés lezárása
+     * stops file load
      */
     static stopLoad() {
-        this._model.resetFilesToLoad();
+        this._model.emptyFilesToLoad();
     }
 }

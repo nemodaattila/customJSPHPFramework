@@ -30,17 +30,17 @@ class Main {
             ]
         );
         await Includer.startLoad()
-        await Includer.loadFileSource('alertPopup')
+        await Includer.loadModuleSource('alertPopup')
         Messenger.setObject(new AlertPopup())
-        await Includer.loadFileSource('desktop')
-        await Includer.loadFileSource('desktopWindow')
-        await Includer.loadFileSource('desktopWindowTab')
-        await Includer.loadFileSource('listerTable')
+        await Includer.loadModuleSource('desktop')
+        await Includer.loadModuleSource('desktopWindow')
+        await Includer.loadModuleSource('desktopWindowTab')
+        await Includer.loadModuleSource('listerTable')
         // await Includer.loadFileSource('infinityScroller')
-        await Includer.loadFileSource('listerTableSearchConnector')
+        await Includer.loadModuleSource('listerTableSearchConnector')
 
-        await Includer.loadFileSource('entityHandlerTable')
-        await Includer.loadFileSource('entityServiceParent')
+        await Includer.loadModuleSource('entityHandlerTable')
+        await Includer.loadModuleSource('entityServiceParent')
 
     }
 

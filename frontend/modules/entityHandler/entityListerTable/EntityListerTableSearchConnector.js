@@ -30,7 +30,7 @@ class EntityListerTableSearchConnector {
     }
 
     async createOffsetSourceObject(pageTurnerName, container, listerControllerPointer) {
-        await Includer.loadFileSource(pageTurnerName)
+        await Includer.loadModuleSource(pageTurnerName)
         this.offsetSourceObject = new (eval(pageTurnerName[0].toUpperCase() + pageTurnerName.slice(1) + "Controller"))(container, listerControllerPointer, this)
         return this._offsetSourceObject
     }

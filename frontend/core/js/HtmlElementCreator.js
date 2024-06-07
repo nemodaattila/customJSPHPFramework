@@ -1,87 +1,85 @@
 /**
  * static class
- * segédfüggvények html elemek készítéséhez
+ * assistant class for creating HTML elements
  */
 class HtmlElementCreator {
     /**
-     * létrehoz egy html DOM elemet
-     * @param type {array | string} - html DOM típus(pl.: div) - ha array akkor egymásba ágyazza az elemeket
-     * @param parent {HTMLElement | string} - szülő DOM element-je, ebbe kerül létrehozásra az elem
-     * @param params {object} - HTML elem paraméterei (pl: id, class)
-     * @returns {HTMLElement} a létrejött DOM element - egymásba ágyazottnál a belső elem
-     * @throws {Error} - ha a type nem string vagy array
+     * creates a html element
+     * @param type {string[] | string} html DOM type(for e.g.: 'div')  or ARRAY (nested ['div','input'])
+     * @param parent {HTMLElement | string} parent DOM element, in which the element is created
+     * @param params {object} parameters of the element (fot e.g.: id, class)
+     * @returns {HTMLElement} the created HTML element, if nested, it's the nested element
+     * @throws {Error} if type is not string or array
      * @see createNestedHtmlElement | createSimpleHtmlElement
      */
     static createHtmlElement(type, parent, params = {}) {
-        if (typeof type === "string") {
+        //TODO test type with object
+        if (typeof type === "string")
             return this.createSimpleHtmlElement(type, parent, params)
-        } else if (typeof type === "object") {
+        if (typeof type === "object")
             return this.createNestedHtmlElement(type, parent, params)
-        } else
-            throw new Error('createHtmlElement type must be string or array');
+        throw new Error('createHtmlElement type must be string or array');
     }
 
     /**
-     * létrehoz egy egyszerű (nem egymásba ágyazott) html DOM elemet
-     * @param type {string} - html DOM típus
-     * @param parent {string | HTMLElement|null} - szülő DOM element-je, ebbe kerül létrehozásra az elem
-     * @param params {object} - HTML elem paraméterei
-     * @returns {HTMLElement} - a létrejött DOM element
-     * @throws {Error} - ha a type nem string, vagy a parent element nem létezik
+     * creates a non-nested HTML element
+     * @param type {string} - html DOM type
+     * @param parent {string | HTMLElement|null} parent DOM element, in which the element is created
+     * @param params {object} parameters of the element (fot e.g.: id, class)
+     * @returns {HTMLElement} the created HTML element
+     * @throws {Error} if type is not string
      */
     static createSimpleHtmlElement(type, parent, params = {}) {
+        //TODO test if parent is HTMLDOMELEMENT
         if (parent !== null) {
             if (typeof parent === "string")
                 parent = document.getElementById(parent)
             if (parent.nodeName === undefined)
                 throw new Error('createHtmlSimpleElement - parent must be DOM element');
-            if (typeof type !== "string")
-                throw new Error('createHtmlSimpleElement type must be a string');
         }
+        if (typeof type !== "string")
+            throw new Error('createHtmlSimpleElement type must be a string');
         const newDiv = document.createElement(type);
         if ('innerHTML' in params) {
             newDiv.innerHTML = params.innerHTML
             delete params.innerHTML
         }
         for (const key in params)
-                newDiv.setAttribute(key, params[key]);
-
+            newDiv.setAttribute(key, params[key]);
         if (parent !== null)
             parent.appendChild(newDiv);
         return newDiv
     };
 
     /**
-     * létrehoz két (vagy több) egymásba ágyaztt html DOM elemet
-     * @param type {array} - html DOM típusok (pl: [td, input]) egymásba ágyazva jönnek létre
-     * @param parent {string | HTMLElement} - szülő DOM element-je, ebbe kerül létrehozásra az elem
-     * @param params {object} - HTML elem paraméterei
-     * @returns {HTMLElement} - element a legbelül ágyazott DOM element
-     * @throws {Error} - ha a type nem object/array
+     * crates a nested element (multilevel)
+     * @param type {string[]} html DOM types for e.g.: [td, input]
+     * @param parent {string | HTMLElement}parent DOM element, in which the element is created
+     * @param params {object} parameters of the element (fot e.g.: id, class)
+     * @returns {HTMLElement} the innermost nested HTML element
+     * @throws {Error} -  if type is not an object
      * @see createSimpleHtmlElement
      */
     static createNestedHtmlElement(type, parent, params = {}) {
+        //TODO test with object
         if (typeof type !== "object")
             throw new Error('createHtmlNestedElement type must be an array');
-        let param, temp, returnObject;
-        for (const key in type)
-            if (type.hasOwnProperty(key)) {
-                param = {}
-                if (parseInt(key) === type.length - 1) param = params;
-                temp = this.createSimpleHtmlElement(type[key], parent, param)
-                if (key === "0") returnObject = temp
-                parent = temp;
-            }
-
+        let param, temp;
+        for (const key in type) {
+            param = {}
+            if (parseInt(key) === type.length - 1) param = params;
+            temp = this.createSimpleHtmlElement(type[key], parent, param)
+            parent = temp;
+        }
         return temp;
     }
 
     /**
-     * hozzáad egy header sort egy táblához (<tr><th></th>...</tr>)
-     * @param parentDOMElement {HTMLTableElement | HTMLTableSectionElement} - TABLE vagy THEAD DOM element
-     * @param headerStrings {array} - a header-ökbe kerülő string-ek
-     * @returns {HTMLTableRowElement}  a létrehozott header row
-     * @throws {Error}- ha a parentDOMElement nem TABLE vagy THEAD
+     * adds a header row to a table (<tr><th></th>...</tr>)
+     * @param parentDOMElement {HTMLTableElement | HTMLTableSectionElement} - TABLE or THEAD DOM element
+     * @param headerStrings {string[]} header strings
+     * @returns {HTMLTableRowElement}  created table row
+     * @throws {Error}- if parentDOMElement not TABLE or THEAD
      */
     static addHeaderRowToTable(parentDOMElement, headerStrings) {
         if (parentDOMElement.nodeName !== "TABLE" && parentDOMElement.nodeName !== "THEAD")
@@ -93,13 +91,13 @@ class HtmlElementCreator {
     }
 
     /**
-     * létrehoz egy select DOM elemet, valamint az option-öket (addOptionToSelect fv)
-     * @param parent {HTMLElement} - szülő DOM elememt, amibe a select kerül
-     * @param params {object} - paraméterek - a select elem paraméterei
-     * @param options {object | array} - választható opciók (részletesebben lásd addOptionToSelect)
-     * @param addOptionValue {boolean} - opciókhoz kell e külön value (részletesebben lásd addOptionToSelect)
-     * @param filterable {boolean} - ha true hozzáad egy üres optiont
-     * @returns {HTMLSelectElement} a létrejött Select DOM elem
+     * creates a select dom element, and it's options
+     * @param parent {HTMLElement} parent DOM element, in which the element is created
+     * @param params {object} parameters of the SELECT element (fot e.g.: id, class)
+     * @param options {object | array} possible options (see addOptionToSelect)
+     * @param addOptionValue {boolean} - options get value? (see addOptionToSelect)
+     * @param filterable {boolean} - if true adds an empty option (see addOptionToSelect)
+     * @returns {HTMLSelectElement} created SELECT DOM element
      * @see addOptionToSelect
      */
     static createSelectWithOptions(parent, params = {}, options = [], addOptionValue = true, filterable = false) {
@@ -112,43 +110,38 @@ class HtmlElementCreator {
             newDiv.selectedIndex = params.selectedIndex
             delete params.selectedIndex
         }
-        for ( const key in params)
-            if (params.hasOwnProperty(key))
-                 newDiv.setAttribute(key, params[key]);
-
+        for (const key in params)
+            newDiv.setAttribute(key, params[key]);
         parent.appendChild(newDiv);
         HtmlElementCreator.addOptionToSelect(newDiv, options, addOptionValue, filterable);
-
         return newDiv
     };
 
     /**
-     * választható opciókat ad egy select elemhez
-     * @param element {HTMLSelectElement} a select DOM elem
-     * @param options {object | array} választható opciók - ha az addOptionvalue true az object/array attributumnevei/kulcsai
-     * value-k lesznek, az értékek pedig labelek
-     * @param addOptionValue {boolean} - ha true: value (attributumérték) és label(attribútum) értékeket kap az option,
-     *                                  ha false: a value és a label ugyanaz lesz(attribútumérték)
-     * @param filterable {boolean} - ha true, akkor a előre egy üres opció kerül - szűréshez
+     * adds options to a select
+     * @param element {HTMLSelectElement} select DOM element
+     * @param options {object | array} options [key: label][]
+     * @param addOptionValue {boolean} if true: options key will be select values and option values will be select labels
+     *                                  if false: select labels and values will be the same - the option's values
+     * @param filterable {boolean} if true, the first option will be an empty option
      */
     static addOptionToSelect(element, options, addOptionValue = true, filterable = false) {
         if (addOptionValue === undefined)
             addOptionValue = true;
         if (filterable)
             element.add(document.createElement("option"));
-        for (const i in options)
-            if (options.hasOwnProperty(i)) {
-                const option = document.createElement("option");
-                if (addOptionValue)
-                    option.value = i;
-                option.text = options[i];
-                element.add(option);
-            }
+        for (const option in options) {
+            const newOption = document.createElement("option");
+            if (addOptionValue)
+                newOption.value = option;
+            newOption.text = options[option];
+            element.add(newOption);
+        }
     };
 
     /**
-     * rekurzívan kiürít egy DOM elemet
-     * @param element {HTMLElement | ChildNode} kiürítendő element
+     * empties an element recursively
+     * @param element {HTMLElement | ChildNode} element to empty
      */
     static emptyDOMElement(element) {
         while (element.firstChild) {

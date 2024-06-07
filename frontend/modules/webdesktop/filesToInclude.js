@@ -1,4 +1,4 @@
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'desktop', [
         {
             directory: WEB_DESKTOP_MODULE_DIR,
@@ -8,14 +8,14 @@ Includer.setIncludableFileSource(
             fileNames: ['DesktopController.js', 'DesktopView.js', 'DesktopModel.js', 'Desktop.css']
         }
     ])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'desktopWindow', [
         {
             directory: WEB_DESKTOP_MODULE_DIR + 'DesktopWindow',
             fileNames: ['DesktopWindowController.js', 'DesktopWindowView.js', 'DesktopWindowModel.js', 'DesktopWindow.css']
         }
     ])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'desktopWindowTab', [
         {
             directory: WEB_DESKTOP_MODULE_DIR + 'DesktopWindowTab',

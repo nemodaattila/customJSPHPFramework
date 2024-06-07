@@ -1,4 +1,4 @@
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'companyLister', [
         {
             directory: MODULE_FILE_DIR + 'companies',
@@ -14,7 +14,7 @@ Includer.setIncludableFileSource(
             ]
         },
     ])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'companyCreator', [
         {
             directory: MODULE_FILE_DIR + 'companies',
@@ -30,7 +30,7 @@ Includer.setIncludableFileSource(
             ]
         },
     ])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'companyEditor', [
         {
             directory: MODULE_FILE_DIR + 'companies',

@@ -1,39 +1,81 @@
+/**
+ * model for Include class
+ */
 class IncluderModel {
-    _includableFileSources = [];
+    /**
+     *
+     * @type {{string: {directory: string, fileNames: string[]}[]}}
+     * @private
+     */
+    _includableModuleSources = {};
+    /**
+     * returns files to be loaded
+     * @type {string[]} file paths
+     * @private
+     */
     _filesToLoad = []
     get filesToLoad() {
         return this._filesToLoad;
     }
 
+    /**
+     * already loaded files
+     * @type {string[]}
+     * @private
+     */
     _loadedFiles = []
-    set loadedFiles(value) {
-        this._loadedFiles.push(value);
+    /**
+     * adds a file to load !IMPORTANT adds, not sets
+     * @param {string} file filename
+     */
+    set loadedFiles(file) {
+        this._loadedFiles.push(file);
     }
 
+    /**
+     * adds a file to loaded files !IMPORTANT, adds not sets
+     * @param {string} file filename
+     */
     setFilesToLoad(file) {
         this._filesToLoad.push(file);
     }
 
-    resetFilesToLoad() {
+    /**
+     * empties filesToLoad array
+     */
+    emptyFilesToLoad() {
         this._filesToLoad = [];
     }
 
-    getIncludableFileSource(name) {
-        if (!this._includableFileSources[name]) {
-            Messenger.showAlert('fileSource not included: '+name);
-            return false;
-        }
-            return this._includableFileSources[name];
+    /**
+     * returns module files to be loaded (directory and filenames) based on module name
+     * @param {string} moduleName module name
+     * @returns {boolean|*} module files or false if module not exists
+     */
+    getIncludableModuleSource(moduleName) {
+        if (this._includableModuleSources[moduleName])
+            return this._includableModuleSources[moduleName];
+        Messenger.showAlert('fileSource not included: ' + moduleName);
+        return false;
     }
 
-    setIncludableFileSource(name, value) {
-        if (!this._includableFileSources[name])
-            this._includableFileSources[name] = value;
+    /**
+     * saves module file parameters
+     * @param {string} moduleName module name
+     * @param {{directory: string, fileNames: string[]}[]} files file parameters {directory: string, fileNames: string[]}[]
+     */
+    setIncludableModuleSource(moduleName, files) {
+        if (!this._includableModuleSources[moduleName]) {
+            this._includableModuleSources[moduleName] = files;
+        } else Messenger.showAlert('moduleName already exists')
     }
 
+    /**
+     * checks if a file already loaded
+     * @param fileName {string}} file name
+     * @returns {boolean}
+     */
     searchInLoadedFiles(fileName) {
         return this._loadedFiles.findIndex(file => file === fileName) !== -1
     }
-
-    // loadedModuleFiles = {}
 }

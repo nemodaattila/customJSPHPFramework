@@ -20,7 +20,7 @@ class ModuleLoader {
             }]
         );
         await Includer.startLoad()
-        const moduleFiles = Includer.getIncludableFileSource(module)
+        const moduleFiles = Includer.getIncludableModuleSource(module)
         let temp = await this.getComponent(moduleFiles, 'Controller')
         if (!temp) {
             Messenger.showAlert('controller file missing from: ' + moduleGroupName)

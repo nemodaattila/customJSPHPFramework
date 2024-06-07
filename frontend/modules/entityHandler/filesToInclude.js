@@ -1,4 +1,4 @@
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'entityHandlerTable', [{
         directory: MODULE_FILE_DIR + 'entityHandler/entityHandlerTable',
         fileNames: [
@@ -10,7 +10,7 @@ Includer.setIncludableFileSource(
             'EntityHandlerViewParent.js'
         ]
     }])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'listerTable', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
@@ -22,7 +22,7 @@ Includer.setIncludableFileSource(
                 'EntityListerControllerParent.js'
             ]
         }])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'pageTurner', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
@@ -31,7 +31,7 @@ Includer.setIncludableFileSource(
                 'PageTurner.css',
             ]
         }])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'listerTableSearchConnector', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
@@ -39,7 +39,7 @@ Includer.setIncludableFileSource(
                 'EntityListerTableSearchConnector.js',
             ]
         }])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'infinityScroller', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityListerTable',
@@ -48,7 +48,7 @@ Includer.setIncludableFileSource(
                 'InfinityScroller.css',
             ]
         }])
-Includer.setIncludableFileSource(
+Includer.setIncludableModuleSource(
     'entityServiceParent', [
         {
             directory: MODULE_FILE_DIR + 'entityHandler/entityServiceParent',
