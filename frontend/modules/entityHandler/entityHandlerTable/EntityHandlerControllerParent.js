@@ -81,28 +81,90 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
 
     collectAndSaveRecord()
     {
-             const collectedData = this._view.getComponent('handlerTable').getInputValues()
-        const attributes = this.getHeaderAttributeParams()
-            const hasNoError = Object.entries(collectedData).every(([key,value])=>{
-                if (attributes[key]?.required)
-                {
-                    if (value === '')
-                    {
-                        Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
-                        return false
-                    }
-                }
-                return true
-            })
-        console.log(collectedData)
-        if (!hasNoError)
-            return
-        //      if (compData.address === '' || compData.name === '') {
-        //           AlertPopup.showAlert('Megnevezés és cím kitöltése közelező')
-        //           return
-        //      }
-             this.sendDataHandlerRequest(collectedData)
+
+            const match = item => new Map([
+                ['creator', "collectAndCreateRecord"],
+                ['editor', "collectAndEditRecord"],
+                ['multiEditor', "Normal"],
+            ]).get(item) ?? false
+
+        console.log(match('creator'))
+        this[match(this._type)]()
     }
+
+     async collectAndCreateRecord() {
+         const collectedData = this._view.getComponent('handlerTable').getInputValues()
+         if (!this.validateRecord(collectedData))
+             return
+         this.encodeStringParameters(collectedData)
+         await this.service.sendCreateRequest(collectedData)
+         this._view.getComponent('handlerTable').resetTable()
+     }
+
+    async collectAndEditRecord() {
+        const collectedData = this._view.getComponent('handlerTable').getInputValues()
+        if (!this.validateRecord(collectedData))
+            return
+       const originalData = await this.service.getSelectedDataFromLocalDatabase()
+        console.log(originalData)
+
+        this.getDifferenceBetweenModifiedDataAndOriginal(collectedData, originalData)
+        console.log(collectedData)
+
+        if (Object.keys(collectedData).length === 0)
+            return;
+        this.encodeStringParameters(collectedData)
+        collectedData.id = originalData.id
+        console.log(collectedData)
+        // await this.service.sendEditRequest(collectedData)
+        // this._view.getComponent('handlerTable').resetTable()
+    }
+
+    getDifferenceBetweenModifiedDataAndOriginal(collectedData, originalData)
+    {
+        Object.entries(collectedData).forEach(([key, value]) => {
+            if (value === originalData[key])
+                delete collectedData[key]
+        })
+    }
+
+     validateRecord(collectedData)
+     {
+         const attributes = this.getHeaderAttributeParams()
+          return Object.entries(collectedData).every(([key,value])=>{
+             if (attributes[key]?.required)
+             {
+                 if (value === '')
+                 {
+                     Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
+                     return false
+                 }
+             }
+             return true
+         })
+     }
+
+    encodeStringParameters(collectedData)
+    {
+        let stringTypes =    [ 'string',         'char',
+         'longtext',
+         'mediumtext',
+            'text',
+    'tinytext',
+     'varchar'
+]
+        const tableHeaderAttributes = this.getHeaderAttributeParams()
+
+        Object.entries(collectedData).forEach(([id, value]) => {
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+                return
+
+            if (stringTypes.findIndex(strType => strType === tableHeaderAttributes[id].type) !== -1)
+            collectedData[id] = encodeURIComponent(value)
+        })
+    }
+
+
 
     async sendDataHandlerRequest(collectedData) {
         console.log(this._type)
