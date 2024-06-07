@@ -281,8 +281,23 @@ class EntityHandlerTableView {
             }
             else if (type === 'string') {
                 console.log('decode')
-                this._inputs[id].value = decodeURIComponent(record[id])
-                console.log(decodeURIComponent(record[id]))
+                let pseudoElement = document.createElement('textarea');
+                pseudoElement.innerHTML = record[id];
+
+                this._inputs[id].value = pseudoElement.value
+
+                // console.log(record[id])
+                // try
+                // {
+                //
+                //     this._inputs[id].value = decodeURIComponent(record[id])
+                //     console.log(decodeURIComponent(record[id]))
+                // }
+                // catch (e)
+                // {
+                //     console.log(e)
+                // }
+
             }
             else
                 this._inputs[id].value = record[id]
