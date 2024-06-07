@@ -8,7 +8,7 @@ class CompanyEditorController extends EntityHandlerControllerParent {
      displayView(windowBody) {
           super.displayView(windowBody)
 
-          this._view.addButtonContainer(1, {value: 'Cég hozzáadása'}, () =>
+          this._view.addButtonContainer(1, {value: 'Cég adatainak módosítása'}, () =>
               this.collectAndSaveRecord())
      }
      //
