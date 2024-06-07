@@ -7,7 +7,7 @@ class CompanyEditorController extends EntityHandlerControllerParent {
 
      displayView(windowBody) {
           super.displayView(windowBody)
-
+          //TODO del record button
           this._view.addButtonContainer(1, {value: 'Cég adatainak módosítása'}, () =>
               this.collectAndSaveRecord())
      }
