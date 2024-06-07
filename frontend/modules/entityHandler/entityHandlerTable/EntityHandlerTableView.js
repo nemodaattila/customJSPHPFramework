@@ -4,6 +4,27 @@ class EntityHandlerTableView {
     _inputs = {}
     _focusedCustomInput
 
+    _inputNumAndStringMatcher = type => new Map([
+
+    [ 'number','int'],
+    [ 'bigint','int'],
+    [ 'decimal','float'],
+    [ 'double','float'],
+    [ 'float','float'],
+    [ 'int','int'],
+    [ 'smallint','int'],
+    [ 'tinyint','int'],
+    [ 'year','int'],
+    [ 'string','string'],
+    [ 'char','string'],
+    [ 'longtext','string'],
+    [ 'mediumtext','string'],
+    [ 'text','string'],
+    [ 'tinytext','string'],
+    [ 'varchar','string'],
+
+    ]).get(type) ?? type
+
     constructor( tableContainer, controllerPointer) {
         this._mainContainer = tableContainer;
 
@@ -55,27 +76,18 @@ class EntityHandlerTableView {
                 HtmlElementCreator.createSimpleHtmlElement('span', label, {innerHTML: '*', class: 'requiredInput'})
             if (!input.params)
                 input.params = {}
-            const type = input.type ?? 'string'
+            let type = input.type ?? 'string'
             const tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
+            console.log(type)
+            type = this._inputNumAndStringMatcher(type)
+            console.log(type)
+	//TODO put types into induvudual classes 
             switch (type) {
-                case 'number':
-                case 'bigint':
-                case 'decimal':
-                case 'double':
                 case 'float':
                 case 'int':
-                case 'smallint':
-                case 'tinyint':
-                case 'year':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {...{type: 'number'}, ...input.params})
                      break;
                 case 'string':
-                case 'char':
-                case 'longtext':
-                case 'mediumtext':
-                case 'text':
-                case 'tinytext':
-                case 'varchar':
                     this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'text'})
                     break;
                 case 'currency':
@@ -178,7 +190,14 @@ class EntityHandlerTableView {
         let values = {}
         Object.entries(this._inputs).forEach(([id, input]) => {
 
-            switch (tableHeaderAttributes[id].type) {
+            switch (this._inputNumAndStringMatcher(tableHeaderAttributes[id].type)) {
+                case 'float':
+                    values[id] =parseFloat( this._inputs[id].value)
+                    break
+                case 'select':
+                case 'int':
+                    values[id] =parseInt( this._inputs[id].value)
+                break
                 case 'customInput':
                     values[id] = this._inputs[id].firstChild.value
                     if (values[id] === '') values[id] = null
@@ -188,13 +207,8 @@ class EntityHandlerTableView {
                     values[id] = (index === -1)? null: this._inputs[id].children[1].options[index].getAttribute('data-value')
                     break
                 case 'string':
-                case 'char':
-                case 'longtext':
-                case 'mediumtext':
-                case 'text':
-                case 'tinytext':
-                case 'varchar':
-                    values[id] = encodeURIComponent(this._inputs[id].value.trim())
+                case 'textArea':
+                    values[id] = this._inputs[id].value.trim()
                     break
                 case 'file':
                     values[id] = this._inputs[id].files
@@ -216,7 +230,7 @@ class EntityHandlerTableView {
         Object.entries(this._inputs).forEach(([id, input]) => {
             if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
                 return
-            const type = tableHeaderAttributes[id].type
+            const type = this._inputNumAndStringMatcher(tableHeaderAttributes[id].type)
             if (type === 'customInput') {
                 this._inputs[id].firstChild.value = ''
                 this._inputs[id].children[1].innerHTML = ''
@@ -251,7 +265,9 @@ class EntityHandlerTableView {
         Object.entries(this._inputs).forEach(([id, input]) => {
             if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
                 return
-            const type = tableHeaderAttributes[id].type
+            console.log(tableHeaderAttributes[id].type)
+            const type =this._inputNumAndStringMatcher(tableHeaderAttributes[id].type )?? 'string'
+            console.log(type)
             if (type === 'customInput') {
                 this._inputs[id].firstChild.value = record[id]
             } else if (type === 'dataListSelect') {
@@ -260,9 +276,15 @@ class EntityHandlerTableView {
                     let opt = HtmlElementCreator.createHtmlElement('option', this._inputs[id].children[1], {value: this.service.selectedRecord[input.params.fillParam]})
                     opt.setAttribute('data-value', this.service.selectedRecord[id])
                 }
-            } else if (input.type === 'currency') {
+            } else if (type === 'currency') {
                 this._inputs[id].value = this.formatValue(record[id])
-            } else
+            }
+            else if (type === 'string') {
+                console.log('decode')
+                this._inputs[id].value = decodeURIComponent(record[id])
+                console.log(decodeURIComponent(record[id]))
+            }
+            else
                 this._inputs[id].value = record[id]
         })
     }
