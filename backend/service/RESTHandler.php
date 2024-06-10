@@ -126,17 +126,27 @@ class RESTHandler
         $this->parameters = $this->routeAnalyser->getParameters();
         if (isset($_SERVER['CONTENT_TYPE'])) {
             switch ($_SERVER['REQUEST_METHOD']) {
-                case 'PUT':
-
-                    $putVars = file_get_contents('php://input');
-                    print_r($putVars);
-                    foreach ($putVars as $key=>$value)
+                case 'PATCH':
+                    $_PATCH = explode('&',file_get_contents('php://input'));
+                    $parameters = [];
+                    foreach ($_PATCH as $value)
                     {
-                        $putVars[$key] = json_decode($value);
+                        [$key,$keyValue] = explode('=',$value);
+                        $parameters[$key]=$keyValue;
                     }
-                    var_dump($putVars);
-                    if (count($putVars) === 1) $putVars = $putVars[0];
-                    $this->parameters->setRequestData($putVars);
+                    $this->parameters->setRequestData($parameters);
+
+
+//                    $putVars = file_get_contents('php://input');
+//                    print_r($putVars);
+//
+//                    foreach ($putVars as $key=>$value)
+//                    {
+//                        $putVars[$key] = json_decode($value);
+//                    }
+//                    var_dump($putVars);
+//                    if (count($putVars) === 1) $putVars = $putVars[0];
+//                    $this->parameters->setRequestData($putVars);
                     break;
                 case 'POST':
                     $decodedData = filter_input_array(INPUT_POST);

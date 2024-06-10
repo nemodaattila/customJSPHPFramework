@@ -17,6 +17,7 @@ class Routes
         ['GET', 'company/meta', 'MetaDataHandler', 'getCompanyMeta', 'A'],
         ['GET', 'company', 'CompanyHandler', 'getCompanyIds', 'A'],
         ['POST', 'company', 'CompanyHandler', 'createCompany', 'A'],
+        ['PATCH', 'company/$1', 'CompanyHandler', 'editCompany', 'A'],
 
         ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A']
 //

@@ -259,7 +259,7 @@ class CustomPDO implements DatabaseConnectionInterface
      * @return bool sikeresség
      * @throws Exception mysql hiba
      */
-    protected function updateRecord(string $tableName, int $id, array $values): bool {
+    public function updateRecord(string $tableName, int $id, array $values): bool {
         $attr = [];
         $attrVal = [];
         foreach ($values as $key => $val) {

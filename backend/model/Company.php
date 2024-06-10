@@ -65,7 +65,6 @@ class Company extends EntityModelParent
 
 
     public function __construct($companyData) {
-        var_dump($companyData);
         foreach ($companyData as $key => $value)
             $this->$key=$value;
     }

@@ -63,7 +63,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         //     ac.postFields.additionalParams = JSON.stringify(additionalParams)
         try {
             console.log(searchAndOrderParams)
-            return  await RESTHandler.send({
+            return  await RESTHandler.sendRequest({
                 url: this._restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
@@ -84,7 +84,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getOne(id) {
-        this._model.addRecord(id, await RESTHandler.send({
+        this._model.addRecord(id, await RESTHandler.sendRequest({
             url: this._restParameter + "/" + id, requestType: 'GET',
         }))
     }
@@ -106,13 +106,14 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.send({url: this._restParameter+'/meta', requestType: 'GET'})
+        this._model.companyTypes = await RESTHandler.sendRequest({url: this._restParameter+'/meta', requestType: 'GET'})
         this._model.loaded = true
+        console.log(this)
     }
 
     async sendCreateRequest(record) {
 
-        await RESTHandler.send({
+        await RESTHandler.sendRequest({
             url: this._restParameter, requestType: 'POST',
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : record
@@ -131,7 +132,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         for (const id of dataIds) {
             record.id = id
             console.log(record)
-            await RESTHandler.send({
+            await RESTHandler.sendRequest({
                 url: this._restParameter+'/'+id, requestType: 'PATCH',
                 customHeader: {"Content-type": 'application/json-patch+json'},
                 values : record
