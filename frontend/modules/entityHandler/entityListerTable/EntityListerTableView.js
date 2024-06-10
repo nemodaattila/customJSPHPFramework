@@ -175,10 +175,10 @@ class EntityListerTableView {
         const editorIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'edit_icon.png', class: 'tableIcon', title: 'Rekord kezelés'
         })
-        if (enabledOperations.edit)
+        if (enabledOperations.editor)
             editorIcon.addEventListener('click', (event) => {
                 event.stopPropagation()
-                this.showDetailed()
+                this._controllerPointer.operationIconClicked('editor');
             })
         const eraserIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'del_icon.png', class: 'tableIcon', title: 'Kijelölt rekord(ok) törlése'
