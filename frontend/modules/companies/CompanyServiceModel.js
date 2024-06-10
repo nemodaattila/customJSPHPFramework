@@ -35,7 +35,7 @@ class CompanyServiceModel extends EntityServiceModelParent {
         },
         multipleEditor: {
             module: 'multipleCompanyEditor',
-            title: 'Cégek szerkesztése'
+            title: 'Több cég szerkesztése'
         },
         creator: {
             module: 'companyCreator',

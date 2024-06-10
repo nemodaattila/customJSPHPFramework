@@ -46,3 +46,19 @@ Includer.setIncludableModuleSource(
             ]
         },
     ])
+Includer.setIncludableModuleSource(
+    'multipleCompanyEditor', [
+        {
+            directory: MODULE_FILE_DIR + 'companies',
+            fileNames: [
+                'CompanyService.js',
+                'CompanyServiceModel.js',
+            ]
+        },
+        {
+            directory: MODULE_FILE_DIR + 'companies/CompanyMultipleEditor',
+            fileNames: [
+                'CompanyMultipleEditorController.js',
+            ]
+        },
+    ])
