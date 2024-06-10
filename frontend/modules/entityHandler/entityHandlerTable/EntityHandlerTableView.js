@@ -313,6 +313,50 @@ class EntityHandlerTableView {
         })
     }
 
+    getNotEmptyInputValues(tableHeaderAttributes) {
+        let values = {}
+        Object.entries(this._inputs).forEach(([id, input]) => {
+            const type = this._inputNumAndStringMatcher(tableHeaderAttributes[id].type)
+            switch (type) {
+                case 'customInput':
+                    let val = this._inputs[id].firstChild.value
+                    if (val !== '') values[id] = val
+                    break;
+                case 'dataListSelect':
+                    let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
+                    if (index !== -1)
+                        values[id] = this._inputs[id].children[1].options[index].getAttribute('data-value')
+                    break
+                case 'string':
+                case 'char':
+                case 'longtext':
+                case 'mediumtext':
+                case 'text':
+                case 'tinytext':
+                case 'varchar':
+                    if (this._inputs[id].value !== '')
+                        values[id] = encodeURIComponent(this._inputs[id].value.trim())
+                    break
+                case 'select':
+                    if (this._inputs[id].value !== "-1")
+                        values[id] = this._inputs[id].value
+                    break
+                case 'currency':
+                    if (this._inputs[id].value !== '')
+                        values[id] = this._inputs[id].value.replaceAll(' ', '')
+                    break
+                case 'datetime':
+                    if (this._inputs[id].value !== '')
+                        values[id] = this._inputs[id].value.toString().replace('T', ' ')
+                    break
+                default:
+                    if (this._inputs[id].value !== '')
+                        values[id] = this._inputs[id].value
+            }
+        })
+        return values
+    }
+
     // /**
     //  * magas tábla DOM elementje
     //  * @type {HTMLTableElement}
@@ -419,49 +463,7 @@ class EntityHandlerTableView {
     //  * magas tábla azon elemeinek visszadása ami nem üres pl: ''
     //  * @returns {{}}
     //  */
-    // getTallTableNonNullValues() {
-    //     let _inputs = this.windowContentPointer.content._inputs
-    //     let values = {}
-    //     Object.entries(_inputs).forEach(([id, input]) => {
-    //         switch (input.type) {
-    //             case 'customInput':
-    //                 let val = this._inputs[id].firstChild.value
-    //                 if (val !== '') values[id] = val
-    //                 break;
-    //             case 'dataListSelect':
-    //                 let index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
-    //                 if (index !== -1)
-    //                     values[id] = this._inputs[id].children[1].options[index].getAttribute('data-value')
-    //                 break
-    //             case 'string':
-    //             case 'char':
-    //             case 'longtext':
-    //             case 'mediumtext':
-    //             case 'text':
-    //             case 'tinytext':
-    //             case 'varchar':
-    //                 if (this._inputs[id].value !== '')
-    //                     values[id] = encodeURIComponent(this._inputs[id].value.trim())
-    //                 break
-    //             case 'select':
-    //                 if (this._inputs[id].value !== "-1")
-    //                     values[id] = this._inputs[id].value
-    //                 break
-    //             case 'currency':
-    //                 if (this._inputs[id].value !== '')
-    //                     values[id] = this._inputs[id].value.replaceAll(' ', '')
-    //                 break
-    //             case 'datetime':
-    //                 if (this._inputs[id].value !== '')
-    //                     values[id] = this._inputs[id].value.toString().replace('T', ' ')
-    //                 break
-    //             default:
-    //                 if (this._inputs[id].value !== '')
-    //                     values[id] = this._inputs[id].value
-    //         }
-    //     })
-    //     return values
-    // }
+
     //
     // /**
     //  * magas tábla feltöltése értékekkel

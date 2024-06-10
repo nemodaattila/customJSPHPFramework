@@ -85,10 +85,9 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
             const match = item => new Map([
                 ['creator', "collectAndCreateRecord"],
                 ['editor', "collectAndEditRecord"],
-                ['multiEditor', "Normal"],
+                ['multipleEditor', "collectAndEditMultipleRecord"],
             ]).get(item) ?? false
 
-        console.log(match('creator'))
         this[match(this._type)]()
     }
 
@@ -111,6 +110,8 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
 
     async collectAndEditRecord() {
         const collectedData = this._view.getComponent('handlerTable').getInputValues()
+        if (Object.keys(collectedData).length === 0)
+            return;
         if (!this.validateRecord(collectedData))
             return
        const originalData = await this.service.getSelectedDataFromLocalDatabase()
@@ -119,8 +120,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
         this.getDifferenceBetweenModifiedDataAndOriginal(collectedData, originalData)
         console.log(collectedData)
 
-        if (Object.keys(collectedData).length === 0)
-            return;
+
         this.encodeStringParameters(collectedData)
         collectedData.id = originalData.id
         console.log(collectedData)
@@ -172,7 +172,22 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
         })
     }
 
+    async collectAndEditMultipleRecord() {
+        const collectedData = this._view.getComponent('handlerTable').getNotEmptyInputValues()
+        if (Object.keys(collectedData).length === 0)
+            return;
 
+        if (!this.validateRecord(collectedData))
+            return
+
+
+
+        this.encodeStringParameters(collectedData)
+        collectedData.id = this._serviceModelPointer.selectedIds
+        console.log(collectedData)
+        await this.service.sendEditRequest(collectedData, this._multiple)
+        this._view.getComponent('handlerTable').resetTable()
+    }
 
     async sendDataHandlerRequest(collectedData) {
         console.log(this._type)

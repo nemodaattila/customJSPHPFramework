@@ -18,6 +18,12 @@ class EntityHandlerTableController {
        return this._view.getInputValues(this._headerAttributeParams)
     }
 
+    getNotEmptyInputValues()
+    {
+        return this._view.getNotEmptyInputValues(this._headerAttributeParams)
+
+    }
+
     resetTable()
     {
         this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor', this._type)
