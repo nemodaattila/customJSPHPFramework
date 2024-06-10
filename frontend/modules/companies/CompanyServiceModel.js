@@ -1,4 +1,11 @@
 class CompanyServiceModel extends EntityServiceModelParent {
+
+    _restParameter = 'company'
+
+    _handlerEventTrigger = 'companyHandlerEvent'
+
+    _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva'}
+
     _companyTypes = {0: 'Nem vevő'}
 
     _moduleDirName = "companies"
@@ -18,7 +25,7 @@ class CompanyServiceModel extends EntityServiceModelParent {
 
 
 
-    // _selectedRecord = null
+// _selectedRecord = null
     // get selectedRecord() {
     //     return this._selectedRecord;
     // }

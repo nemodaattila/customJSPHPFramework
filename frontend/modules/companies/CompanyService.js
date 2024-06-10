@@ -1,9 +1,5 @@
 class CompanyService extends EntityServiceControllerParent {
-    _restParameter = 'company'
 
-    _handlerEventTrigger = 'companyHandlerEvent'
-
-    _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva'}
 
 
     async init() {
