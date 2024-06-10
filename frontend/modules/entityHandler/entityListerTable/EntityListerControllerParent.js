@@ -94,6 +94,11 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         this.refreshRows({resetOffset: true})
     }
 
+    onHandlerEvent()
+    {
+        this.refreshRows({hardReset: true})
+    }
+
     async refreshRows(params = {}) {
         console.log(params)
         params = params ?? {}

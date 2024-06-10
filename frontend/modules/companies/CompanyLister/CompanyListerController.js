@@ -3,7 +3,7 @@
  */
 class CompanyListerController extends EntityListerControllerParent {
     subscribeToEvents() {
-        EventSubscriptionHandler.subscribe('companyHandlerEvent', this, 'refreshRows')
+        EventSubscriptionHandler.subscribe('companyHandlerEvent', this, 'onHandlerEvent')
     }
      _pageTurnerType = 'infinityScroller'
     //_pageTurnerType = 'pageTurner'
