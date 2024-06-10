@@ -1,17 +1,14 @@
 /**
- * MVC modul betöltése
+ * loading MVC modules; module groups: entity lister, and handlers (creator, editor), service in a pack
  */
 class ModuleLoader {
     /**
-     * a betöltendő modul paraméterei - module: modulnév, object: meghivó object: App, task: végrehajtandó almodul neve
-     * @type {{module: string, object: Object, task: string, params: Object|null}}
+     * loads an MVC module controller, model, view + service and serviceModel if exists
+     * @param moduleGroupName {string} name of the module group - for e.g. companies
+     * @param module {string} name of the module for e.g. CompanyCreator
+     * @param connectedParams not used as yet
+     * @returns {Promise<*|boolean>} returns the controller or false, if module group not exists
      */
-    static moduleToLoad
-    // /**
-    //  *  ModulInitiator példány
-    //  *  @type {ModuleInitiator}
-    //  */
-    // static initiator
     static async loadModule(moduleGroupName, module, connectedParams = null) {
         Includer.addFilesToLoad(
             [{
@@ -21,104 +18,39 @@ class ModuleLoader {
         );
         await Includer.startLoad()
         const moduleFiles = Includer.getIncludableModuleSource(module)
-        let temp = await this.getComponent(moduleFiles, 'Controller')
-        if (!temp) {
+        let controllerName = await this.getComponent(moduleFiles, 'Controller')
+        if (!controllerName) {
             Messenger.showAlert('controller file missing from: ' + moduleGroupName)
             return false
         }
-        const controller = new (eval(await this.loadFile(temp)))(moduleGroupName)
-        console.log(performance.now())
-        console.trace()
-        console.log(controller.constructor.name)
-
-
-        temp = await this.getComponent(moduleFiles, 'Service')
-        if (temp) {
-            const service = new (eval(await this.loadFile(temp)))() //TODO nicer solution?
-            console.log(service.model)
+        const controller = new (eval(await this.loadFile(controllerName)))(moduleGroupName)
+        let serviceName = await this.getComponent(moduleFiles, 'Service')
+        if (serviceName) {
+            const service = new (eval(await this.loadFile(serviceName)))() //TODO nicer solution?
             if (service.model === undefined) {
                 let serviceModel = undefined
-                temp = await this.getComponent(moduleFiles, 'ServiceModel')
-                if (temp)
-                    serviceModel = new (eval(await this.loadFile(temp)))()
+                let serviceModelName = await this.getComponent(moduleFiles, 'ServiceModel')
+                if (serviceModelName)
+                    serviceModel = new (eval(await this.loadFile(serviceModelName)))()
                 if (serviceModel)
                     service.model = serviceModel
                 await service.init()
             }
             controller.service = service
         }
-        temp = await this.getComponent(moduleFiles, 'View')
-
-        controller.view=temp?new (eval(await this.loadFile(temp)))():new WindowContentViewParent()
+        let viewFileName = await this.getComponent(moduleFiles, 'View')
+        controller.view = viewFileName ? new (eval(await this.loadFile(viewFileName)))() : new WindowContentViewParent()
         controller.init();
-        // let index = moduleFiles.findIndex(file => file.includes('Service'))
-        //
-        // let controllerFile = moduleFiles[index]
-        //
-        //
-        // index = moduleFiles.findIndex(file => file.includes('Service'))
-        // console.log(index)
-        // if (index !== -1)
-        // {
-        //     let serviceFile = moduleFiles[index]
-        //
-        // }
-        //
-        // let moduleName = module.module
-        // if (!moduleName.includes('Service'))
-        //     moduleName = moduleName + 'Service'
-        // if (App.loadedJSFiles.indexOf('modules/service/' + moduleName + '.js') === -1) {
-        //     Includer.addFilesToLoad({
-        //         callWord: 'moduleServiceLoaded',
-        //         id: moduleName,
-        //         files: [{
-        //             directory: 'modules/service',
-        //             fileNames: [moduleName + '.js']
-        //         }]
-        //     })
-        //     try {
-        //         await Includer.startLoad()
-        //     } catch (e) {
-        //         console.log('Includer error')
-        //         return false
-        //     }
-        // }
-        // let service = eval(moduleName)
-        // if (service.init === undefined) {
-        //     AlertPopup.showAlert(this.moduleToLoad.module + 'Service' + ' has no init function')
-        //     return
-        // }
-        // try {
-        //     await service.init()
-        // } catch (e) {
-        //     console.log('servive init error')
-        //     return false
-        // }
-        // this.initiator = new ModuleInitiator(module)
-        // let files = this.initiator.getFilesToLoad()
-        // if (files === undefined) {
-        //     AlertPopup.showAlert('Module task files definition missing: ' + module.task)
-        //     return
-        // }
-        // Includer.addFilesToLoad({
-        //     callWord: 'moduleFilesLoaded',
-        //     id: module.module + '.' + module.task,
-        //     files: files
-        // })
-        // try {
-        //     await Includer.startLoad()
-        // } catch (e) {
-        //     console.log('Includer startload error')
-        //     return false
-        // }
-        // let controller = this.initiator.initController(module.window, connectedParams)
-        // App.addSubModule(controller)
-        // return true
         return controller
     }
 
-    static async loadFile(tempData) {
-        let [directory, fileName] = tempData
+    /**
+     * adds file to Includer and loads it, returns fileName without exception
+     * @param directory {string} file path
+     * @param fileName {string} filename
+     * @returns {Promise<*>} fileName without exception
+     */
+    static async loadFile([directory, fileName]) {
         Includer.addFilesToLoad(
             [{
                 directory: directory,
@@ -129,6 +61,12 @@ class ModuleLoader {
         return fileName.split('.')[0]
     }
 
+    /**
+     * searches for mvc component in module files (filenames) (for e.g. : View)
+     * @param files {{}[]} module files
+     * @param componentName {string} name of the component (for e.g. : View)
+     * @returns {*[]|boolean}
+     */
     static getComponent(files, componentName) {
         let fileIndex
         const groupIndex = files.findIndex((group) => {
@@ -140,9 +78,6 @@ class ModuleLoader {
             return fileIndex >= 0
         })
         if (groupIndex === -1) return false
-        const data = [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
-        // delete files[groupIndex].fileNames[fileIndex];
-        files[groupIndex].fileNames = files[groupIndex].fileNames.filter((val) => val !== null);
-        return data
+        return [files[groupIndex].directory, files[groupIndex].fileNames[fileIndex]]
     }
 }

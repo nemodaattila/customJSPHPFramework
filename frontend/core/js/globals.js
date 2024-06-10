@@ -1,3 +1,4 @@
+const BACKEND_URL = '../backend/'
 const BACKEND_IMAGE_URL = '../backend/image/'
 const CORE_FILE_DIR = './core/js'
 const MODULE_FILE_DIR = './modules/'
