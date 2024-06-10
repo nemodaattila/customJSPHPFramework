@@ -186,7 +186,8 @@ class EntityListerTableView {
         if (enabledOperations.deletable)
             eraserIcon.addEventListener('click', (event) => {
                 event.stopPropagation()
-                this.service.sendDeleteRequest(this.selectedRows.map(row => row.connectedObjectId))
+                this._controllerPointer.operationIconClicked('delete');
+
             })
         const printerIcon = HtmlElementCreator.createHtmlElement('img', this._tableIconContainer, {
             src: this._iconPath + 'print_icon.png',

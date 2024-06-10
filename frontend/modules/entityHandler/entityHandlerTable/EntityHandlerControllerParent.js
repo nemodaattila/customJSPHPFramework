@@ -86,6 +86,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
                 ['creator', "collectAndCreateRecord"],
                 ['editor', "collectAndEditRecord"],
                 ['multipleEditor', "collectAndEditMultipleRecord"],
+                ['delete', "deleteRecord"],
             ]).get(item) ?? false
 
         this[match(this._type)]()

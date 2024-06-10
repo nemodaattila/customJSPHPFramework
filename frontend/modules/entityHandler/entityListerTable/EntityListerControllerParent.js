@@ -196,7 +196,12 @@ class EntityListerControllerParent extends WindowContentControllerParent {
                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.creator.module)
                 break
             case 'editor':
-                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams[this._serviceModelPointer.selectedIds.length===0?'editor':'multipleEditor'].module)
+                if (this._serviceModelPointer.selectedIds.length===0)
+                    break
+                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams[this._serviceModelPointer.selectedIds.length===1?'editor':'multipleEditor'].module)
+                break
+            case 'delete':
+                await this.service.sendDeleteRequest()
                 break
             default:
                 Messenger.showAlert('EntityListerControllerParent - there is no operation type as ' + operationType)

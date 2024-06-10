@@ -108,19 +108,20 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async sendDeleteRequest() {
-        if (confirm("Biztos hogy törlöd kijelölt rekordokat?") !== true)
+        if (confirm("Biztos hogy törlöd a kijelölt rekordo(ka)t?") !== true)
             return;
         // if ((await this.createAndSendRequest('deleteBill', JSON.stringify(ids))).success === true) {
         //     AlertPopup.showSuccess('Számla törlése')
         //     EventSubscriptionHandler.triggerSubscriptionCall('refreshBill')
         // }
+        console.log(this._model.selectedIds)
+        for (const id of this._model.selectedIds) {
+            await RESTHandler.sendRequest({
+                url: this.model.restParameter+'/'+id, requestType: 'DELETE',
 
-        await RESTHandler.sendRequest({
-            url: this.model.restParameter, requestType: 'POST',
-            customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
-            values :''
-        })
-        Messenger.showSuccess(this.model.successMessages['creator'])
+            })
+        }
+        Messenger.showSuccess(this.model.successMessages['delete'])
         EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
     }
 
