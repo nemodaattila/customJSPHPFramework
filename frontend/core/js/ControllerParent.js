@@ -12,12 +12,13 @@ class ControllerParent {
     }
 
     _view
-    set view(value) {
-        this._view = value;
-    }
 
     get view() {
         return this._view;
+    }
+
+    set view(value) {
+        this._view = value;
     }
 
     destructor() {
