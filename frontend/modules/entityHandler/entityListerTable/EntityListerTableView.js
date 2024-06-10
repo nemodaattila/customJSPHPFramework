@@ -12,7 +12,7 @@ class EntityListerTableView {
     _filterRow
     _filterInputs = {}
     _rows
-    _selectedRows = []
+    // _selectedRows = []
     _lastClickedRow = undefined
     _actualSortElement = null
     _tableContainerHeader
@@ -64,14 +64,14 @@ class EntityListerTableView {
     }
 
     _firstSortClick=true
-
-    set selectedRows(value) {
-        this._selectedRows = value;
-    }
-
-    get selectedRows() {
-        return this._selectedRows;
-    }
+    //
+    // set selectedRows(value) {
+    //     this._selectedRows = value;
+    // }
+    //
+    // get selectedRows() {
+    //     return this._selectedRows;
+    // }
 
     get lastClickedRow() {
         return this._lastClickedRow;

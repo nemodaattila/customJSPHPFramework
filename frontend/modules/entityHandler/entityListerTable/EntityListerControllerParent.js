@@ -208,9 +208,14 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         // if (rowClickEvent.button === 1 || this.service.selectedRecord !== null)
             // this.showDetailed(false)
 
-
         if (rowClickEvent.ctrlKey) {
-            this.addRemoveSelectedRow(row)
+            let index =
+                this._serviceModelPointer.selectedIds.indexOf(recordId)
+            index === -1?
+                this._serviceModelPointer.addSelectedId(recordId):
+                this._serviceModelPointer.removeSelectedId(index)
+
+                console.log(this._serviceModelPointer.selectedIds)
             return
         }
         if (rowClickEvent.shiftKey) {

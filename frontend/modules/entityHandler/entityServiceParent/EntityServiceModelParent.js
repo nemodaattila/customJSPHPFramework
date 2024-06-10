@@ -25,6 +25,11 @@ class EntityServiceModelParent {
 
     }
 
+    removeSelectedId(index)
+    {
+        this._selectedIds.splice(index, 1)
+    }
+
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
     }
@@ -93,7 +98,6 @@ class EntityServiceModelParent {
 
     getRecordByIdForListTable(id) {
         const record = {...this._records[id]}
-        console.log(this)
         let recordData = {}
 
 

@@ -304,30 +304,28 @@ class EntityListerTableController {
         })
     }
 
-    rowClicked(row, event, recordId)
-    {
-        this.selectRow(row, event)
-
-        if (isNaN(recordId)) {
-            Messenger.showAlert('record id parameter type is not right: ', recordId)
-            return
-        }
-            this._controllerPointer.rowClicked(recordId, event)
-    }
 
     operationIconClicked(operationType) {
         this._controllerPointer.operationIconClicked(operationType)
     }
 
-    selectRow(row, event) {
-        if (event.ctrlKey) {
-            this.addRemoveSelectedRow(row)
+    rowClicked(row, event, recordId) {
+        if (isNaN(recordId)) {
+            Messenger.showAlert('record id parameter type is not right: ', recordId)
             return
         }
+
+        if (event.ctrlKey) {
+            this.addRemoveSelectedRow(row, event, recordId)
+            return
+        }
+
         if (event.shiftKey) {
             this.setSelectedRowWithShift(row)
             return;
         }
+        this._controllerPointer.rowClicked(recordId, event)
+
         this._view._rows.forEach((row) => {
             row.setAttribute("data-select", "0");
         })
@@ -342,6 +340,25 @@ class EntityListerTableController {
         //     this.tableContainer.scrollTo(0, this.pageScrollData.getScrollCoord('down', index));
         // if (index === this.rows.length - 1) {
         //     this.controllerPointer.collectSearchParamsForRequest('next')
+        // }
+    }
+
+        addRemoveSelectedRow(rowToCheck, event, recordId) {
+            this._controllerPointer.rowClicked(recordId, event)
+
+if (            !rowToCheck.hasAttribute("data-select") || rowToCheck.getAttribute('data-select') === '0') {
+    rowToCheck.setAttribute("data-select", "1");
+}
+else
+    rowToCheck.setAttribute("data-select", "0");
+
+        // let index = this.selectedRows.indexOf(rowToCheck)
+        // if (index === -1) {
+        //     rowToCheck.setAttribute("data-select", "1");
+        //     this.selectedRows.push(rowToCheck)
+        // } else {
+        //     rowToCheck.setAttribute("data-select", "0");
+        //     this.selectedRows.splice(index, 1)
         // }
     }
 
@@ -618,16 +635,7 @@ class EntityListerTableController {
 //      * invertálja egy sor kijelölését, ctrl + egér bal gomb
 //      * @param rowToCheck {HTMLTableRowElement} sor DOM elem
 //      */
-//     addRemoveSelectedRow(rowToCheck) {
-//         let index = this.selectedRows.indexOf(rowToCheck)
-//         if (index === -1) {
-//             rowToCheck.setAttribute("data-select", "1");
-//             this.selectedRows.push(rowToCheck)
-//         } else {
-//             rowToCheck.setAttribute("data-select", "0");
-//             this.selectedRows.splice(index, 1)
-//         }
-//     }
+
 //
 //     /**
 //      * kiválasztott sor/rekord részletes adataink/módosító táblájának megjelenítése, dupla kattintás
