@@ -5,6 +5,24 @@ class EntityServiceModelParent {
 
     _selectedIds = []
 
+    _restParameter = undefined
+
+    _handlerEventTrigger = undefined
+
+    _successMessages = {}
+
+    get restParameter() {
+        return this._restParameter;
+    }
+
+    get handlerEventTrigger() {
+        return this._handlerEventTrigger;
+    }
+
+    get successMessages() {
+        return this._successMessages;
+    }
+
     constructor() {
         // console.trace()
         console.log('modelInit')

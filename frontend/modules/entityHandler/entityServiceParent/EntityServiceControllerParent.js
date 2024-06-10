@@ -3,11 +3,7 @@
  */
 class EntityServiceControllerParent extends WindowContentControllerParent {
     static _instance = undefined
-    _restParameter = undefined
 
-    _handlerEventTrigger = undefined
-
-    _successMessages = {}
 
     constructor() {
         super();
@@ -64,7 +60,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         try {
             console.log(searchAndOrderParams)
             return  await RESTHandler.sendRequest({
-                url: this._restParameter, requestType: 'GET',
+                url: this.model.restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
         } catch (e) {
@@ -85,7 +81,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
 
     async getOne(id) {
         this._model.addRecord(id, await RESTHandler.sendRequest({
-            url: this._restParameter + "/" + id, requestType: 'GET',
+            url: this.model.restParameter + "/" + id, requestType: 'GET',
         }))
     }
 
@@ -106,20 +102,37 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.sendRequest({url: this._restParameter+'/meta', requestType: 'GET'})
+        this._model.companyTypes = await RESTHandler.sendRequest({url: this.model.restParameter+'/meta', requestType: 'GET'})
         this._model.loaded = true
         console.log(this)
+    }
+
+    async sendDeleteRequest() {
+        if (confirm("Biztos hogy törlöd kijelölt rekordokat?") !== true)
+            return;
+        // if ((await this.createAndSendRequest('deleteBill', JSON.stringify(ids))).success === true) {
+        //     AlertPopup.showSuccess('Számla törlése')
+        //     EventSubscriptionHandler.triggerSubscriptionCall('refreshBill')
+        // }
+
+        await RESTHandler.sendRequest({
+            url: this.model.restParameter, requestType: 'POST',
+            customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
+            values :''
+        })
+        Messenger.showSuccess(this.model.successMessages['creator'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
     }
 
     async sendCreateRequest(record) {
 
         await RESTHandler.sendRequest({
-            url: this._restParameter, requestType: 'POST',
+            url: this.model.restParameter, requestType: 'POST',
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : record
         })
-        Messenger.showSuccess(this._successMessages['creator'])
-        EventSubscriptionHandler.triggerSubscriptionCall(this._handlerEventTrigger)
+        Messenger.showSuccess(this.model.successMessages['creator'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
     }
 
     async sendEditRequest(record, multiple = false) {
@@ -134,13 +147,13 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
             record.id = id
             console.log(record)
             await RESTHandler.sendRequest({
-                url: this._restParameter+'/'+id, requestType: 'PATCH',
+                url: this.model.restParameter+'/'+id, requestType: 'PATCH',
                 customHeader: {"Content-type": 'application/json-patch+json'},
                 values : record
             })
         }
-        Messenger.showSuccess(this._successMessages['editor'])
-        EventSubscriptionHandler.triggerSubscriptionCall(this._handlerEventTrigger)
+        Messenger.showSuccess(this.model.successMessages['editor'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
             // let value = await this.createAndSendRequest(multiple ? 'editMultipleCompany' : 'editCompany', JSON.stringify(data))
         // if (value.success === true) {
         //     Messenger.showSuccess(this._successMessages['editor'])
