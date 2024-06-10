@@ -27,4 +27,9 @@ class EntityHandlerTableController {
     {
         this._view.fillTable(record, headerAttributeParams, this._type)
     }
+
+    attributeMultipleDelButtonClicked(id)
+    {
+        this._controllerPointer.attributeMultipleDelButtonClicked(id)
+    }
 }

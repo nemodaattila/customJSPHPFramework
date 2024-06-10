@@ -126,9 +126,10 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
 
         console.log(record)
 
-        if (multiple === false)
+        if (!multiple)
             record.id = [record.id]
         const dataIds = record.id
+        console.log(dataIds)
         for (const id of dataIds) {
             record.id = id
             console.log(record)

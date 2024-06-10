@@ -32,7 +32,7 @@ class EntityHandlerTableView {
         this._mainContainer.style.overflow = 'auto'
     }
 
-    displayTableElements(tableHeaderAttributes, handlerType, isMultiple)
+    displayTableElements(tableHeaderAttributes, handlerType, isMultiple = false)
     {
         console.log(this._mainContainer)
         console.log(tableHeaderAttributes)
@@ -79,9 +79,18 @@ class EntityHandlerTableView {
             let type = input.type ?? 'string'
             const tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
             console.log(type)
+            console.log(isMultiple)
+            if (isMultiple)
+            {
+                (HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'button', Value: 'Érték törlése'})).addEventListener('click',()=>{
+                    this._controllerPointer.attributeMultipleDelButtonClicked(id)
+                })
+
+            }
+
             type = this._inputNumAndStringMatcher(type)
             console.log(type)
-	//TODO put types into induvudual classes 
+	//TODO put types into individual classes
             switch (type) {
                 case 'float':
                 case 'int':

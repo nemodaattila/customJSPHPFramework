@@ -92,6 +92,14 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
         this[match(this._type)]()
     }
 
+    async attributeMultipleDelButtonClicked(attributeName) {
+        let collectedData = {}
+        collectedData[attributeName] = ''
+        collectedData.id=this._serviceModelPointer.selectedIds
+            //DO validation
+        await this.service.sendEditRequest(collectedData, this._multiple)
+    }
+
      async collectAndCreateRecord() {
          const collectedData = this._view.getComponent('handlerTable').getInputValues()
          if (!this.validateRecord(collectedData))
