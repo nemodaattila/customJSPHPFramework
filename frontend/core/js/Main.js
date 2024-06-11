@@ -32,7 +32,7 @@ class Main {
             {
                 directory: CORE_FILE_DIR,
                 fileNames: ['Messenger.js', 'HtmlElementCreator.js', 'EventSubscriptionHandler.js',
-                    'ModuleLoader.js', 'ControllerParent.js', 'RESTHandler.js', 'VariableHandler.js'],
+                    'ModuleLoader.js', 'ControllerParent.js', 'RESTHandler.js', 'VariableHelper.js'],
             },
             {
                 directory: WEB_DESKTOP_MODULE_DIR,

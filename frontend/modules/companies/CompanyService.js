@@ -1,10 +1,13 @@
+/**
+ * service for Companies
+ */
 class CompanyService extends EntityServiceControllerParent {
-
-
-
+    /**
+     * gets company types from server
+     * @see EntityServiceControllerParent.getMetaParameters
+     * @returns {Promise<boolean>}
+     */
     async init() {
-        console.log('init')
-        console.log(this)
         return new Promise(async (resolve) => {
             if (this._model.loaded)
                 resolve(true)
@@ -12,30 +15,4 @@ class CompanyService extends EntityServiceControllerParent {
             resolve(await super.init())
         })
     }
-
-
-
-    /**
-     * új cég beküldése
-     * @param data {Object} cégadatok
-     */
-
-    //
-    // /**
-    //  * cég módosítási adatok beküldése
-    //  * @param data {Object} módosított adatok
-    //  * @param multiple {boolean} egy vagy több cég van szerkesztve
-    //  */
-
-    //
-    // /**
-    //  * egy cég adatainak lekérése
-    //  * @param companyId {number} cég azonosító
-    //  * @param forced {boolean} kötelező lekérés
-    //  */
-    // static async getOne(companyId, forced = false) {
-    //     if (this.selectedRecord === null || this.selectedRecord.id !== companyId || forced)
-    //         this.selectedRecord = await this.createAndSendRequest('getCompany', companyId)
-    //     return true
-    // }
 }

@@ -1,13 +1,13 @@
 class EntityListerControllerParent extends WindowContentControllerParent {
     _type = 'lister'
     // _searchAndOrderParameters
-    _pageTurnerType = 'infinityScroller'
+    _pageTurner = undefined
     _serviceModelPointer
     _rowHeight = 20
     _searchParamConnector
     _tableHeaderAttributeOrder
 
-    init() {
+    async init() {
         //TODO check zoom with search and scroll
         this.subscribeToEvents?.()
         console.log(this)
@@ -15,6 +15,19 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         this._searchParamConnector.orderAndLimitParameterObject = new SearchAndOrderParameters()
         this._searchParamConnector.defaultRowHeight = this._rowHeight
         this._searchParamConnector.controllerPointer = this;
+        await this.loadPageTurnerTypes()
+        this.loadPageTurner()
+    }
+
+   async loadPageTurnerTypes()
+    {
+        for (const pageTurner of PAGE_TURNER_TYPES) {
+          await  Includer.loadModuleSource(pageTurner)
+        }
+    }
+
+    loadPageTurner(){
+        this._pageTurner=new InfinityScrollerController()
     }
 
     setHeaderAttributeOrder() {
@@ -59,10 +72,21 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         )
         this._searchParamConnector.orderSourceObject = listerTable.view
         console.trace()
-        await this._view.addComponent("pageTurner", await this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
+        await this._view.addComponent("pageTurner", await this.createOffsetSourceObject( listerTable))
         this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
         // this._searchParamConnector.setAutoLimit()
         // this.getRecordsFromServer("refresh")
+    }
+
+    async createOffsetSourceObject( container) {
+
+        this._searchParamConnector.offsetSourceObject = this.createPageTurnerObject()
+        this._searchParamConnector.offsetSourceObject.init(container, this, this._searchParamConnector)
+        // new (eval(pageTurnerName[0].toUpperCase() + pageTurnerName.slice(1) + "Controller"))(container, this, this._searchParamConnector)
+    }
+
+    createPageTurnerObject (){
+        return  new InfinityScrollerController()
     }
 
     //reset

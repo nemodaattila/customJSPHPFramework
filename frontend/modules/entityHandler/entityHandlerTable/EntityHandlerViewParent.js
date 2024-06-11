@@ -10,7 +10,7 @@ class EntityHandlerViewParent extends WindowContentViewParent{
         })
     }
 
-    addButtonContainer(columnNum, buttonParams, onclickEvent, sameLine = false) {
+    addButtonWithContainer(columnNum, buttonParams, onclickEvent, sameLine = false) {
         if (!this._buttonContainer)
             this._buttonContainer = HtmlElementCreator.createSimpleHtmlElement('div', this._windowContentMainContainer, {class: 'buttonContainer'})
         //TODO columncount

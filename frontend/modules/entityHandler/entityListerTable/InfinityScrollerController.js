@@ -15,7 +15,7 @@ class InfinityScrollerController {
     _scrollTimer
 
     _outerScrollTimer
-    constructor(listerTable, controllerPointer,searchConnector) {
+    init(listerTable, controllerPointer,searchConnector) {
         this._searchConnector=searchConnector
         this._listerControllerPointer = controllerPointer
         const tableContainerBody = listerTable.getTableContainerBody()

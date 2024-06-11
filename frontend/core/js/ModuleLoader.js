@@ -77,7 +77,7 @@ class ModuleLoader {
         }
         let viewFileName = await this.getComponent(moduleFiles, 'View')
         controller.view = viewFileName ? new (eval(await this.loadFile(viewFileName)))() : new WindowContentViewParent()
-        controller.init();
+        await controller.init();
         return controller
     }
 }

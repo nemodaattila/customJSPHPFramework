@@ -1,34 +1,70 @@
+/**
+ * Service model for CompanyService
+ */
 class CompanyServiceModel extends EntityServiceModelParent {
-
-    _restParameter = 'company'
-
-    _handlerEventTrigger = 'companyHandlerEvent'
-
-    _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva'}
-
+    /**
+     * types of companies
+     * @type {Object.<number, string>}
+     * @private
+     */
     _companyTypes = {0: 'Nem vevő'}
-
+    /**
+     * default order attribute of the connected lister Table
+     * @type {string}
+     * @private
+     */
+    _defaultOrder = 'name'
+    /**
+     * the name of the event, which triggers when a company's parameter is changed, a company created or deleted
+     * @type {string}
+     * @private
+     * @see EventSubscriptionHandler
+     */
+    _handlerEventTrigger = 'companyHandlerEvent'
+    /**
+     * name of the directory in which the module can be found (in modules map)
+     * @type {string}
+     * @private
+     */
     _moduleDirName = "companies"
+    /**
+     * url parameter chunk for request to backend pl: GET -> <backendUrl>/company/23
+     * @type {string}
+     * @private
+     */
+    _restParameter = 'company'
+    /**
+     * success message when,
+     * @type {{editor: string, creator: string, delete: string}}
+     * @private
+     */
+    _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva', 'delete': 'Cég törölve'}
+    //
+    // _onClickEventAttribs = ['id', 'name']
+    // get onClickEventAttribs() {
+    //     return this._onClickEventAttribs;
+    // }
+    /***************************************************/
     get companyTypes() {
         return this._companyTypes;
+    }
+
+    get defaultOrder() {
+        return this._defaultOrder;
+    }
+
+    /**
+     * !!! not simple set - forEach
+     * @param types
+     */
+    set companyTypes(types) {
+        Object.values(types).forEach(type =>
+            this._companyTypes[type.id] = type.name)
     }
 
     get moduleDirName() {
         return this._moduleDirName;
     }
-
-    set companyTypes(types) {
-        console.log(types)
-        Object.values(types).forEach(type =>
-            this._companyTypes[type.id] = type.name)
-    }
-
-
-
-// _selectedRecord = null
-    // get selectedRecord() {
-    //     return this._selectedRecord;
-    // }
 
     _moduleParams = {
         lister: {
@@ -37,12 +73,7 @@ class CompanyServiceModel extends EntityServiceModelParent {
         },
         editor: {
             module: 'companyEditor',
-            title: 'Cég szerkesztése',
-            windowName: 'companyEditor'
-        },
-        multipleEditor: {
-            module: 'multipleCompanyEditor',
-            title: 'Több cég szerkesztése'
+            title: 'Cég(ek) szerkesztése',
         },
         creator: {
             module: 'companyCreator',
@@ -54,31 +85,11 @@ class CompanyServiceModel extends EntityServiceModelParent {
         return this._moduleParams;
     }
 
-    _restName = 'company'
-    get restName() {
-        return this._restName;
-    }
-
-    _entityTriggerName = 'company'
-    get entityTriggerName() {
-        return this._entityTriggerName;
-    }
-
-    _onClickEventAttribs = ['id', 'name']
-    get onClickEventAttribs() {
-        return this._onClickEventAttribs;
-    }
-
-    _defaultOrder = 'name'
-    get defaultOrder() {
-        return this._defaultOrder;
-    }
-
     _tableHeaderAttributes = {
-        id: {label: 'Azonosító', type: 'int', inModule: ['lister']},
-        name: {label: 'Név', type: 'string',required: true},
-        address: {label: 'cím', type: 'string',required: true},
-        vat_number: {label: 'Adószám',required: true},
+        id: {label: 'Azonosító', type: new NumberTableInput(), inModule: ['lister']},
+        name: {label: 'Név', type: 'string', required: true},
+        address: {label: 'cím', type: 'string', required: true},
+        vat_number: {label: 'Adószám', required: true},
         category: {
             label: 'Kapcsolat-típus', type: 'select',
             values: this._companyTypes
@@ -89,66 +100,52 @@ class CompanyServiceModel extends EntityServiceModelParent {
         return this._tableHeaderAttributes;
     }
 
-    _editSubMenuParams = {
-        editCompany: {
-            label: 'Cég szerkesztése',
-            moduleGroupName: 'companies',
-            task: 'companyEditor',
-            windowName: 'companyEditor'
-        },
-        companyBills: {
-            label: 'Céghez tartozó számlák',
-            moduleGroupName: 'bills',
-            task: 'billLister',
-            windowName: 'companyEditor',
-            tableSearchParams: [{
-                type: 'company',
-                value: this._selectedIds[0],
-                operator: 'eq'
-            }],
-        },
-        companyWorksheets: {
-            label: 'Céghez tartozó munkalapok',
-            windowName: 'companyEditor',
-            module: 'worksheets',
-            task: 'worksheetLister',
-            tableSearchParams: [{
-                type: 'company',
-                value: this._selectedIds[0],
-                operator: 'eq'
-            }],
-        },
-        companyEvents: {
-            label: 'Cégesemények',
-            module: 'events',
-            task: 'eventLister',
-            tableSearchParams: [{
-                type: 'elementGroup',
-                value: 1,
-                operator: 'eq'
-            }, {
-                type: 'element',
-                value: this._selectedIds[0],
-                operator: 'eq'
-            }],
-        }
-    }
-    get editSubMenuParams() {
-        return this._editSubMenuParams;
-    }
-
-    getTitle(name) {
-        console.log(name)
-        return this._moduleParams[name].title
-    }
-
-    getEnabledOperations() {
-        return {
-            lister: this._moduleParams.lister !== undefined,
-            editor: this._moduleParams.editor !== undefined,
-            multiEditor: this._moduleParams.multipleEditor !== undefined,
-            creator: this._moduleParams.creator !== undefined,
-            deletable: this._moduleParams.deletable
-        }
-    }
+    // _editSubMenuParams = {
+    //     editCompany: {
+    //         label: 'Cég szerkesztése',
+    //         moduleGroupName: 'companies',
+    //         task: 'companyEditor',
+    //         windowName: 'companyEditor'
+    //     },
+    //     companyBills: {
+    //         label: 'Céghez tartozó számlák',
+    //         moduleGroupName: 'bills',
+    //         task: 'billLister',
+    //         windowName: 'companyEditor',
+    //         tableSearchParams: [{
+    //             type: 'company',
+    //             value: this._selectedIds[0],
+    //             operator: 'eq'
+    //         }],
+    //     },
+    //     companyWorksheets: {
+    //         label: 'Céghez tartozó munkalapok',
+    //         windowName: 'companyEditor',
+    //         module: 'worksheets',
+    //         task: 'worksheetLister',
+    //         tableSearchParams: [{
+    //             type: 'company',
+    //             value: this._selectedIds[0],
+    //             operator: 'eq'
+    //         }],
+    //     },
+    //     companyEvents: {
+    //         label: 'Cégesemények',
+    //         module: 'events',
+    //         task: 'eventLister',
+    //         tableSearchParams: [{
+    //             type: 'elementGroup',
+    //             value: 1,
+    //             operator: 'eq'
+    //         }, {
+    //             type: 'element',
+    //             value: this._selectedIds[0],
+    //             operator: 'eq'
+    //         }],
+    //     }
+    // }
+    // get editSubMenuParams() {
+    //     return this._editSubMenuParams;
+    // }
+    //
 }

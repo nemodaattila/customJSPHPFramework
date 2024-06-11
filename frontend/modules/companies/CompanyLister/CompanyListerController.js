@@ -1,10 +1,13 @@
 /**
- * controller a cégek kilistázására táblás formában
+ * controller for listing companies
  */
 class CompanyListerController extends EntityListerControllerParent {
     subscribeToEvents() {
         EventSubscriptionHandler.subscribe('companyHandlerEvent', this, 'onHandlerEvent')
     }
-     _pageTurnerType = 'infinityScroller'
-    //_pageTurnerType = 'pageTurner'
+
+    createPageTurnerObject() {
+        return new InfinityScrollerController()
+        // this._pageTurner = new PageTurner()
+    }
 }

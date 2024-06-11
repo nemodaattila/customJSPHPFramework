@@ -47,6 +47,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
 
 
      async displayView(windowBody) {
+        //TODO move from here
          this._serviceModelPointer = this.service.model
          console.log({...this._serviceModelPointer})
 

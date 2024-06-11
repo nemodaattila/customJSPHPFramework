@@ -11,6 +11,8 @@ class EntityServiceModelParent {
 
     _successMessages = {}
 
+    _moduleParams = undefined
+
     get restParameter() {
         return this._restParameter;
     }
@@ -137,5 +139,27 @@ class EntityServiceModelParent {
             recordData[param].push(filterType)
         })
         return recordData
+    }
+
+    /**
+     * get enabled handler operations, NOT same as user privileges
+     * @returns {{editor: boolean, lister: boolean, creator: boolean, deletable: boolean}}
+     */
+    getEnabledOperations() {
+        return {
+            lister: this._moduleParams.lister !== undefined ?? false,
+            editor: this._moduleParams.editor !== undefined?? false,
+            creator: this._moduleParams.creator !== undefined ?? false,
+            deletable: this._moduleParams.deletable ?? false
+        }
+    }
+
+    /**
+     * get title (window label) of the module
+     * @param moduleName {string}
+     * @returns {string}
+     */
+    getTitle(moduleName) {
+        return this._moduleParams[moduleName].title
     }
 }
