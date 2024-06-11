@@ -1,39 +1,39 @@
 /**
- * static class
- * segédfüggvények hiba és sikeres művelet visszajelzésére
- * hibaüzenet - képernyő közepén megjelenik egy piros hátterű négyzet, rajta egy gombbal, amivel bezárható, a háttér szürke és nem kattintható
- * sikeres művelet - képernyő jobb alsó sarkában zöld háttérrel üzenet, 3 mp után eltűnik
+ * static class,
+ * class for displaying error(alert) and success messages
+ * error messages are displayed in the middle of the screen, a rectangle appears with a red background,
+ * with a acknowledgment button (label: OK), everything else becomes greyish, and cannot be clicked,
+ * success messages are displayed in the bottom right of the screen (green rectangle), it disappears after 3 seconds
  */
 class AlertPopup {
+    /**
+     * {number | undefined} timeout for success message disappearance
+     * @private
+     */
     _timeout
     _view
 
-    /**
-     * eseménykezelő hozzáadása alert nyugtázó gombhoz
-     * hibaablak eltüntetése
-     */
     constructor() {
         this._view = new AlertPopupView()
     }
 
     /**
-     * hibaablak megjelenítése és szöveg kiírása
-     * @param message {string} - megjelenítendő hibaüzenet
+     * displays error rectangle and message -> calls view
+     * @param errorMessage {string} - error message to be displayed
      */
-    showAlert(message) {
-        this._view.showAlert(message)
+    showAlertMessage(errorMessage) {
+        this._view.showAlertMessage(errorMessage)
     }
 
     /**
-     * sikeres művelet visszajelző üzenet megjelenítése
-     * timer indítása - 3 mp után eltűnik az üzenet
-     * @param message {string|null} - megjelenítendő szöveg
+     * displays success rectangle and message, hides it after 3 seconds (timout) -> calls view
+     * @param message {string|null} success message
      */
     showSuccess(message = null) {
-        clearTimeout(this.timeout)
-        this._view.showSuccess(message)
-        this.timeout = setTimeout(() => {
-            this._view.hideSuccess()
+        clearTimeout(this._timeout)
+        this._view.showSuccessMessage(message)
+        this._timeout = setTimeout(() => {
+            this._view.hideSuccessMessage()
         }, 3000)
     }
 }
