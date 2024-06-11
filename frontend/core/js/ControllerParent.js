@@ -3,6 +3,8 @@
  */
 class ControllerParent {
     _model
+    _view
+
     get model() {
         return this._model;
     }
@@ -10,8 +12,6 @@ class ControllerParent {
     set model(value) {
         this._model = value;
     }
-
-    _view
 
     get view() {
         return this._view;

@@ -13,6 +13,8 @@ class Includer {
         this._model = new IncluderModel()
     }
 
+    /******************************************************************/
+
     /**
      * returns module files to be loaded (directory and filenames) based on module name
      * @param {string} modulName module name
@@ -22,6 +24,15 @@ class Includer {
         return this._model.getIncludableModuleSource(modulName);
     }
 
+    /**
+     * loads a module
+     * @param moduleName module name
+     * @returns {Promise<void>}
+     */
+    static async loadModuleSource(moduleName) {
+        this.addFilesToLoad(this._model.getIncludableModuleSource(moduleName))
+        await this.startFileLoad()
+    }
 
     /**
      * saves module file parameters in model
@@ -32,15 +43,7 @@ class Includer {
         this._model.setIncludableModuleSource(modulName, files);
     }
 
-    /**
-     * loads a module
-     * @param moduleName module name
-     * @returns {Promise<void>}
-     */
-    static async loadModuleSource(moduleName) {
-        this.addFilesToLoad(this._model.getIncludableModuleSource(moduleName))
-        await this.startLoad()
-    }
+    /***********************************************************************/
 
     /**
      * prepares files to load
@@ -60,30 +63,6 @@ class Includer {
             })
         })
     };
-
-    /**
-     * starts file loading, calls files to load one by one, stops on error
-     * @returns {Promise<unknown>}
-     */
-    static async startLoad() {
-        return new Promise(async (resolve, reject) => {
-            const filesToLoad = this._model.filesToLoad
-            if (filesToLoad.length === 0)
-                resolve(true)
-            for (const file of filesToLoad) {
-                try {
-                    await this.loadScript(file)
-                } catch (e) {
-                    Messenger.showAlert('file load failed: ' + e)
-                    this.stopLoad()
-                    reject(false)
-                    break;
-                }
-            }
-            this.stopLoad()
-            resolve(true)
-        })
-    }
 
     /**
      * loads a file (javascript/css)
@@ -121,9 +100,35 @@ class Includer {
     }
 
     /**
+     * starts file loading, calls files to load one by one, stops on error
+     * @returns {Promise<unknown>}
+     */
+    static async startFileLoad() {
+        return new Promise(async (resolve, reject) => {
+            const filesToLoad = this._model.filesToLoad
+            if (filesToLoad.length === 0)
+                resolve(true)
+            for (const file of filesToLoad) {
+                try {
+                    await this.loadScript(file)
+                } catch (e) {
+                    Messenger.showAlert('file load failed: ' + e)
+                    this.stopFileLoad()
+                    reject(false)
+                    break;
+                }
+            }
+            this.stopFileLoad()
+            resolve(true)
+        })
+    }
+
+
+
+    /**
      * stops file load
      */
-    static stopLoad() {
+    static stopFileLoad() {
         this._model.emptyFilesToLoad();
     }
 }

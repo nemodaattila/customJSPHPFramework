@@ -1,7 +1,7 @@
 /**
  * assistant class for variables
  */
-class Class {
+class VariableHelper {
     /**
      *  returns true if parameter "str" is string, false if not
      */

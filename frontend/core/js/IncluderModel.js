@@ -3,33 +3,34 @@
  */
 class IncluderModel {
     /**
+     * returns files to be loaded
+     * @type {string[]} file paths
+     * @private
+     */
+    _filesToLoad = []
+    /**
      *
      * @type {{string: {directory: string, fileNames: string[]}[]}}
      * @private
      */
     _includableModuleSources = {};
     /**
-     * returns files to be loaded
-     * @type {string[]} file paths
-     * @private
-     */
-    _filesToLoad = []
-    get filesToLoad() {
-        return this._filesToLoad;
-    }
-
-    /**
      * already loaded files
      * @type {string[]}
      * @private
      */
     _loadedFiles = []
+
+    /**************************************************/
     /**
-     * adds a file to load !IMPORTANT adds, not sets
-     * @param {string} file filename
+     * empties filesToLoad array
      */
-    set loadedFiles(file) {
-        this._loadedFiles.push(file);
+    emptyFilesToLoad() {
+        this._filesToLoad = [];
+    }
+
+    get filesToLoad() {
+        return this._filesToLoad;
     }
 
     /**
@@ -41,12 +42,14 @@ class IncluderModel {
     }
 
     /**
-     * empties filesToLoad array
+     * adds a file to load !IMPORTANT adds, not sets
+     * @param {string} file filename
      */
-    emptyFilesToLoad() {
-        this._filesToLoad = [];
+    set loadedFiles(file) {
+        this._loadedFiles.push(file);
     }
 
+    /**************************************************************/
     /**
      * returns module files to be loaded (directory and filenames) based on module name
      * @param {string} moduleName module name
@@ -60,6 +63,15 @@ class IncluderModel {
     }
 
     /**
+     * checks if a file already loaded
+     * @param fileName {string}} file name
+     * @returns {boolean}
+     */
+    searchInLoadedFiles(fileName) {
+        return this._loadedFiles.findIndex(file => file === fileName) !== -1
+    }
+
+    /**
      * saves module file parameters
      * @param {string} moduleName module name
      * @param {{directory: string, fileNames: string[]}[]} files file parameters {directory: string, fileNames: string[]}[]
@@ -68,14 +80,5 @@ class IncluderModel {
         if (!this._includableModuleSources[moduleName]) {
             this._includableModuleSources[moduleName] = files;
         } else Messenger.showAlert('moduleName already exists')
-    }
-
-    /**
-     * checks if a file already loaded
-     * @param fileName {string}} file name
-     * @returns {boolean}
-     */
-    searchInLoadedFiles(fileName) {
-        return this._loadedFiles.findIndex(file => file === fileName) !== -1
     }
 }

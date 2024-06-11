@@ -1,3 +1,6 @@
+/**
+ * this file runs first
+ */
 class Main {
     static async init() {
         Includer.init()
@@ -44,7 +47,7 @@ class Main {
                 fileNames: ['filesToInclude.js']
             }]
         );
-        await Includer.startLoad()
+        await Includer.startFileLoad()
         await Includer.loadModuleSource('alertPopup')
         Messenger.setObject(new AlertPopup())
         await Includer.loadModuleSource('desktop')

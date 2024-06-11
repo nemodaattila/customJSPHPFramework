@@ -12,13 +12,13 @@ class RESTHandler {
      * @returns {Promise<*>} response data
      */
     static async sendRequest({
-                                 url = false,
+                                 url = '',
                                  requestType = 'GET',
                                  customHeader = [],
                                  payload = null,
                                  values = null
                              } = {}) {
-        if (url == false) {
+        if (!VariableHelper.isString(url)) {
             Messenger.showAlert('RESTHandler target url missing')
             return false
         }
