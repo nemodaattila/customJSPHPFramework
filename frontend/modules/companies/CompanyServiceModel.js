@@ -86,15 +86,15 @@ class CompanyServiceModel extends EntityServiceModelParent {
     }
 
     _tableHeaderAttributes = {
-        id: {label: 'Azonosító', type: new NumberTableInput(), inModule: ['lister']},
-        name: {label: 'Név', type: 'string', required: true},
-        address: {label: 'cím', type: 'string', required: true},
-        vat_number: {label: 'Adószám', required: true},
+        id: {label: 'Azonosító', type: 'NumberTableInput', inModule: ['lister']},
+        name: {label: 'Név', type: 'StringTableInput', required: true},
+        address: {label: 'cím', type: 'StringTableInput', required: true},
+        vat_number: {label: 'Adószám', type: 'StringTableInput',required: true},
         category: {
-            label: 'Kapcsolat-típus', type: 'select',
+            label: 'Kapcsolat-típus', type: 'SelectTableInput',
             values: this._companyTypes
         },
-        comment: {label: 'Megjegyzés'}
+        comment: {label: 'Megjegyzés',type: 'StringTableInput'}
     }
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
