@@ -69,7 +69,7 @@ class Includer {
      * @param file {string} file path
      * @returns {Promise<unknown>}
      */
-    static loadScript(file) {
+    static _loadScript(file) {
         const extension = file.split('.').pop().toLowerCase()
         if (extension === 'js')
             return new Promise((resolve, reject) => {
@@ -110,15 +110,15 @@ class Includer {
                 resolve(true)
             for (const file of filesToLoad) {
                 try {
-                    await this.loadScript(file)
+                    await this._loadScript(file)
                 } catch (e) {
                     Messenger.showAlert('file load failed: ' + e)
-                    this.stopFileLoad()
+                    this._stopFileLoad()
                     reject(false)
                     break;
                 }
             }
-            this.stopFileLoad()
+            this._stopFileLoad()
             resolve(true)
         })
     }
@@ -128,7 +128,7 @@ class Includer {
     /**
      * stops file load
      */
-    static stopFileLoad() {
+    static _stopFileLoad() {
         this._model.emptyFilesToLoad();
     }
 }

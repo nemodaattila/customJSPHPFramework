@@ -17,7 +17,7 @@ class EventSubscriptionHandler {
      * @param triggerWords {string | Array} trigger words to be triggered
      * @param eventData {any}  data sent with event - not Event object
      */
-    static callSubscribedFunctions(triggerWords, eventData) {
+    static _callSubscribedFunctions(triggerWords, eventData) {
         for (const callWord of triggerWords) {
             if (!this._subscriptions[callWord])
                 continue
@@ -34,7 +34,7 @@ class EventSubscriptionHandler {
      * @param objectPointer {Object}  class pointer
      * @returns {boolean} true if subscribed, false if not
      */
-    static checkIfAlreadySubscribed(triggerWord, objectPointer) {
+    static _checkIfAlreadySubscribed(triggerWord, objectPointer) {
         return this._subscriptions[triggerWord].findIndex(sub => sub[0] === objectPointer) !== -1
     }
 
@@ -58,7 +58,7 @@ class EventSubscriptionHandler {
             this._subscriptions = {};
         if (!this._subscriptions[triggerWord])
             this._subscriptions[triggerWord] = [];
-        if (this.checkIfAlreadySubscribed(triggerWord, objectPointer))
+        if (this._checkIfAlreadySubscribed(triggerWord, objectPointer))
             return
         prioritized ? this._subscriptions[triggerWord].unshift([objectPointer, functionName]) :
             this._subscriptions[triggerWord].push([objectPointer, functionName]);
@@ -81,7 +81,7 @@ class EventSubscriptionHandler {
             return;
         }
         if (!Array.isArray(triggerWord)) triggerWord = [triggerWord]
-        this.callSubscribedFunctions(triggerWord, eventData);
+        this._callSubscribedFunctions(triggerWord, eventData);
     }
 
     /**
