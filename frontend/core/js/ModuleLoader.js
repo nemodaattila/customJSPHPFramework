@@ -6,7 +6,7 @@ class ModuleLoader {
      * searches for mvc component in module files (filenames) (for e.g. : View)
      * @param files {{}[]} module files
      * @param componentName {string} name of the component (for e.g. : View)
-     * @returns {*[]|boolean}
+     * @returns {*[]|false}
      */
     static getComponent(files, componentName) {
         let fileIndex
@@ -47,6 +47,25 @@ class ModuleLoader {
      * @returns {Promise<*|boolean>} returns the controller or false, if module group not exists
      */
     static async loadModule(moduleGroupName, module, connectedParams = null) {
+        const moduleFiles = await this.loadModuleFiles(module)
+        const controller = this.loadController(moduleFiles)
+        if (!controller) {
+            Messenger.showAlert('controller file missing from: ' + moduleGroupName)
+            return false
+        }
+        controller.service = this.loadService(moduleFiles, moduleGroupName)
+        if (controller.service) {
+            if (!controller.service.model)
+                controller.service.model = this.loadServiceModel()
+            await controller.service.init()
+        }
+        controller.view = this.loadView(moduleFiles)
+        controller.model = this.loadModel(moduleFiles)
+        await controller.init();
+        return controller
+    }
+
+    static async loadModuleFiles(moduleGroupName, module) {
         Includer.addFilesToLoad(
             [{
                 directory: MODULE_FILE_DIR + moduleGroupName,
@@ -54,30 +73,31 @@ class ModuleLoader {
             }]
         );
         await Includer.startFileLoad()
-        const moduleFiles = Includer.getIncludableModuleSource(module)
-        let controllerName = await this.getComponent(moduleFiles, 'Controller')
-        if (!controllerName) {
-            Messenger.showAlert('controller file missing from: ' + moduleGroupName)
-            return false
-        }
-        const controller = new (eval(await this.loadFile(controllerName)))(moduleGroupName)
-        let serviceName = await this.getComponent(moduleFiles, 'Service')
-        if (serviceName) {
-            const service = new (eval(await this.loadFile(serviceName)))() //TODO nicer solution?
-            if (service.model === undefined) {
-                let serviceModel = undefined
-                let serviceModelName = await this.getComponent(moduleFiles, 'ServiceModel')
-                if (serviceModelName)
-                    serviceModel = new (eval(await this.loadFile(serviceModelName)))()
-                if (serviceModel)
-                    service.model = serviceModel
-                await service.init()
-            }
-            controller.service = service
-        }
-        let viewFileName = await this.getComponent(moduleFiles, 'View')
-        controller.view = viewFileName ? new (eval(await this.loadFile(viewFileName)))() : new WindowContentViewParent()
-        await controller.init();
-        return controller
+        return Includer.getIncludableModuleSource(module)
+    }
+
+    static async loadController(moduleFiles, moduleGroupName) {
+        const controllerName = await this.getComponent(moduleFiles, 'Controller')
+        return !controllerName ? false : new (eval(await this.loadFile(controllerName)))(moduleGroupName)
+    }
+
+    static async loadService(moduleFiles) {
+        const serviceName = await this.getComponent(moduleFiles, 'Service')
+        return !serviceName ? undefined : new (eval(await this.loadFile(serviceName)))()
+    }
+
+    static async loadServiceModel(moduleFiles) {
+        const serviceModelName = await this.getComponent(moduleFiles, 'ServiceModel')
+        return !serviceModelName ? undefined : new (eval(await this.loadFile(serviceModelName)))()
+    }
+
+    static async loadView(moduleFiles) {
+        const view = await this.getComponent(moduleFiles, 'View')
+        return !view ? undefined : new (eval(await this.loadFile(view)))()
+    }
+
+    static async loadModel(moduleFiles) {
+        const model = await this.getComponent(moduleFiles, 'model')
+        return !model ? undefined : new (eval(await this.loadFile(model)))()
     }
 }
