@@ -11,33 +11,25 @@ class RESTHandler {
      * @param values {{}|null} same as payload, for backwards compatibility
      * @returns {Promise<*>} response data
      */
-    static async sendRequest({
-                                 url = '',
-                                 requestType = 'GET',
-                                 customHeader = [],
-                                 payload = null,
-                                 values = null
-                             } = {}) {
+    static async sendHttpRequest({
+                                     url = '',
+                                     requestType = 'GET',
+                                     customHeader = [],
+                                     payload = null,
+                                     values = null
+                                 } = {}) {
         if (!VariableHelper.isString(url)) {
             Messenger.showAlert('RESTHandler target url missing')
             return false
         }
-        url = BACKEND_URL + url
-        payload = payload ?? values ?? null
         return new Promise(async (resolve, reject) => {
             const request = new XMLHttpRequest();
-            request.open(requestType, url, true);
-            if (customHeader !== [])
-                Object.entries(customHeader).forEach(([hName, hValue]) =>
-                    request.setRequestHeader(hName, hValue));
-            if (payload === null) {
-                request.send()
-            } else {
-                let parameters = [];
-                for (const key in payload)
-                    parameters.push(key + "=" + payload[key])
-                await request.send(parameters.join('&'));
-            }
+            await this._compileRequest(request, {
+                url,
+                requestType,
+                customHeader,
+            })
+            request.send(this._compileRequestParameters(payload ?? values ?? null))
             request.onreadystatechange = () => {
                 if (request.readyState !== 4)
                     return;
@@ -57,5 +49,29 @@ class RESTHandler {
                 }
             };
         })
+    }
+
+    static async _compileRequest(request, {
+                                     url = '',
+                                     requestType = 'GET',
+                                     customHeader = [],
+                                 } = {}
+    ) {
+        url = BACKEND_URL + url
+        request.open(requestType, url, true);
+        if (customHeader !== [])
+            Object.entries(customHeader).forEach(([hName, hValue]) =>
+                request.setRequestHeader(hName, hValue));
+    }
+
+    static _compileRequestParameters(payload) {
+        if (payload === null)
+            return null
+        return Object.entries(payload).map(([key, value]) => (key + "=" + payload[key])).join('&')
+        //  let parameters = [];
+        //  for (const key in payload)
+        //      parameters.push)
+        // return parameters
+        //  await request.send(parameters.join('&'));
     }
 }
