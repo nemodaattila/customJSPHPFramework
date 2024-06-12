@@ -47,25 +47,27 @@ class ModuleLoader {
      * @returns {Promise<*|boolean>} returns the controller or false, if module group not exists
      */
     static async loadModule(moduleGroupName, module, connectedParams = null) {
-        const moduleFiles = await this._loadModuleFiles(module)
-        const controller = this._loadController(moduleFiles)
+        const moduleFiles = await this._loadModuleFiles(moduleGroupName, module)
+        const controller = await this._loadController(moduleFiles)
         if (!controller) {
             Messenger.showAlert('controller file missing from: ' + moduleGroupName)
             return false
         }
-        controller.service = this._loadService(moduleFiles, moduleGroupName)
+        controller.service = await this._loadService(moduleFiles, moduleGroupName)
+        console.log(controller)
         if (controller.service) {
             if (!controller.service.model)
-                controller.service.model = this._loadServiceModel()
+                controller.service.model = await this._loadServiceModel(moduleFiles)
             await controller.service.init()
         }
-        controller.view = this._loadView(moduleFiles)
-        controller.model = this._loadModel(moduleFiles)
+        controller.view = await this._loadView(moduleFiles)
+        controller.model = await this._loadModel(moduleFiles)
         await controller.init();
         return controller
     }
 
     static async _loadModuleFiles(moduleGroupName, module) {
+        console.log(MODULE_FILE_DIR + moduleGroupName)
         Includer.addFilesToLoad(
             [{
                 directory: MODULE_FILE_DIR + moduleGroupName,
