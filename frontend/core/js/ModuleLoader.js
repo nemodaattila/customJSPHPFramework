@@ -95,7 +95,7 @@ class ModuleLoader {
 
     static async _loadView(moduleFiles) {
         const view = await this.getComponent(moduleFiles, 'View')
-        return !view ? undefined : new (eval(await this.loadFile(view)))()
+        return !view ? new WindowContentViewParent() : new (eval(await this.loadFile(view)))()
     }
 
     static async _loadModel(moduleFiles) {
