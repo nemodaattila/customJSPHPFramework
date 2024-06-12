@@ -15,7 +15,7 @@ class Messenger {
      * @param message
      */
     static showAlert(message) {
-        !this._messageObject ? alert(message) : this._messageObject.showAlert(message)
+        !this._messageObject ? alert(message) : this._messageObject.showAlertMessage(message)
     }
 
     /**
@@ -23,6 +23,6 @@ class Messenger {
      * @param message
      */
     static showSuccess(message) {
-        !this._messageObject ? alert(message) : this._messageObject.showSuccess(message)
+        !this._messageObject ? alert(message) : this._messageObject.showSuccessMessage(message)
     }
 }
