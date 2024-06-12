@@ -33,7 +33,7 @@ class AlertPopupView {
     }
 
     showAlertMessage(message) {
-        this._alertMessageContainer.innerHTML = "<p>ERROR!</p> ${message}"
+        this._alertMessageContainer.innerHTML = `<p>ERROR!</p> ${message}`
         this._alertContainer.style.display = "initial";
         this._alertAcknowledgerButton.focus()
     }

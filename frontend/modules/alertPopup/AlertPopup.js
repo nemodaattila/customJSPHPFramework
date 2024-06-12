@@ -29,7 +29,7 @@ class AlertPopup {
      * displays success rectangle and message, hides it after 3 seconds (timout) -> calls view
      * @param message {string|null} success message
      */
-    showSuccess(message = null) {
+    showSuccessMessage(message = null) {
         clearTimeout(this._timeout)
         this._view.showSuccessMessage(message)
         this._timeout = setTimeout(() => {
