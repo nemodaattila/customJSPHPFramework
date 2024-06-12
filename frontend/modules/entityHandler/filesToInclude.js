@@ -57,3 +57,16 @@ Includer.setIncludableModuleSource(
                 'EntityServiceModelParent.js',
             ]
         }])
+
+
+Includer.setIncludableModuleSource(
+    'entityHandlerInputObjects', [
+        {
+            directory: MODULE_FILE_DIR + 'entityHandler/entityHandlerInputObjects',
+            fileNames: [
+                'TableInputParent.js',
+                'NumberTableInput.js',
+                'StringTableInput.js',
+                'SelectTableInput.js',
+            ]
+        }])
