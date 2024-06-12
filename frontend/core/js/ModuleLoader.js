@@ -47,25 +47,25 @@ class ModuleLoader {
      * @returns {Promise<*|boolean>} returns the controller or false, if module group not exists
      */
     static async loadModule(moduleGroupName, module, connectedParams = null) {
-        const moduleFiles = await this.loadModuleFiles(module)
-        const controller = this.loadController(moduleFiles)
+        const moduleFiles = await this._loadModuleFiles(module)
+        const controller = this._loadController(moduleFiles)
         if (!controller) {
             Messenger.showAlert('controller file missing from: ' + moduleGroupName)
             return false
         }
-        controller.service = this.loadService(moduleFiles, moduleGroupName)
+        controller.service = this._loadService(moduleFiles, moduleGroupName)
         if (controller.service) {
             if (!controller.service.model)
-                controller.service.model = this.loadServiceModel()
+                controller.service.model = this._loadServiceModel()
             await controller.service.init()
         }
-        controller.view = this.loadView(moduleFiles)
-        controller.model = this.loadModel(moduleFiles)
+        controller.view = this._loadView(moduleFiles)
+        controller.model = this._loadModel(moduleFiles)
         await controller.init();
         return controller
     }
 
-    static async loadModuleFiles(moduleGroupName, module) {
+    static async _loadModuleFiles(moduleGroupName, module) {
         Includer.addFilesToLoad(
             [{
                 directory: MODULE_FILE_DIR + moduleGroupName,
@@ -76,27 +76,27 @@ class ModuleLoader {
         return Includer.getIncludableModuleSource(module)
     }
 
-    static async loadController(moduleFiles, moduleGroupName) {
+    static async _loadController(moduleFiles, moduleGroupName) {
         const controllerName = await this.getComponent(moduleFiles, 'Controller')
         return !controllerName ? false : new (eval(await this.loadFile(controllerName)))(moduleGroupName)
     }
 
-    static async loadService(moduleFiles) {
+    static async _loadService(moduleFiles) {
         const serviceName = await this.getComponent(moduleFiles, 'Service')
         return !serviceName ? undefined : new (eval(await this.loadFile(serviceName)))()
     }
 
-    static async loadServiceModel(moduleFiles) {
+    static async _loadServiceModel(moduleFiles) {
         const serviceModelName = await this.getComponent(moduleFiles, 'ServiceModel')
         return !serviceModelName ? undefined : new (eval(await this.loadFile(serviceModelName)))()
     }
 
-    static async loadView(moduleFiles) {
+    static async _loadView(moduleFiles) {
         const view = await this.getComponent(moduleFiles, 'View')
         return !view ? undefined : new (eval(await this.loadFile(view)))()
     }
 
-    static async loadModel(moduleFiles) {
+    static async _loadModel(moduleFiles) {
         const model = await this.getComponent(moduleFiles, 'model')
         return !model ? undefined : new (eval(await this.loadFile(model)))()
     }
