@@ -36,8 +36,34 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         return new Promise(async (resolve) => {
             console.log('init')
             this._model.setTableHeaderAttributeOrder();
+            await this.loadTableInputObjects()
+            this.createTableInputObjects()
             resolve(true)
         })
+    }
+
+    async loadTableInputObjects()
+    {
+        console.log('input')
+            await Includer.loadModuleSource('entityHandlerInputObjects')
+    }
+
+    createTableInputObjects(){
+       Object.values( this._model.tableHeaderAttributes).forEach(inputParameters => {
+           console.log(inputParameters.type)
+           inputParameters.type = inputParameters.type??'StringTableInput'
+           if (ENTITY_HANDLER_INPUT_TYPES.findIndex(type => type === inputParameters.type) ===-1) {
+
+               Messenger.showAlert('there is no input object type such: '+inputParameters.type +" see globals.js => ENTITY_HANDLER_INPUT_TYPES")
+               return
+           }
+           try {
+               inputParameters.typeObject = new (eval(inputParameters.type))()
+           }
+           catch (e) {
+               Messenger.showAlert(`${inputParameters.type}  class is missing`)
+           }
+       })
     }
 
     getTitle(name) {
@@ -59,7 +85,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         //     ac.postFields.additionalParams = JSON.stringify(additionalParams)
         try {
             console.log(searchAndOrderParams)
-            return  await RESTHandler.sendRequest({
+            return  await RESTHandler.sendHttpRequest({
                 url: this.model.restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
@@ -80,7 +106,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getOne(id) {
-        this._model.addRecord(id, await RESTHandler.sendRequest({
+        this._model.addRecord(id, await RESTHandler.sendHttpRequest({
             url: this.model.restParameter + "/" + id, requestType: 'GET',
         }))
     }
@@ -102,7 +128,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.sendRequest({url: this.model.restParameter+'/meta', requestType: 'GET'})
+        this._model.companyTypes = await RESTHandler.sendHttpRequest({url: this.model.restParameter+'/meta', requestType: 'GET'})
         this._model.loaded = true
         console.log(this)
     }
@@ -116,7 +142,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         // }
         console.log(this._model.selectedIds)
         for (const id of this._model.selectedIds) {
-            await RESTHandler.sendRequest({
+            await RESTHandler.sendHttpRequest({
                 url: this.model.restParameter+'/'+id, requestType: 'DELETE',
 
             })
@@ -127,7 +153,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
 
     async sendCreateRequest(record) {
 
-        await RESTHandler.sendRequest({
+        await RESTHandler.sendHttpRequest({
             url: this.model.restParameter, requestType: 'POST',
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : record
@@ -147,7 +173,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         for (const id of dataIds) {
             record.id = id
             console.log(record)
-            await RESTHandler.sendRequest({
+            await RESTHandler.sendHttpRequest({
                 url: this.model.restParameter+'/'+id, requestType: 'PATCH',
                 customHeader: {"Content-type": 'application/json-patch+json'},
                 values : record
