@@ -65,9 +65,13 @@ class RESTHandler {
     }
 
     static _compileRequestParameters(payload) {
+        console.trace()
+        console.log(payload)
         if (payload === null)
             return null
-        return Object.entries(payload).map(([key, value]) => (key + "=" + payload[key])).join('&')
+        let request = Object.entries(payload).map(([key, value]) => (key + "=" + value)).join('&')
+        console.log(request)
+        return request
         //  let parameters = [];
         //  for (const key in payload)
         //      parameters.push)
