@@ -50,6 +50,10 @@ class EntityServiceModelParent {
         this._selectedIds.splice(index, 1)
     }
 
+    set tableHeaderAttributes(value) {
+        this._tableHeaderAttributes = value;
+    }
+
     get tableHeaderAttributes() {
         return this._tableHeaderAttributes;
     }
@@ -123,20 +127,7 @@ class EntityServiceModelParent {
 
 
         this._tableHeaderAttributeOrder.forEach(param  =>{
-            const filterType = this._tableHeaderAttributes[param].type ?? 'string'
-
-            if (filterType === 'select') {
-                recordData[param] = [this._tableHeaderAttributes[param].values[record[param]],'select']
-                return
-            }
-
-                try {
-                    recordData[param] = [record[param] === null || record[param] === undefined ? '' : decodeURIComponent(record[param])]
-                } catch (e) {
-                    recordData[param] = [record[param]]
-                }
-
-            recordData[param].push(filterType)
+            recordData[param] = [record[param],this._tableHeaderAttributes[param]]
         })
         return recordData
     }
@@ -160,6 +151,9 @@ class EntityServiceModelParent {
      * @returns {string}
      */
     getTitle(moduleName) {
+        console.log(moduleName)
+        console.log(this._moduleParams)
+        console.trace()
         return this._moduleParams[moduleName].title
     }
 }
