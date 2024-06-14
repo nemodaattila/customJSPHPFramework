@@ -5,8 +5,9 @@ Includer.setIncludableModuleSource(
             'EntityHandlerTableController.js',
             'EntityHandlerTableView.js',
             'EntityHandlerTable.css',
-            // 'SearchAndOrderParameters.js',
             'EntityHandlerControllerParent.js',
+            'EntityCreatorControllerParent.js',
+            'EntityEditorControllerParent.js',
             'EntityHandlerViewParent.js'
         ]
     }])
