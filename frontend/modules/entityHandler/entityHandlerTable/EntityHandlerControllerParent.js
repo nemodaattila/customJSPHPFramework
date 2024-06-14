@@ -1,212 +1,82 @@
-class EntityHandlerControllerParent extends WindowContentControllerParent{
-    /**
-     * több adatot kezel?
-     * @type {boolean}
-     */
-    _multiple = false
+class EntityHandlerControllerParent extends WindowContentControllerParent {
     /**
      * controller típusa - creator / edit / multiple
      */
     _type
-
     _serviceModelPointer
 
-
-
-
-
-    constructor(type) {
-        super();
-        this._type = type
-        this._multiple = this._type === 'multipleEditor'
-        // if (this._type === 'editor') {
-        //     this.getOneEntity()
-        // }
-        // else
-        //     this.init()
-    }
-
-    destructor()
-    {
+    destructor() {
         super.destructor?.()
         this._serviceModelPointer = undefined
-
+        EventSubscriptionHandler.massUnSubscribe(this)
     }
 
     getHeaderAttributeParams() {
         return this._serviceModelPointer.tableHeaderAttributes
     }
 
-    onDesktopWindowResize() {}
-
-    init(){
+    // onDesktopWindowResize() {}
+    init() {
         this.subscribeToEvents?.()
-        EventSubscriptionHandler.massUnSubscribe(this)
         this._view = new EntityHandlerViewParent()
+        this._serviceModelPointer = this.service.model
+        console.log(this)
     }
 
-
-     async displayView(windowBody) {
-        //TODO move from here
-         this._serviceModelPointer = this.service.model
-         console.log({...this._serviceModelPointer})
-
-         console.log(this._serviceModelPointer.selectedIds.length)
-         if (this._serviceModelPointer.selectedIds.length !== 0) {
-             let idLabel = this._serviceModelPointer.selectedIds.length === 1 ?
-                 this._serviceModelPointer.selectedIds[0] :
-                 this._serviceModelPointer.selectedIds.join(', ')
-             this._view.addIdLabel(idLabel)
-         }
-         this._view.addComponent('handlerTable', new EntityHandlerTableController(this.getWindowContentMainContainer(), this), this._type)
-         console.log(this._view.getComponent('handlerTable'))
-         if (this._type === 'editor')
-             this._view.getComponent('handlerTable').fillTable(await this.service.getSelectedDataFromLocalDatabase(), this.getHeaderAttributeParams())
-         // listerTable.displayTableIcons(this._serviceModelPointer.getEnabledOperations())
-         //
-         // this._searchParamConnector.setOrdering(this._serviceModelPointer?.defaultOrder ?? 'id', 'ASC')
-         // listerTable.drawHeaders(
-         //     this._serviceModelPointer.tableHeaderAttributeOrder,
-         //     this._serviceModelPointer.defaultOrder
-         // )
-         // this._searchParamConnector.orderSourceObject = listerTable.view
-         // console.trace()
-         //
-         // this._view.addComponent("pageTurner", this._searchParamConnector.createOffsetSourceObject(this._pageTurnerType, listerTable, this))
-         // console.dir(windowBody)
-         // this._searchParamConnector.tableDOMElement = this._view.getComponent('listerTable').view._dataTable
-         // // this._searchParamConnector.setAutoLimit()
-         // // this.getRecordsFromServer("refresh")
-         // this.openHandlerWindow('creator')
-     }
-
-    collectAndSaveRecord()
-    {
-
-            const match = item => new Map([
-                ['creator', "collectAndCreateRecord"],
-                ['editor', "collectAndEditRecord"],
-                ['multipleEditor', "collectAndEditMultipleRecord"],
-                ['delete', "deleteRecord"],
-            ]).get(item) ?? false
-
+    collectAndSaveRecord() {
+        const match = item => new Map([
+            ['creator', "collectAndCreateRecord"],
+            ['editor', "collectAndEditRecord"],
+            ['delete', "deleteRecord"],
+        ]).get(item) ?? false
         this[match(this._type)]()
     }
 
-    async attributeMultipleDelButtonClicked(attributeName) {
-        let collectedData = {}
-        collectedData[attributeName] = ''
-        collectedData.id=this._serviceModelPointer.selectedIds
-            //DO validation
-        await this.service.sendEditRequest(collectedData, this._multiple)
-    }
-
-     async collectAndCreateRecord() {
-         const collectedData = this._view.getComponent('handlerTable').getInputValues()
-         if (!this.validateRecord(collectedData))
-             return
-         this.encodeStringParameters(collectedData)
-         await this.service.sendCreateRequest(collectedData)
-         this._view.getComponent('handlerTable').resetTable()
-     }
-
-    async collectAndEditRecord() {
-        const collectedData = this._view.getComponent('handlerTable').getInputValues()
-        if (Object.keys(collectedData).length === 0)
-            return;
-        if (!this.validateRecord(collectedData))
-            return
-       const originalData = await this.service.getSelectedDataFromLocalDatabase()
-        console.log(originalData)
-
-        this.getDifferenceBetweenModifiedDataAndOriginal(collectedData, originalData)
-        console.log(collectedData)
-
-
-        this.encodeStringParameters(collectedData)
-        collectedData.id = originalData.id
-        console.log(collectedData)
-        await this.service.sendEditRequest(collectedData)
-        // this._view.getComponent('handlerTable').resetTable()
-    }
-
-    getDifferenceBetweenModifiedDataAndOriginal(collectedData, originalData)
-    {
-        Object.entries(collectedData).forEach(([key, value]) => {
-            if (value === originalData[key])
-                delete collectedData[key]
+    validateRecord(collectedData) {
+        const attributes = this.getHeaderAttributeParams()
+        return Object.entries(collectedData).every(([key, value]) => {
+            if (attributes[key]?.required) {
+                if (value === '') {
+                    Messenger.showAlert((attributes[key].label ?? key) + ' Kitöltése kötelező');
+                    return false
+                }
+            }
+            return true
         })
     }
 
-     validateRecord(collectedData)
-     {
-         const attributes = this.getHeaderAttributeParams()
-          return Object.entries(collectedData).every(([key,value])=>{
-             if (attributes[key]?.required)
-             {
-                 if (value === '')
-                 {
-                     Messenger.showAlert((attributes[key].label??key) + ' Kitöltése kötelező');
-                     return false
-                 }
-             }
-             return true
-         })
-     }
-
-    encodeStringParameters(collectedData)
-    {
-        let stringTypes =    [ 'string',         'char',
-         'longtext',
-         'mediumtext',
+    encodeStringParameters(collectedData) {
+        let stringTypes = ['string', 'char',
+            'longtext',
+            'mediumtext',
             'text',
-    'tinytext',
-     'varchar'
-]
+            'tinytext',
+            'varchar'
+        ]
         const tableHeaderAttributes = this.getHeaderAttributeParams()
-
         Object.entries(collectedData).forEach(([id, value]) => {
-            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module => module === handlerType) === -1)
                 return
-
             if (stringTypes.findIndex(strType => strType === tableHeaderAttributes[id].type) !== -1)
-            collectedData[id] = encodeURIComponent(value)
+                collectedData[id] = encodeURIComponent(value)
         })
     }
 
-    async collectAndEditMultipleRecord() {
-        const collectedData = this._view.getComponent('handlerTable').getNotEmptyInputValues()
-        if (Object.keys(collectedData).length === 0)
-            return;
-
-        if (!this.validateRecord(collectedData))
-            return
-
-
-
-        this.encodeStringParameters(collectedData)
-        collectedData.id = this._serviceModelPointer.selectedIds
-        console.log(collectedData)
-        await this.service.sendEditRequest(collectedData, this._multiple)
-        this._view.getComponent('handlerTable').resetTable()
-    }
-
-    async sendDataHandlerRequest(collectedData) {
-        console.log(this._type)
-        if (!collectedData)
-            return
-        if (this._type === 'creator') {
-            await this.service.sendCreateRequest(collectedData)
-            this._view.getComponent('handlerTable').resetTable()
-        } else {
-            if (await this.service.sendEditRequest(collectedData, this.multiple))
-                if (!this.multiple) {
-                    await this.getOneEntity(false)
-                } else
-                    this.view.resetTallTable()
-        }
-    }
-
+    // async sendDataHandlerRequest(collectedData) {
+    //     console.log(this._type)
+    //     if (!collectedData)
+    //         return
+    //     if (this._type === 'creator') {
+    //         await this.service.sendCreateRequest(collectedData)
+    //         this._view.getComponent('handlerTable').resetTable()
+    //     } else {
+    //         if (await this.service.sendEditRequest(collectedData, this.multiple))
+    //             if (!this.multiple) {
+    //                 await this.getOneEntity(false)
+    //             } else
+    //                 this.view.resetTallTable()
+    //     }
+    // }
     //
     // /**
     //  * egy rekord/entitás adatainak lekérése
@@ -269,7 +139,6 @@ class EntityHandlerControllerParent extends WindowContentControllerParent{
     //  * @param {*} compData összegyüjtött adatok
     //  * @returns {Promise<void>}
     //  */
-
     //
     // /**
     //  * fájl előkészítése feltöltésre (fájlnév + base64 string)
