@@ -19,6 +19,10 @@ class EntityListerTableSearchConnector {
         this._orderSourceObject._searchParamConnector = this
     }
 
+    get offsetSourceObject() {
+        return this._offsetSourceObject;
+    }
+
     _offsetSourceObject
     set offsetSourceObject(value) {
         this._offsetSourceObject = value;
