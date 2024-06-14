@@ -3,7 +3,7 @@ class DesktopView {
      * az ablakkezelő DOM elementje
      * @type {HTMLDivElement|HTMLBodyElement}
      */
-    _mainContainer = document.getElementsByTagName('body')[0]
+    _mainContainer = document.querySelector('body')
     get mainContainer() {
         return this._mainContainer;
     }

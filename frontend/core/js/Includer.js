@@ -76,7 +76,7 @@ class Includer {
                 const script = document.createElement("script");
                 script.type = "text/javascript";
                 script.src = file;
-                document.getElementsByTagName("head")[0].appendChild(script);
+                document.querySelector("head").appendChild(script);
                 script.onload = () => {
                     this._model.loadedFiles = file
                     resolve(true)
@@ -90,7 +90,7 @@ class Includer {
                 link.type = 'text/css';
                 link.href = file;
                 link.media = 'all';
-                document.getElementsByTagName("head")[0].appendChild(link);
+                document.querySelector("head").appendChild(link);
                 link.onload = () => {
                     this._model.loadedFiles = file
                     resolve(true)
@@ -106,8 +106,10 @@ class Includer {
     static async startFileLoad() {
         return new Promise(async (resolve, reject) => {
             const filesToLoad = this._model.filesToLoad
-            if (filesToLoad.length === 0)
+            if (filesToLoad.length === 0) {
                 resolve(true)
+                return
+            }
             for (const file of filesToLoad) {
                 try {
                     await this._loadScript(file)

@@ -14,7 +14,7 @@ class AlertPopupView {
      * adds click event to alert acknowledger button
      */
     constructor() {
-        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id: "alertContainer"})
+        this._alertContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.querySelector('body'), {id: "alertContainer"})
         const container = HtmlElementCreator.createSimpleHtmlElement('div', this._alertContainer)
         this._alertMessageContainer = HtmlElementCreator.createSimpleHtmlElement('div', container);
         this._alertAcknowledgerButton = HtmlElementCreator.createNestedHtmlElement(['div', 'input'], container, {
@@ -22,7 +22,7 @@ class AlertPopupView {
             value: 'OK'
         })
         this._alertAcknowledgerButton.addEventListener('click', () => this._alertContainer.style.display = "none")
-        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.getElementsByTagName('body')[0], {id: "successContainer"})
+        this._successContainer = HtmlElementCreator.createSimpleHtmlElement('div', document.querySelector('body'), {id: "successContainer"})
         HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer, {innerText: 'Operation successful'})
         this._successMessageContainer = HtmlElementCreator.createSimpleHtmlElement('p', this._successContainer)
     }
