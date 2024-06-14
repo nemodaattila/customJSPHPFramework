@@ -1,7 +1,7 @@
 /**
  * controller for editing companies
  */
-class CompanyEditorController extends EntityHandlerControllerParent {
+class CompanyEditorController extends EntityEditorControllerParent {
     subscribeToEvents() {
         // EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
     }
