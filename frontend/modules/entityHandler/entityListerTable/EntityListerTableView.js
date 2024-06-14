@@ -536,105 +536,101 @@ class EntityListerTableView {
         return this._rows.map(row => row.getAttribute('recordId'))
     }
 
-    displayFilters(attributeOrder, attributeParams) {
+    createHeaderFilterInputs(attributeOrder, attributeParams) {
         this._filterRow = HtmlElementCreator.createSimpleHtmlElement('tr', this._tHead, {'class': 'filterRow'})
         this._filterInputs = {}
-        attributeOrder.forEach(id => {
+        attributeOrder.forEach(attributeName => {
+            const inoutObject = attributeParams[attributeName]
+            console.log(inoutObject)
 
-            const modelParams = attributeParams[id]
             const td = HtmlElementCreator.createSimpleHtmlElement('td', this._filterRow)
-            const filterType = modelParams?.type ?? 'string'
-            switch (filterType) {
-                case 'number':
-                case 'bigint':
-                case 'decimal':
-                case 'double':
-                case 'float':
-                case 'int':
-                case 'smallint':
-                case 'tinyint':
-                case 'year':
-                case 'string':
-                case 'char':
-                case 'longtext':
-                case 'mediumtext':
-                case 'text':
-                case 'tinytext':
-                case 'varchar':
-                    this._filterInputs[id] = [
-                        HtmlElementCreator.createSelectWithOptions(td, {}, {
-                            cont: 'Tartalmaz',
-                            notcont: 'Nem tartalmaz',
-                            start: 'Kezdődik',
-                            end: 'Végződik',
-                            eq: 'Egyenlő',
-                            neq: 'Nem egyenlő',
-                            sm: 'Kissebb mint',
-                            sme: 'Kissebb-egyenlő mint',
-                            gr: 'Nagyobb mint',
-                            gre: 'Nagyobb-egyenlő mint',
-                            null: 'Üres',
-                            notnull: 'Nem üres'
-                        }, true),
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {
-                            type: (['string', 'char', 'longtext', 'mediumtext', 'text', 'tinytext', 'varchar'].findIndex(
-                                value => filterType === value) === -1) ? "number" : 'text',
-                            min: 0,
-                            size: 20,
-                        })
-                    ]
-                    if (modelParams.maxLength )
-                        this._filterInputs[id][1].maxLength = Math.min(parseInt(modelParams.maxLength), 524288);
-                    if (modelParams.precision )
-                        this._filterInputs[id][1].max = (10 ** modelParams.precision) - 1
-                    break;
-                case 'select':
-                case 'array':
-                    this._filterInputs[id] = [
-                        HtmlElementCreator.createSelectWithOptions(td, {}, {
-                            eq: 'Egyenlő',
-                            neq: 'Nem egyenlő',
-                            null: 'Üres',
-                            notnull: 'Nem üres',
-                        }, true),
-                        HtmlElementCreator.createSelectWithOptions(td, {},
-                            modelParams.values, filterType === 'select', true)
-                    ];
-                    break;
-                case 'date':
-                    this._filterInputs[id] = [
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'}),
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'})
-                    ];
-                    break;
-                case 'datetime':
-                    this._filterInputs[id] = [
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'}),
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'})
-                    ];
-                    break;
-                case 'time':
-                    this._filterInputs[id] = [
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'}),
-                        HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'})
-                    ];
-                    break;
-                case undefined:
-                case 'none':
-                    break
-                default:
-                    console.log('unkown filtertype: ' + filterType)
-            }
-            if (modelParams) {
-                if (modelParams['defaultValue'] && !modelParams.hidden)
-                    this._filterInputs[id][1].value = modelParams['defaultValue']
-                if (modelParams['defaultOperator'] && !modelParams.hidden)
-                    this._filterInputs[id][0].value = modelParams['defaultOperator']
-                if (modelParams['disabled']) {
-                    this._filterInputs[id][0].disabled = true
-                    this._filterInputs[id][1].disabled = true
-                }
-            }
+            inoutObject.displayListerFilterSelect(td, inoutObject)
+            inoutObject.displayListerValueInput(td, inoutObject)
+            if (inoutObject?.hidden)
+                document.getElementById('hcb-' + this.id + "-" + attributeName).click()
+            // const filterType = modelParams?.type ?? 'string'
+            // switch (filterType) {
+            //     case 'number':
+            //     case 'bigint':
+            //     case 'decimal':
+            //     case 'double':
+            //     case 'float':
+            //     case 'int':
+            //     case 'smallint':
+            //     case 'tinyint':
+            //     case 'year':
+            //     case 'string':
+            //     case 'char':
+            //     case 'longtext':
+            //     case 'mediumtext':
+            //     case 'text':
+            //     case 'tinytext':
+            //     case 'varchar':
+            //         this._filterInputs[id] = [
+            //             HtmlElementCreator.createSelectWithOptions(td, {}, {
+            //                 cont: 'Tartalmaz',
+            //                 notcont: 'Nem tartalmaz',
+            //                 start: 'Kezdődik',
+            //                 end: 'Végződik',
+            //                 eq: 'Egyenlő',
+            //                 neq: 'Nem egyenlő',
+            //                 sm: 'Kissebb mint',
+            //                 sme: 'Kissebb-egyenlő mint',
+            //                 gr: 'Nagyobb mint',
+            //                 gre: 'Nagyobb-egyenlő mint',
+            //                 null: 'Üres',
+            //                 notnull: 'Nem üres'
+            //             }, true),
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {
+            //                 type: (['string', 'char', 'longtext', 'mediumtext', 'text', 'tinytext', 'varchar'].findIndex(
+            //                     value => filterType === value) === -1) ? "number" : 'text',
+            //                 min: 0,
+            //                 size: 20,
+            //             })
+            //         ]
+            //         if (modelParams.maxLength )
+            //             this._filterInputs[id][1].maxLength = Math.min(parseInt(modelParams.maxLength), 524288);
+            //         if (modelParams.precision )
+            //             this._filterInputs[id][1].max = (10 ** modelParams.precision) - 1
+            //         break;
+            //     case 'select':
+            //     case 'array':
+            //         this._filterInputs[id] = [
+            //             HtmlElementCreator.createSelectWithOptions(td, {}, {
+            //                 eq: 'Egyenlő',
+            //                 neq: 'Nem egyenlő',
+            //                 null: 'Üres',
+            //                 notnull: 'Nem üres',
+            //             }, true),
+            //             HtmlElementCreator.createSelectWithOptions(td, {},
+            //                 modelParams.values, filterType === 'select', true)
+            //         ];
+            //         break;
+            //     case 'date':
+            //         this._filterInputs[id] = [
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'}),
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'date'})
+            //         ];
+            //         break;
+            //     case 'datetime':
+            //         this._filterInputs[id] = [
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'}),
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'datetime-local'})
+            //         ];
+            //         break;
+            //     case 'time':
+            //         this._filterInputs[id] = [
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'}),
+            //             HtmlElementCreator.createSimpleHtmlElement('input', td, {type: 'time'})
+            //         ];
+            //         break;
+            //     case undefined:
+            //     case 'none':
+            //         break
+            //     default:
+            //         console.log('unkown filtertype: ' + filterType)
+            // }
+
             // if (filter !== undefined && filter !== 'none')
             //     this._filters[id] = [this.filterInputs[id][0].value, this.filterInputs[id][1].value]
         })
@@ -653,12 +649,23 @@ class EntityListerTableView {
         return this._tableContainer.style.zoom === '' ? 1 : this._tableContainer.style.zoom
     }
 
-    createRowWithRecord(attributes, id, order) {
+    addRowToListerTable(id)
+    {
         let row = HtmlElementCreator.createHtmlElement('tr', this._tBody, {})
         row.setAttribute("recordId", id)
         this._rows.push(row)
+        return row
+    }
+
+    createListerBodyTd(row, value)
+    {
+        return  HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+
+    }
+
+    createRowWithRecord(attributes, id, order) {
+
         attributes.forEach(([value, type, paramName],key) => {
-            const td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
             td.style.width=this._headerRow.children[key].style.width
             if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
                 td.classList.add('rightAlign')

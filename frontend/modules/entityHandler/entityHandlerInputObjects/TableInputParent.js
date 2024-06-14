@@ -1,6 +1,25 @@
 class TableInputParent {
     _listerFilterSelectElement
     _listerValueElement
+    _tallTableValueInput
+    _inModule
+    _label
+
+    get inModule() {
+        return this._inModule;
+    }
+
+    set inModule(value) {
+        this._inModule = value;
+    }
+
+    get label() {
+        return this._label;
+    }
+
+    set label(value) {
+        this._label = value;
+    }
 
     addInputEventToListerFilterSelectElement(event)
     {
@@ -10,6 +29,42 @@ class TableInputParent {
     addInputEventToListerValueElement(event)
     {
         this._listerValueElement.addEventListener('input', event)
+    }
+
+    focusTallTableInput()
+    {
+        this._tallTableValueInput.focus()
+        // if (this._inputs[Object.keys(this._inputs)[0]].tagName === 'DIV') {
+        //     this._inputs[Object.keys(this._inputs)[0]].firstChild.focus()
+        //     this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]].firstChild)
+        // } else {
+        //     this._inputs[Object.keys(this._inputs)[0]].focus()
+        //     this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]])
+        // }
+    }
+
+    getTallTableValueInputValue()
+    {
+        return this._tallTableValueInput.value
+    }
+
+    convertOperationString(operation) {
+
+        const match = item => new Map([
+            ['eq', "="],
+            ['neq', "!="],
+            ['sm', "<"],
+            ['sme', "<="],
+            ['gr', ">"],
+            ['gre', ">="],
+        ]).get(item) ?? operation
+       return match(operation)
+    }
+
+    getListerFilterInputValues()
+    {
+        if (this._listerFilterSelectElement.value !== '' || this._listerValueElement.value !== '')
+                        return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value[1]]
     }
 
 }

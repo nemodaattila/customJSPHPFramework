@@ -27,4 +27,26 @@ class StringTableInput extends TableInputParent {
                 size: 20,
             })
     }
+
+    displayTallTableValueInput(domContainer, inputParameters)
+    {
+        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer,{...{type: 'string'}, ...inputParameters.parameters})
+        console.log(this)
+    }
+    getTallTableValueInputValue()
+    {
+        console.log(this)
+        return this._tallTableValueInput.value.trim()
+    }
+
+    formatListerTd(td)
+    {
+        td.classList.add('leftAlign')
+    }
+
+    getListerFilterInputValues()
+    {
+        if (this._listerValueElement.value !== '' || this._listerFilterSelectElement.value === 'null' || this._listerFilterSelectElement.value === 'notnull')
+                        return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value.toString()];
+    }
 }

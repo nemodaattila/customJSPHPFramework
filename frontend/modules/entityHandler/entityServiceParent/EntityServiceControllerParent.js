@@ -49,7 +49,14 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     createTableInputObjects(){
-       Object.values( this._model.tableHeaderAttributes).forEach(inputParameters => {
+
+        const createdInputObjects={}
+
+        let tableHeaderAttributes = this._model.tableHeaderAttributes
+
+
+
+       Object.entries( tableHeaderAttributes).forEach(([attributeName,inputParameters]) => {
            console.log(inputParameters.type)
            inputParameters.type = inputParameters.type??'StringTableInput'
            if (ENTITY_HANDLER_INPUT_TYPES.findIndex(type => type === inputParameters.type) ===-1) {
@@ -58,12 +65,19 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
                return
            }
            try {
-               inputParameters.typeObject = new (eval(inputParameters.type))()
+               console.log('typeBbject')
+               const inputObj = new (eval(inputParameters.type))()
+               delete inputParameters.type
+                Object.entries(inputParameters).forEach(([name, value])=> inputObj['_'+name]=value)
+               createdInputObjects[attributeName] = inputObj
            }
            catch (e) {
                Messenger.showAlert(`${inputParameters.type}  class is missing`)
            }
        })
+        this._model.tableHeaderAttributes=createdInputObjects
+
+
     }
 
     getTitle(name) {
@@ -86,7 +100,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         try {
             console.log(searchAndOrderParams)
             return  await RESTHandler.sendHttpRequest({
-                url: this.model.restParameter, requestType: 'GET',
+                url: this._model.restParameter, requestType: 'GET',
                 customHeader: {"Search-And-Order-Params": JSON.stringify(searchAndOrderParams)},
             })
         } catch (e) {
@@ -107,12 +121,12 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
 
     async getOne(id) {
         this._model.addRecord(id, await RESTHandler.sendHttpRequest({
-            url: this.model.restParameter + "/" + id, requestType: 'GET',
+            url: this._model.restParameter + "/" + id, requestType: 'GET',
         }))
     }
 
     getDataFromLocalDatabase(recordIds, ) {
-        return recordIds.map(id => this.model.getRecordByIdForListTable(id))
+        return recordIds.map(id => this._model.getRecordByIdForListTable(id))
     }
 
     async getRecordsFromLocalDatabase(recordIds, hardReset = false) {
@@ -128,7 +142,7 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
     }
 
     async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.sendHttpRequest({url: this.model.restParameter+'/meta', requestType: 'GET'})
+        this._model.companyTypes = await RESTHandler.sendHttpRequest({url: this._model.restParameter+'/meta', requestType: 'GET'})
         this._model.loaded = true
         console.log(this)
     }
@@ -143,23 +157,23 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
         console.log(this._model.selectedIds)
         for (const id of this._model.selectedIds) {
             await RESTHandler.sendHttpRequest({
-                url: this.model.restParameter+'/'+id, requestType: 'DELETE',
+                url: this._model.restParameter+'/'+id, requestType: 'DELETE',
 
             })
         }
-        Messenger.showSuccess(this.model.successMessages['delete'])
-        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
+        Messenger.showSuccess(this._model.successMessages['delete'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this._model.handlerEventTrigger)
     }
 
     async sendCreateRequest(record) {
 
         await RESTHandler.sendHttpRequest({
-            url: this.model.restParameter, requestType: 'POST',
+            url: this._model.restParameter, requestType: 'POST',
             customHeader: {"Content-type": 'application/x-www-form-urlencoded'},
             values : record
         })
-        Messenger.showSuccess(this.model.successMessages['creator'])
-        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
+        Messenger.showSuccess(this._model.successMessages['creator'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this._model.handlerEventTrigger)
     }
 
     async sendEditRequest(record, multiple = false) {
@@ -174,13 +188,13 @@ class EntityServiceControllerParent extends WindowContentControllerParent {
             record.id = id
             console.log(record)
             await RESTHandler.sendHttpRequest({
-                url: this.model.restParameter+'/'+id, requestType: 'PATCH',
+                url: this._model.restParameter+'/'+id, requestType: 'PATCH',
                 customHeader: {"Content-type": 'application/json-patch+json'},
                 values : record
             })
         }
-        Messenger.showSuccess(this.model.successMessages['editor'])
-        EventSubscriptionHandler.triggerSubscriptionCall(this.model.handlerEventTrigger)
+        Messenger.showSuccess(this._model.successMessages['editor'])
+        EventSubscriptionHandler.triggerSubscriptionCall(this._model.handlerEventTrigger)
             // let value = await this.createAndSendRequest(multiple ? 'editMultipleCompany' : 'editCompany', JSON.stringify(data))
         // if (value.success === true) {
         //     Messenger.showSuccess(this._successMessages['editor'])

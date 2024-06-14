@@ -4,26 +4,6 @@ class EntityHandlerTableView {
     _inputs = {}
     _focusedCustomInput
 
-    _inputNumAndStringMatcher = type => new Map([
-
-    [ 'number','int'],
-    [ 'bigint','int'],
-    [ 'decimal','float'],
-    [ 'double','float'],
-    [ 'float','float'],
-    [ 'int','int'],
-    [ 'smallint','int'],
-    [ 'tinyint','int'],
-    [ 'year','int'],
-    [ 'string','string'],
-    [ 'char','string'],
-    [ 'longtext','string'],
-    [ 'mediumtext','string'],
-    [ 'text','string'],
-    [ 'tinytext','string'],
-    [ 'varchar','string'],
-
-    ]).get(type) ?? type
 
     constructor( tableContainer, controllerPointer) {
         this._mainContainer = tableContainer;
@@ -32,159 +12,51 @@ class EntityHandlerTableView {
         this._mainContainer.style.overflow = 'auto'
     }
 
-    displayTableElements(tableHeaderAttributes, handlerType, isMultiple = false)
+    createTallTable()
     {
-        console.log(this._mainContainer)
-        console.log(tableHeaderAttributes)
         this.tallTable = HtmlElementCreator.createSimpleHtmlElement('div', this._mainContainer, {class: 'handlerTable'})
-        //TODO inputPerRow
-        // let inputPerNums = this.windowContentPointer.content.inputPerRow ?? 1
-        const inputPerRows = 1
-        let evenRow = true
+
+    }
+
+    addGridTemplateStyle(columnNum)
+    {
         let cols = ''
-        for (let i = 0; i < inputPerRows; i++)
+        for (let i = 0; i < columnNum; i++)
             cols += ' 524px '
         this.tallTable.style.gridTemplateColumns += cols
-        let colorKey = -1
-        let colorOffset = 0;
-        Object.entries(tableHeaderAttributes).forEach(([id, input]) => {
-            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
-            return
+    }
 
-            colorKey++;
-            if (input.gridRowEnd)
-                colorOffset += input.gridRowEnd + 1;
-            if (colorOffset > 0) {
-                colorKey++;
-                colorOffset--;
-            }
-            if (colorKey % inputPerRows === 0)
-                evenRow = !evenRow
-            const tr = HtmlElementCreator.createSimpleHtmlElement('div', this.tallTable, {
-                class: 'tableRow'
-            })
-            if (evenRow)
-                tr.classList.add('evenRow')
-            if (input.gridRowEnd) {
-                tr.style.gridRowEnd = 'span ' + input.gridRowEnd
-                evenRow = !evenRow
-            }
-            const defaultTdParams = {class: 'tableCell'}
-            const tdParamForLabel = {...defaultTdParams, ...{innerHTML: input.label ?? id}}
-            const label = HtmlElementCreator.createSimpleHtmlElement('div', tr, tdParamForLabel)
-            if (input.required )
-                HtmlElementCreator.createSimpleHtmlElement('span', label, {innerHTML: '*', class: 'requiredInput'})
-            if (!input.params)
-                input.params = {}
-            let type = input.type ?? 'string'
-            const tdElem = HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
-            console.log(type)
-            console.log(isMultiple)
-            if (isMultiple)
-            {
-                (HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'button', Value: 'Érték törlése'})).addEventListener('click',()=>{
-                    this._controllerPointer.attributeMultipleDelButtonClicked(id)
-                })
-
-            }
-
-            type = this._inputNumAndStringMatcher(type)
-            console.log(type)
-	//TODO put types into individual classes
-            switch (type) {
-                case 'float':
-                case 'int':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {...{type: 'number'}, ...input.params})
-                     break;
-                case 'string':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'text'})
-                    break;
-                case 'currency':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'text'})
-                    this._inputs[id].addEventListener('focus', () => this._inputs[id].value = this._inputs[id].value.replaceAll(' ', ''))
-                    this._inputs[id].addEventListener('blur', () => this._inputs[id].value = this.formatValue(this._inputs[id].value))
-                    break;
-                case 'tel':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'tel'})
-                    break;
-                case 'email':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'email'})
-                    break;
-                case 'date':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'date'})
-                    if (!isMultiple && !input.noDefault)
-                        this._inputs[id].value = (new Date()).toISOString().split('T')[0]
-                    break
-                case 'datetime':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'datetime-local'})
-                    if (!isMultiple) {
-                        const now = new Date();
-                        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                        this._inputs[id].value = now.toISOString().slice(0, 16);
-                    }
-                    break
-                case 'file':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('input', tdElem, {...{type: 'file'}, ...input.params})
-                    const delIcon = HtmlElementCreator.createSimpleHtmlElement('img', tdElem, {
-                        src: './image/icons/del_icon.png',
-                        class: 'columnMoveIcon',
-                        title: 'kép/fájl törlése',
-                        hidden: true
-                    })
-                    delIcon.addEventListener('click', () => {
-                        this._inputs[id].value = ''
-                        delIcon.hidden = true
-                    })
-                    this._inputs[id].addEventListener('change', () => {
-                        if (this._inputs[id].value !== '')
-                            delIcon.hidden = false
-                    })
-                    break
-                case 'select':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('select', tdElem, {})
-                    if (input.multiple)
-                        this._inputs[id].multiple = true
-                    if (isMultiple)
-                        HtmlElementCreator.addOptionToSelect(this._inputs[id], {'-1': 'Nincs változás'}, true)
-                    HtmlElementCreator.addOptionToSelect(this._inputs[id], {...input.values}, true)
-                    if (input.defaultValue)
-                        this._inputs[id].value = input.defaultValue
-                    break
-                case 'customInput':
-                    this._inputs[id] = tdElem
-                    this.createEntitySelectorInputs(id)
-                    break
-                case 'dataListSelect':
-                    this._inputs[id] = tdElem
-                    this.createCustomDatalistInput(id, input.params)
-                    break
-                case 'textArea':
-                    this._inputs[id] = HtmlElementCreator.createHtmlElement('textarea', tdElem, input.params)
-                    break;
-                default:
-                    this._inputs[id] = tdElem
-            }
-            this._inputs[id].addEventListener('click',(
-                (input.type !== 'customInput' && input.type !== 'dataListSelect')?
-                    () => this.setFocusedCustomInput(this._inputs[id]):
-                    () => this.setFocusedCustomInput(this._inputs[id].firstChild)
-            ))
-
-
-            // if (input.type !== 'customInput' && input.type !== 'dataListSelect') {
-            //     this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id]))
-            // } else
-            //     this._inputs[id].addEventListener('click', () => this.setFocusedCustomInput(this._inputs[id].firstChild))
+    addRowToTallTable(isEventRow, gridRowEnd)
+    {
+        const tr = HtmlElementCreator.createSimpleHtmlElement('div', this.tallTable, {
+            class: 'tableRow'
         })
-        if (this._inputs[Object.keys(this._inputs)[0]].tagName === 'DIV') {
-            this._inputs[Object.keys(this._inputs)[0]].firstChild.focus()
-            this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]].firstChild)
-        } else {
-            this._inputs[Object.keys(this._inputs)[0]].focus()
-            this.setFocusedCustomInput(this._inputs[Object.keys(this._inputs)[0]])
+        if (isEventRow)
+            tr.classList.add('evenRow')
+        if (gridRowEnd) {
+            tr.style.gridRowEnd = 'span ' + gridRowEnd
+
         }
+        return tr
+    }
+
+    createTd(tr,defaultTdParams)
+    {
+        return  HtmlElementCreator.createSimpleHtmlElement('div', tr, defaultTdParams)
+
+    }
+
+    createMultipleAttributeDeleterButton()
+    {
+        return HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'button', Value: 'Érték törlése'})
+    }
 
 
+    createLabelTd(tr,tdParameters, required = false)
+    {
+        const label = HtmlElementCreator.createSimpleHtmlElement('div', tr, tdParameters)
+        if (required )
+            HtmlElementCreator.createSimpleHtmlElement('span', label, {innerHTML: '*', class: 'requiredInput'})
     }
 
     setFocusedCustomInput(input) {
@@ -195,45 +67,45 @@ class EntityHandlerTableView {
             this._focusedCustomInput.classList.add('focusedInput')
     }
 
-    getInputValues(tableHeaderAttributes) {
-        let values = {}
-        Object.entries(this._inputs).forEach(([id, input]) => {
-
-            switch (this._inputNumAndStringMatcher(tableHeaderAttributes[id].type)) {
-                case 'float':
-                    values[id] =parseFloat( this._inputs[id].value)
-                    break
-                case 'select':
-                case 'int':
-                    values[id] =parseInt( this._inputs[id].value)
-                break
-                case 'customInput':
-                    values[id] = this._inputs[id].firstChild.value
-                    if (values[id] === '') values[id] = null
-                    break;
-                case 'dataListSelect':
-                    const index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
-                    values[id] = (index === -1)? null: this._inputs[id].children[1].options[index].getAttribute('data-value')
-                    break
-                case 'string':
-                case 'textArea':
-                    values[id] = this._inputs[id].value.trim()
-                    break
-                case 'file':
-                    values[id] = this._inputs[id].files
-                    break
-                case 'currency':
-                    values[id] = this._inputs[id].value.replaceAll(' ', '')
-                    break
-                case 'datetime':
-                    values[id] = this._inputs[id].value.toString().replace('T', ' ')
-                    break
-                default:
-                    values[id] = this._inputs[id].value
-            }
-        })
-        return values
-    }
+    // getInputValues(tableHeaderAttributes) {
+    //     let values = {}
+    //     Object.entries(this._inputs).forEach(([id, input]) => {
+    //
+    //         switch (this._inputNumAndStringMatcher(tableHeaderAttributes[id].type)) {
+    //             case 'float':
+    //                 values[id] =parseFloat( this._inputs[id].value)
+    //                 break
+    //             case 'select':
+    //             case 'int':
+    //                 values[id] =parseInt( this._inputs[id].value)
+    //             break
+    //             case 'customInput':
+    //                 values[id] = this._inputs[id].firstChild.value
+    //                 if (values[id] === '') values[id] = null
+    //                 break;
+    //             case 'dataListSelect':
+    //                 const index = Array.from(this._inputs[id].children[1].options).findIndex(opt => opt.value === this._inputs[id].firstChild.value)
+    //                 values[id] = (index === -1)? null: this._inputs[id].children[1].options[index].getAttribute('data-value')
+    //                 break
+    //             case 'string':
+    //             case 'textArea':
+    //                 values[id] = this._inputs[id].value.trim()
+    //                 break
+    //             case 'file':
+    //                 values[id] = this._inputs[id].files
+    //                 break
+    //             case 'currency':
+    //                 values[id] = this._inputs[id].value.replaceAll(' ', '')
+    //                 break
+    //             case 'datetime':
+    //                 values[id] = this._inputs[id].value.toString().replace('T', ' ')
+    //                 break
+    //             default:
+    //                 values[id] = this._inputs[id].value
+    //         }
+    //     })
+    //     return values
+    // }
 
     resetTable(tableHeaderAttributes, isMultiple = false) {
         Object.entries(this._inputs).forEach(([id, input]) => {

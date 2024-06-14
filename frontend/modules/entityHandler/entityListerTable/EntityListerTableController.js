@@ -59,17 +59,22 @@ class EntityListerTableController {
 
     drawHeaders(tableAttributeOrder, defaultOrderParamName, isReDraw = false) {
         this._view.displayTableHeaders(tableAttributeOrder, this._headerAttributeParams, defaultOrderParamName, isReDraw)
-        this._view.displayFilters(tableAttributeOrder, this._headerAttributeParams)
-        this.addFilterEvents(tableAttributeOrder)
+        this._view.createHeaderFilterInputs(tableAttributeOrder, this._headerAttributeParams)
+        this.addInputEventToHeaderFilters(tableAttributeOrder)
     }
 
-    addFilterEvents(tableAttributeOrder) {
+    addInputEventToHeaderFilters(tableAttributeOrder) {
+        console.log(this._headerAttributeParams)
         tableAttributeOrder.forEach(attribName => {
-            if (this._headerAttributeParams[attribName]?.type === 'none')
+            if (!this._headerAttributeParams[attribName])
                 return
-            let filters = this._view.getFilterInput(attribName)
-            filters[0].addEventListener('input', (event) => {
+            // let filters = this._view.getFilterInput(attribName)
+            // console.log(filters)
+            this._headerAttributeParams[attribName].addInputEventToListerFilterSelectElement(
+
+            (event) => {
                 event.stopPropagation()
+                console.log(this)
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
                     this._controllerPointer.onTableFilterChange()
@@ -79,14 +84,14 @@ class EntityListerTableController {
                     event.target.nextElementSibling.disabled = true;
                 } else event.target.nextElementSibling.disabled = false;
             })
-            filters[1].addEventListener('input', (event) => {
+            this._headerAttributeParams[attribName].addInputEventToListerValueElement ((event) => {
                 clearTimeout(this.timeOut)
                 this.timeOut = setTimeout(() => {
                     this._controllerPointer.onTableFilterChange()
                 }, 300);
             })
-            if (this._headerAttributeParams[attribName]?.hidden)
-                document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
+            // if (this._headerAttributeParams[attribName]?.hidden)
+            //     document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
         })
     }
 
@@ -118,136 +123,124 @@ class EntityListerTableController {
     collectAndConvertFilterParams() {
         const finalFilterData = []
         console.log(this)
-        Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
-            const filterType = headerParams.type ?? 'string'
-            const inputs = this._view.getFilterInput(name)
-            if (inputs === undefined)
-                return;
-            const inputValues = [inputs[0].value, inputs[1].value];
-            let values = ''
-            switch (filterType) {
-                case 'number':
-                case 'bigint':
-                case 'decimal':
-                case 'double':
-                case 'float':
-                case 'int':
-                case 'smallint':
-                case 'tinyint':
-                case 'year':
-                    if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
-                        values = [this.convertOperationString(inputValues[0]), parseInt(inputValues[1])];
-                    break;
-                case 'string':
-                case 'char':
-                case 'longtext':
-                case 'mediumtext':
-                case 'text':
-                case 'tinytext':
-                case 'varchar':
-                case 'select':
-                case 'array':
-                    if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
-                        values = [this.convertOperationString(inputValues[0]), inputValues[1].toString()];
-                    break;
-                case 'time':
-                    let timeFrom = '';
-                    if (inputValues[0] !== '') {
-                        const tf = inputValues[0].split(':')
-                        timeFrom = new Date()
-                        timeFrom.setHours(tf[0])
-                        timeFrom.setMinutes(tf[1])
-                        timeFrom.setSeconds(0)
-                    }
-                    let timeTo = '';
-                    if (inputValues[1] !== '') {
-                        const tt = inputValues[1].split(':')
-                        timeTo = new Date()
-                        timeTo.setHours(tt[0])
-                        timeTo.setMinutes(tt[1])
-                        timeTo.setSeconds(0)
-                    }
-                    if (timeFrom !== '' || timeTo !== '')
-                        values = [timeFrom, timeTo, 1];
-                    if (values[0] > values[1]) {
-                        Messenger.showAlert('kezdő idő nem lehet nagyobb a végidőnél')
-                        return
-                    }
-                    break;
-                case 'datetime':
-                    let temp = []
-                    if (inputValues[0] !== '')
-                        temp[0] = inputValues[0].toString().replace('T', ' ')
-                    if (inputValues[1] !== '')
-                        temp[1] = inputValues[1].toString().replace('T', ' ')
-                    if (inputValues[0] !== '' || inputValues[1] !== '') {
-                        if (inputValues[0] !== '' && inputValues[1] === '')
-                            temp[1] = '2286-11-20 23:59:59'
-                        if (inputValues[0] === '' && inputValues[1] !== '')
-                            temp[0] = '1970-01-01 00:00:00'
-                        values = temp
-                        values[2] = 1;
-                        if (values[0] > values[1]) {
-                            Messenger.showAlert('kezdő dátum-idő nem lehet nagyobb a végdátum idő-nél')
-                            return
-                        }
-                    }
-                    break;
-                case 'date':
-                    const temp2 = []
-                    if (inputValues[0] !== '')
-                        temp2[0] = inputValues[0].toString().replace('T', ' ')
-                    if (inputValues[1] !== '')
-                        temp2[1] = inputValues[1].toString().replace('T', ' ')
-                    if (inputValues[0] !== '' || inputValues[1] !== '') {
-                        if (inputValues[0] !== '' && inputValues[1] === '')
-                            temp2[1] = '2286-11-20'
-                        if (inputValues[0] === '' && inputValues[1] !== '')
-                            temp2[0] = '1970-01-01'
-                        values = temp2
-                        values[2] = 1;
-                    }
-                    if (values[0] > values[1]) {
-                        Messenger.showAlert('kezdő dátum nem lehet nagyobb a végdátumnál')
-                        return
-                    }
-                    break;
-                case 'hidden':
-                case undefined:
-                    break
-                default:
-                    if (inputValues[0] !== '' || inputValues[1] !== '')
-                        values = [this.convertOperationString(inputValues[0]), inputValues[1]];
-            }
-            if (values !== '')
-                finalFilterData.push([name].concat(values))
-        })
-        Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
-            if (headerParams.filterType === 'hidden' && headerParams.defaultOperator)
-                finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
+         Object.entries(this._headerAttributeParams).forEach(([name, inputObject]) => {
+            console.log(inputObject)
+            const inputValues = inputObject.getListerFilterInputValues()
+            if (inputValues)
+                finalFilterData.push( [name, ...inputValues])
+
+        //     const filterType = inputObject.type ?? 'string'
+        //     const inputs = this._view.getFilterInput(name)
+        //     if (inputs === undefined)
+        //         return;
+        //     const inputValues = [inputs[0].value, inputs[1].value];
+        //     let values = ''
+        //     switch (filterType) {
+        //         case 'number':
+        //         case 'bigint':
+        //         case 'decimal':
+        //         case 'double':
+        //         case 'float':
+        //         case 'int':
+        //         case 'smallint':
+        //         case 'tinyint':
+        //         case 'year':
+        //             if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
+        //                 values = [this.convertOperationString(inputValues[0]), parseInt(inputValues[1])];
+        //             break;
+        //         case 'string':
+        //         case 'char':
+        //         case 'longtext':
+        //         case 'mediumtext':
+        //         case 'text':
+        //         case 'tinytext':
+        //         case 'varchar':
+        //         case 'select':
+        //         case 'array':
+        //             if (inputValues[1] !== '' || inputValues[0] === 'null' || inputValues[0] === 'notnull')
+        //                 values = [this.convertOperationString(inputValues[0]), inputValues[1].toString()];
+        //             break;
+        //         case 'time':
+        //             let timeFrom = '';
+        //             if (inputValues[0] !== '') {
+        //                 const tf = inputValues[0].split(':')
+        //                 timeFrom = new Date()
+        //                 timeFrom.setHours(tf[0])
+        //                 timeFrom.setMinutes(tf[1])
+        //                 timeFrom.setSeconds(0)
+        //             }
+        //             let timeTo = '';
+        //             if (inputValues[1] !== '') {
+        //                 const tt = inputValues[1].split(':')
+        //                 timeTo = new Date()
+        //                 timeTo.setHours(tt[0])
+        //                 timeTo.setMinutes(tt[1])
+        //                 timeTo.setSeconds(0)
+        //             }
+        //             if (timeFrom !== '' || timeTo !== '')
+        //                 values = [timeFrom, timeTo, 1];
+        //             if (values[0] > values[1]) {
+        //                 Messenger.showAlert('kezdő idő nem lehet nagyobb a végidőnél')
+        //                 return
+        //             }
+        //             break;
+        //         case 'datetime':
+        //             let temp = []
+        //             if (inputValues[0] !== '')
+        //                 temp[0] = inputValues[0].toString().replace('T', ' ')
+        //             if (inputValues[1] !== '')
+        //                 temp[1] = inputValues[1].toString().replace('T', ' ')
+        //             if (inputValues[0] !== '' || inputValues[1] !== '') {
+        //                 if (inputValues[0] !== '' && inputValues[1] === '')
+        //                     temp[1] = '2286-11-20 23:59:59'
+        //                 if (inputValues[0] === '' && inputValues[1] !== '')
+        //                     temp[0] = '1970-01-01 00:00:00'
+        //                 values = temp
+        //                 values[2] = 1;
+        //                 if (values[0] > values[1]) {
+        //                     Messenger.showAlert('kezdő dátum-idő nem lehet nagyobb a végdátum idő-nél')
+        //                     return
+        //                 }
+        //             }
+        //             break;
+        //         case 'date':
+        //             const temp2 = []
+        //             if (inputValues[0] !== '')
+        //                 temp2[0] = inputValues[0].toString().replace('T', ' ')
+        //             if (inputValues[1] !== '')
+        //                 temp2[1] = inputValues[1].toString().replace('T', ' ')
+        //             if (inputValues[0] !== '' || inputValues[1] !== '') {
+        //                 if (inputValues[0] !== '' && inputValues[1] === '')
+        //                     temp2[1] = '2286-11-20'
+        //                 if (inputValues[0] === '' && inputValues[1] !== '')
+        //                     temp2[0] = '1970-01-01'
+        //                 values = temp2
+        //                 values[2] = 1;
+        //             }
+        //             if (values[0] > values[1]) {
+        //                 Messenger.showAlert('kezdő dátum nem lehet nagyobb a végdátumnál')
+        //                 return
+        //             }
+        //             break;
+        //         case 'hidden':
+        //         case undefined:
+        //             break
+        //         default:
+        //             if (inputValues[0] !== '' || inputValues[1] !== '')
+        //                 values = [this.convertOperationString(inputValues[0]), inputValues[1]];
+        //     }
+        //     if (values !== '')
+        //         finalFilterData.push([name].concat(values))
+        // })
+        // Object.entries(this._headerAttributeParams).forEach(([name, headerParams]) => {
+        //     if (headerParams.filterType === 'hidden' && headerParams.defaultOperator)
+        //         finalFilterData.push([name, this.convertOperationString(headerParams.defaultOperator), headerParams.defaultValue])
         })
         console.log(finalFilterData)
         return finalFilterData
     }
 
-    convertOperationString(operation) {
-        switch (operation) {
-            case 'eq':
-                return '=';
-            case 'neq':
-                return '!=';
-            case 'sm':
-                return '<';
-            case 'sme':
-                return '<=';
-            case 'gr':
-                return '>';
-            case 'gre':
-                return '>=';
-            default:
-                return operation;
-        }
-    }
+
 
     onSortElementClick(parameterName, order) {
         this._controllerPointer.onSortElementClick(parameterName, order)
@@ -271,12 +264,35 @@ class EntityListerTableController {
 //         })
     }
 
+
+
+
     displayRecordsInTable(records, order) {
         records.forEach(record => {
+            console.log(record)
            // const recordIdIndex = record.findIndex(attr => attr[2] === 'id')
            //  console.log(recordIdIndex)
             const orderedAttributes = order.map((orderAttrib) =>        [      ...record[orderAttrib],orderAttrib]            )
-            const row = this._view.createRowWithRecord(orderedAttributes, record.id[0])
+
+           const row =  this._view.addRowToListerTable(record.id[0])
+            // const row = this._view.createRowWithRecord(orderedAttributes, record.id[0])
+
+            console.log(orderedAttributes)
+            orderedAttributes.forEach(([value, typeObject, paramName],key) => {
+                const td = this._view.createListerBodyTd(row, value)
+                typeObject.formatListerTd?.(td)
+            //     const td = HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
+            //     td.style.width=this._headerRow.children[key].style.width
+            //     if (['int', 'number', 'date', 'decimal'].findIndex(dataType => dataType === type) !== -1)
+            //         td.classList.add('rightAlign')
+            //     if (['string', 'date', 'datetime', 'select', 'varchar', 'text'].findIndex(dataType => dataType === type) !== -1)
+            //         td.classList.add('leftAlign')
+            //     if (!document.getElementById("hcb-" + this.id + "-" + paramName).checked)
+            //         td.style.display = 'none'
+            })
+            // return row;
+
+
             // row.connectedObjectId = record.id
             row.addEventListener('click', (event) => {
                 event.preventDefault()

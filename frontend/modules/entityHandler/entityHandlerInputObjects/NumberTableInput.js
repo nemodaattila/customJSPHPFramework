@@ -30,4 +30,19 @@ class NumberTableInput extends TableInputParent {
         if (modelParams.precision)
             this._listerValueElement.max = (10 ** modelParams.precision) - 1
     }
+    displayTallTableValueInput(domContainer,inputParameters)
+    {
+        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer, {...{type: 'number'}, ...inputParameters})
+    }
+
+    formatListerTd(td)
+    {
+        td.classList.add('rightAlign')
+    }
+
+    getListerFilterInputValues()
+    {
+        if (this._listerValueElement.value !== '' || this._listerFilterSelectElement.value === 'null' || this._listerFilterSelectElement.value === 'notnull')
+            return [this.convertOperationString(this._listerFilterSelectElement.value), parseInt(this._listerValueElement.value)];
+    }
 }
