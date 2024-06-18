@@ -1,7 +1,7 @@
 /**
  * szerverrel kapcsolatot tartó objektumok ősosztálya
  */
-class EntityServiceControllerParent extends WindowContentControllerParent {
+class EntityServiceControllerParent  extends ControllerParent{
     static _instance = undefined
 
 
