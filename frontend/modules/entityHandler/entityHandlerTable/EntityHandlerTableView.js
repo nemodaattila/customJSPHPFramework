@@ -46,7 +46,7 @@ class EntityHandlerTableView {
 
     }
 
-    createMultipleAttributeDeleterButton()
+    createMultipleAttributeDeleterButton(tdElem)
     {
         return HtmlElementCreator.createHtmlElement('input', tdElem, {type: 'button', Value: 'Érték törlése'})
     }
@@ -137,53 +137,53 @@ class EntityHandlerTableView {
         })
     }
 
-    fillTable(record,tableHeaderAttributes,handlerType ) {
-        console.log(record)
-        console.log(tableHeaderAttributes)
-        if (record === null)
-            return
-
-        Object.entries(this._inputs).forEach(([id, input]) => {
-            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
-                return
-            console.log(tableHeaderAttributes[id].type)
-            const type =this._inputNumAndStringMatcher(tableHeaderAttributes[id].type )?? 'string'
-            console.log(type)
-            if (type === 'customInput') {
-                this._inputs[id].firstChild.value = record[id]
-            } else if (type === 'dataListSelect') {
-                if (this.service.selectedRecord[input.params.fillParam] !== undefined && this.service.selectedRecord[id] !== null) {
-                    this._inputs[id].firstChild.value = this.service.selectedRecord[input.params.fillParam] ?? ''
-                    let opt = HtmlElementCreator.createHtmlElement('option', this._inputs[id].children[1], {value: this.service.selectedRecord[input.params.fillParam]})
-                    opt.setAttribute('data-value', this.service.selectedRecord[id])
-                }
-            } else if (type === 'currency') {
-                this._inputs[id].value = this.formatValue(record[id])
-            }
-            else if (type === 'string') {
-                console.log('decode')
-                let pseudoElement = document.createElement('textarea');
-                pseudoElement.innerHTML = record[id];
-
-                this._inputs[id].value = pseudoElement.value
-
-                // console.log(record[id])
-                // try
-                // {
-                //
-                //     this._inputs[id].value = decodeURIComponent(record[id])
-                //     console.log(decodeURIComponent(record[id]))
-                // }
-                // catch (e)
-                // {
-                //     console.log(e)
-                // }
-
-            }
-            else
-                this._inputs[id].value = record[id]
-        })
-    }
+    // fillTable(record,tableHeaderAttributes,handlerType ) {
+    //     console.log(record)
+    //     console.log(tableHeaderAttributes)
+    //     if (record === null)
+    //         return
+    //
+    //     Object.entries(this._inputs).forEach(([id, input]) => {
+    //         if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module =>module === handlerType) === -1)
+    //             return
+    //         console.log(tableHeaderAttributes[id].type)
+    //         const type =this._inputNumAndStringMatcher(tableHeaderAttributes[id].type )?? 'string'
+    //         console.log(type)
+    //         if (type === 'customInput') {
+    //             this._inputs[id].firstChild.value = record[id]
+    //         } else if (type === 'dataListSelect') {
+    //             if (this.service.selectedRecord[input.params.fillParam] !== undefined && this.service.selectedRecord[id] !== null) {
+    //                 this._inputs[id].firstChild.value = this.service.selectedRecord[input.params.fillParam] ?? ''
+    //                 let opt = HtmlElementCreator.createHtmlElement('option', this._inputs[id].children[1], {value: this.service.selectedRecord[input.params.fillParam]})
+    //                 opt.setAttribute('data-value', this.service.selectedRecord[id])
+    //             }
+    //         } else if (type === 'currency') {
+    //             this._inputs[id].value = this.formatValue(record[id])
+    //         }
+    //         else if (type === 'string') {
+    //             console.log('decode')
+    //             let pseudoElement = document.createElement('textarea');
+    //             pseudoElement.innerHTML = record[id];
+    //
+    //             this._inputs[id].value = pseudoElement.value
+    //
+    //             // console.log(record[id])
+    //             // try
+    //             // {
+    //             //
+    //             //     this._inputs[id].value = decodeURIComponent(record[id])
+    //             //     console.log(decodeURIComponent(record[id]))
+    //             // }
+    //             // catch (e)
+    //             // {
+    //             //     console.log(e)
+    //             // }
+    //
+    //         }
+    //         else
+    //             this._inputs[id].value = record[id]
+    //     })
+    // }
 
     getNotEmptyInputValues(tableHeaderAttributes) {
         let values = {}
