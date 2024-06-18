@@ -30,14 +30,17 @@ class StringTableInput extends TableInputParent {
 
     displayTallTableValueInput(domContainer, inputParameters)
     {
-        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer,{...{type: 'string'}, ...inputParameters.parameters})
+        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer,{...{type: 'string'}, ...this._htmlParameters})
         console.log(this)
     }
-    getTallTableValueInputValue()
-    {
-        console.log(this)
-        return this._tallTableValueInput.value.trim()
-    }
+
+        getTallTableValueInputValue(withValidation = true)
+        {
+            return withValidation?this.validateValue(encodeURIComponent(this._tallTableValueInput.value.trim())):encodeURIComponent(this._tallTableValueInput.value.trim())
+
+        }
+
+
 
     formatListerTd(td)
     {
@@ -48,5 +51,11 @@ class StringTableInput extends TableInputParent {
     {
         if (this._listerValueElement.value !== '' || this._listerFilterSelectElement.value === 'null' || this._listerFilterSelectElement.value === 'notnull')
                         return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value.toString()];
+    }
+    fillTallTableInput(value)
+    {
+        let pseudoElement = document.createElement('textarea');
+                    pseudoElement.innerHTML = value;
+        this._tallTableValueInput.value = pseudoElement.value
     }
 }

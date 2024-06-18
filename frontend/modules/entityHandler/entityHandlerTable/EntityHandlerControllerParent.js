@@ -3,6 +3,10 @@ class EntityHandlerControllerParent extends WindowContentControllerParent {
      * controller típusa - creator / edit / multiple
      */
     _type
+    get type() {
+        return this._type;
+    }
+
     _serviceModelPointer
 
     destructor() {
@@ -24,26 +28,17 @@ class EntityHandlerControllerParent extends WindowContentControllerParent {
     }
 
     collectAndSaveRecord() {
+        console.log(this._type)
         const match = item => new Map([
             ['creator', "collectAndCreateRecord"],
             ['editor', "collectAndEditRecord"],
             ['delete', "deleteRecord"],
         ]).get(item) ?? false
+        console.log(match(this._type))
         this[match(this._type)]()
     }
 
-    validateRecord(collectedData) {
-        const attributes = this.getHeaderAttributeParams()
-        return Object.entries(collectedData).every(([key, value]) => {
-            if (attributes[key]?.required) {
-                if (value === '') {
-                    Messenger.showAlert((attributes[key].label ?? key) + ' Kitöltése kötelező');
-                    return false
-                }
-            }
-            return true
-        })
-    }
+
 
     encodeStringParameters(collectedData) {
         let stringTypes = ['string', 'char',

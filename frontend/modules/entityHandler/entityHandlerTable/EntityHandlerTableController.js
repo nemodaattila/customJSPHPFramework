@@ -27,6 +27,19 @@ class EntityHandlerTableController {
             colorObject.isEvenRow = !colorObject.isEvenRow
     }
 
+    checkAttributeVisibilityInModule(inputParameters, type)
+    {
+        console.log([inputParameters, type])
+        if (inputParameters.inModule === undefined)
+            return true
+        if (type === 'editor' && this._controllerPointer.isMultiple)
+        type = 'multipleEditor'
+
+        console.log(type)
+        return (inputParameters.inModule.findIndex(module => module === type) !== -1);
+
+    }
+
     displayTableElements()
     {
         this._headerAttributeParams = this._controllerPointer.getHeaderAttributeParams()
@@ -47,9 +60,14 @@ class EntityHandlerTableController {
         const defaultTdParams = {class: 'tableCell'}
 
         Object.entries(this._headerAttributeParams).forEach(([attributeName, inputParameters],key) => {
-            if (this._headerAttributeParams[attributeName].inModule !== undefined &&
-                this._headerAttributeParams[attributeName].inModule.findIndex(module =>module === this._controllerPointer.type) === -1)
-                return
+            console.log(attributeName)
+
+            console.log(inputParameters.inModule)
+            console.log(this._controllerPointer.type)
+
+            if (!this.checkAttributeVisibilityInModule(inputParameters, this._controllerPointer.type))
+                return;
+
              this.increaseBackGroundColorOffset(rowColorParams,inputParameters.gridRowEnd, inputPerRow)
 
             let tr = this._view.addRowToTallTable(rowColorParams.isEvenRow, inputPerRow)
@@ -57,8 +75,7 @@ class EntityHandlerTableController {
             this._view.createLabelTd(tr,{...defaultTdParams, ...{innerHTML: inputParameters.label ?? attributeName}},
                 inputParameters.validations&&inputParameters.validations.findIndex(vType => vType ==='required') !==-1)
             const valueTd = this._view.createTd(tr,defaultTdParams)
-            if (!inputParameters.parameters)
-                inputParameters.parameters = {}
+
 
             if (this._controllerPointer.isMultiple ?? false)
             {
@@ -68,10 +85,13 @@ class EntityHandlerTableController {
                 })
 
             }
+
+            if (!inputParameters._htmlParameters)
+                inputParameters._htmlParameters = {}
             console.log(this._headerAttributeParams[attributeName])
-            this._headerAttributeParams[attributeName].typeObject.displayTallTableValueInput(valueTd, inputParameters,this._controllerPointer.isMultiple ?? false)
+            inputParameters.displayTallTableValueInput(valueTd,this._controllerPointer.isMultiple ?? false)
             if (key === 0)
-                this._headerAttributeParams[attributeName].typeObject.focusTallTableInput()
+                inputParameters.focusTallTableInput()
 
             // //TODO put types into individual classes
             // switch (type) {
@@ -164,34 +184,53 @@ class EntityHandlerTableController {
 
     }
 
-    getInputValues()
+    getInputValues(nonEmptyOnly=false)
     {
         let values = {}
-
+        try{
         Object.entries(this._headerAttributeParams).forEach(([attributeName, inputParameters],key) => {
-            if (this._headerAttributeParams[attributeName].inModule !== undefined &&
-                this._headerAttributeParams[attributeName].inModule.findIndex(module => module === this._controllerPointer.type) === -1)
-                return
+            if (!this.checkAttributeVisibilityInModule(inputParameters, this._controllerPointer.type))
+                return;
             console.log(attributeName)
-            values[attributeName]=this._headerAttributeParams[attributeName].typeObject.getTallTableValueInputValue()
+            let value = inputParameters.getTallTableValueInputValue(!nonEmptyOnly)
+            if (!nonEmptyOnly || (nonEmptyOnly && value!==''))
+            values[attributeName]= value
         })
-       return values
+
+       return values}
+        catch (errorMessage)
+        {
+            Messenger.showAlert(errorMessage)
+            return  false
+        }
     }
 
     getNotEmptyInputValues()
     {
-        return this._view.getNotEmptyInputValues(this._headerAttributeParams)
-
+        // return this._view.getNotEmptyInputValues(this._headerAttributeParams)
+        return this.getInputValues(true)
     }
 
     resetTable()
     {
-        this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor', this._type)
+        // this._view.resetTable(this._headerAttributeParams,this._type === 'multipleEditor', this._type)
+        Object.entries(this._headerAttributeParams).forEach(([attributeName, inputParameters],key) => {
+            if (!this.checkAttributeVisibilityInModule(inputParameters, this._controllerPointer.type))
+                return;
+            console.log(attributeName)
+            inputParameters.resetTableValueInputValue()
+
+        })
     }
 
     fillTable(record, headerAttributeParams)
     {
-        this._view.fillTable(record, headerAttributeParams, this._type)
+        // this._view.fillTable(record, headerAttributeParams, this._type)
+        Object.entries(this._headerAttributeParams).forEach(([attributeName, inputParameters],key) => {
+            if (!this.checkAttributeVisibilityInModule(inputParameters, this._controllerPointer.type))
+                return;
+            inputParameters.fillTallTableInput(record[attributeName])
+        })
     }
 
 

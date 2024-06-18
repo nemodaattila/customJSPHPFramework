@@ -30,9 +30,9 @@ class NumberTableInput extends TableInputParent {
         if (modelParams.precision)
             this._listerValueElement.max = (10 ** modelParams.precision) - 1
     }
-    displayTallTableValueInput(domContainer,inputParameters)
+    displayTallTableValueInput(domContainer)
     {
-        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer, {...{type: 'number'}, ...inputParameters})
+        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer, {...{type: 'number'}, ...this._htmlParameters})
     }
 
     formatListerTd(td)

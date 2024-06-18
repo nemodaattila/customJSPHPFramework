@@ -17,14 +17,15 @@ class SelectTableInput extends TableInputParent {
                 modelParams.values, true, true)
     }
 
-    displayTallTableValueInput(domContainer, inputParameters, isMultiple = false)
+    displayTallTableValueInput(domContainer, isMultiple = false)
     {
-        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('select', domContainer,inputParameters.parameters)
+        console.log(this)
+        this._tallTableValueInput = HtmlElementCreator.createHtmlElement('select', domContainer,this._htmlParameters)
                 if (isMultiple)
                     HtmlElementCreator.addOptionToSelect(this._tallTableValueInput, {'-1': 'Nincs változás'}, true)
-                HtmlElementCreator.addOptionToSelect(this._tallTableValueInput, {...inputParameters.values}, true)
-                if (inputParameters.defaultValue)
-                    this._tallTableValueInput = inputParameters.defaultValue
+                HtmlElementCreator.addOptionToSelect(this._tallTableValueInput, this._values, true)
+                if (this._defaultValue)
+                    this._tallTableValueInput.value = this._defaultValue
 
     }
 
@@ -39,5 +40,17 @@ class SelectTableInput extends TableInputParent {
     {
         if (this._listerValueElement.value !== '' || this._listerFilterSelectElement.value === 'null' || this._listerFilterSelectElement.value === 'notnull')
             return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value.toString()];
+    }
+
+    getTallTableValueInputValue(withValidation)
+    {
+        if (this._tallTableValueInput.value === '-1')
+            return ''
+        return this.validateValue(this._tallTableValueInput.value)
+    }
+
+    resetTableValueInputValue()
+    {
+        this._tallTableValueInput.value='-1'
     }
 }

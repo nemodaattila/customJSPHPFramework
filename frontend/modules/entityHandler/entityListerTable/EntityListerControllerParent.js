@@ -222,7 +222,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
             case 'editor':
                 if (this._serviceModelPointer.selectedIds.length===0)
                     break
-                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams[this._serviceModelPointer.selectedIds.length===1?'editor':'multipleEditor'].module)
+                await DesktopController.openWindow(this._serviceModelPointer.moduleDirName, this._serviceModelPointer.moduleParams.editor.module)
                 break
             case 'delete':
                 await this.service.sendDeleteRequest()

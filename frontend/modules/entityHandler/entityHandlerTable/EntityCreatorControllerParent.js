@@ -7,7 +7,7 @@ class EntityCreatorControllerParent extends EntityHandlerControllerParent {
 
     async collectAndCreateRecord() {
         const collectedData = this._view.getComponent('handlerTable').getInputValues()
-        if (!this.validateRecord(collectedData))
+        if (!collectedData)
             return
         this.encodeStringParameters(collectedData)
         await this.service.sendCreateRequest(collectedData)

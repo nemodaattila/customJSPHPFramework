@@ -43,9 +43,9 @@ class TableInputParent {
         // }
     }
 
-    getTallTableValueInputValue()
+    getTallTableValueInputValue(withValidation = true)
     {
-        return this._tallTableValueInput.value
+        return withValidation?this.validateValue(this._tallTableValueInput.value):this._tallTableValueInput.value
     }
 
     convertOperationString(operation) {
@@ -67,6 +67,30 @@ class TableInputParent {
                         return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value[1]]
     }
 
+    validateValue(value) {
+
+            if (this._validations === undefined)
+                return value
+
+            if (this._validations.findIndex(validation =>validation === 'required') !== -1) {
+                if (value === '') {
+                    throw (this._label) + ' Kitöltése kötelező'
+
+                }
+            }
+            return value
+
+    }
+
+    fillTallTableInput(value)
+    {
+        this._tallTableValueInput.value = value
+    }
+
+    resetTableValueInputValue()
+    {
+        this._tallTableValueInput.value=''
+    }
 }
 
 
