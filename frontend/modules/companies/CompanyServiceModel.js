@@ -92,7 +92,7 @@ class CompanyServiceModel extends EntityServiceModelParent {
         vat_number: {label: 'Adószám', type: 'StringTableInput',validations : ['required']},
         category: {
             label: 'Kapcsolat-típus', type: 'SelectTableInput',
-            values: this._companyTypes
+            values: this._companyTypes,
         },
         comment: {label: 'Megjegyzés',type: 'StringTableInput'}
     }
