@@ -18,6 +18,7 @@ class Routes
         ['GET', 'company', 'CompanyHandler', 'getCompanyIds', 'A'],
         ['POST', 'company', 'CompanyHandler', 'createCompany', 'A'],
         ['PATCH', 'company/$1', 'CompanyHandler', 'editCompany', 'A'],
+        ['DELETE', 'company/$1', 'CompanyHandler', 'deleteCompany', 'A'],
 
         ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A']
 //
