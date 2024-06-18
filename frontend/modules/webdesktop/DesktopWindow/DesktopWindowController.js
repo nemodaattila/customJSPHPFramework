@@ -51,7 +51,7 @@ class DesktopWindowController {
                 object.style.width = "400px"
             if (parseInt(object.style.height) < 200)
                 object.style.height = "200px"
-            await controller._contentControllerPointer?.onDesktopWindowResize()
+            await controller._contentControllerPointer?.onDesktopWindowResize?.()
             // object.windowObject.contentObject.rows = []
             // object.windowObject.controllerPointer.calcTableRowNum()
             // object.windowObject.contentObject.offset = 0
