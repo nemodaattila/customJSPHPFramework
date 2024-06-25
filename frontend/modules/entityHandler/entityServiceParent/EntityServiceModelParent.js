@@ -5,13 +5,46 @@ class EntityServiceModelParent {
 
     _selectedIds = []
 
+    /**
+     * url parameter chunk for request to backend for, e.g.: GET -> <backendUrl>/company/23
+     * @type {string|undefined}
+     * @private
+     */
     _restParameter = undefined
 
-    _handlerEventTrigger = undefined
-
+    /**
+     * success message displayed, when an operation succeeded
+     * @type {{editor: string, creator: string, delete: string}}
+     * @private
+     */
     _successMessages = {}
 
     _moduleParams = undefined
+
+    /**
+     * default order attribute of the connected lister Table
+     * @type {string}
+     * @private
+     */
+    _defaultOrder
+
+    /**
+     * the name of the event, which triggers when an entity's parameter is changed, an entity created or deleted
+     * @type {string|undefined}
+     * @private
+     * @see EventSubscriptionHandler
+     */
+    _handlerEventTrigger = undefined
+
+    /**
+     * name of the directory in which the module can be found (in modules map)
+     * @type {string}
+     * @private
+     */
+    _moduleDirName
+    get defaultOrder() {
+        return this._defaultOrder;
+    }
 
     get restParameter() {
         return this._restParameter;
@@ -25,6 +58,9 @@ class EntityServiceModelParent {
         return this._successMessages;
     }
 
+    get moduleDirName() {
+        return this._moduleDirName;
+    }
     constructor() {
         // console.trace()
         console.log('modelInit')
@@ -65,6 +101,10 @@ class EntityServiceModelParent {
 
     get loaded() {
         return this._loaded;
+    }
+
+    get moduleParams() {
+        return this._moduleParams;
     }
 
     _tableHeaderAttributeOrder = undefined
