@@ -86,8 +86,8 @@ class EntityHandlerTableController {
 
             }
 
-            if (!inputParameters._htmlParameters)
-                inputParameters._htmlParameters = {}
+            // if (!inputParameters._htmlParameters)
+            //     inputParameters._htmlParameters = {}
             console.log(this._headerAttributeParams[attributeName])
             inputParameters.displayTallTableValueInput(valueTd,this._controllerPointer.isMultiple ?? false)
             if (key === 0)
