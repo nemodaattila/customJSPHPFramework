@@ -89,7 +89,7 @@ class CompanyServiceModel extends EntityServiceModelParent {
         id: {label: 'Azonosító', type: 'NumberTableInput', inModule: ['lister']},
         name: {label: 'Név', type: 'StringTableInput', validations : ['required'] },
         address: {label: 'cím', type: 'StringTableInput', validations : ['required']},
-        vat_number: {label: 'Adószám', type: 'StringTableInput',validations : ['required']},
+        vat_number: {label: 'Adószám', type: 'StringTableInput',validations : ['required'],inModule: ['lister','creator','editor']},
         category: {
             label: 'Kapcsolat-típus', type: 'SelectTableInput',
             values: this._companyTypes,
