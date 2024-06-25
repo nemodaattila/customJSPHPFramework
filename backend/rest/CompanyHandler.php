@@ -33,22 +33,34 @@ class CompanyHandler extends RestParent
     }
 
     public function createCompany($parameters): void {
-    $data = $parameters->getRequestData();
-$this->dbConnection->insertARecord($this->tableName, $data);
-
+        $data = $parameters->getRequestData();
+        $this->dbConnection->insertARecord($this->tableName, $data);
 //TODO       $this->saveEvent(1, 1, $companyId, null);
-    $this->result = true;
+        $this->result = true;
     }
 
-    function editCompany($data = null):void{
+    function editCompany($parameters = null): void {
         $eu = new EntityComparator();
-            $company = new Company($this->dbConnection->getARecordByID($this->tableName, $data->getUrlParameters()[1]));
-            $newData = $data->getRequestData();
-            [$difference, $differenceWithOldValue] = $eu->compareObjects($company, $newData);
+        $company = new Company($this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]));
+        $newData = $parameters->getRequestData();
+        [$difference, $differenceWithOldValue] = $eu->compareObjects($company, $newData);
         if (count($difference) === 0)
             $this->result = true;
-        $this->dbConnection->updateRecord('companies', $company->getId(), $difference);
+        $this->dbConnection->updateRecord($this->tableName, $company->getId(), $difference);
 //        $this->saveEvent(3, 1, $id, $change);
         $this->result = true;
     }
+
+    function deleteCompany($parameters = null) {
+        $companyId=$parameters->getUrlParameters()[1];
+
+                $contData = $this->dbConnection->getARecordByID($this->tableName, $companyId);
+                if ($contData === null)
+                    throw new Exception('Kontakt nem létezik');
+                $this->dbConnection->deleteARecordById($this->tableName, $companyId);
+//                $this->saveEvent(4, 3, $id, ['name' => ['oldValue' => $name, 'newValue' => null], 'company' => ['oldValue' => $company, 'newValue' => null]]);
+        $this->result = true;
+
+        }
+
 }
