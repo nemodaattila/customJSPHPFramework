@@ -13,11 +13,11 @@ class SelectTableInput extends TableInputParent {
 
     displayListerValueInput(domContainer, modelParams) {
         this._listerValueElement =
-            HtmlElementCreator.createSelectWithOptions(domContainer, {},
+            HtmlElementCreator.createSelectWithOptions(domContainer, this._htmlParameters,
                 modelParams.values, true, true)
     }
 
-    displayTallTableValueInput(domContainer, isMultiple = false)
+    displayTallTableValueInput(domContainer, htmlParameters, isMultiple = false)
     {
         console.log(this)
         this._tallTableValueInput = HtmlElementCreator.createHtmlElement('select', domContainer,this._htmlParameters)

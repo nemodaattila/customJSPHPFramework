@@ -4,6 +4,7 @@ class TableInputParent {
     _tallTableValueInput
     _inModule
     _label
+    _htmlParameters = {}
 
     get inModule() {
         return this._inModule;

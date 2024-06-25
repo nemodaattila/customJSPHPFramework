@@ -28,7 +28,7 @@ class StringTableInput extends TableInputParent {
             })
     }
 
-    displayTallTableValueInput(domContainer, inputParameters)
+    displayTallTableValueInput(domContainer, )
     {
         this._tallTableValueInput = HtmlElementCreator.createHtmlElement('input', domContainer,{...{type: 'string'}, ...this._htmlParameters})
         console.log(this)
