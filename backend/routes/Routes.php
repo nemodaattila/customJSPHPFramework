@@ -19,8 +19,14 @@ class Routes
         ['POST', 'company', 'CompanyHandler', 'createCompany', 'A'],
         ['PATCH', 'company/$1', 'CompanyHandler', 'editCompany', 'A'],
         ['DELETE', 'company/$1', 'CompanyHandler', 'deleteCompany', 'A'],
+        ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A'],
 
-        ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A']
+        ['GET', 'bill/meta', 'MetaDataHandler', 'getBillMeta', 'A'],
+        ['GET', 'bill', 'BillHandler', 'getIds', 'A'],
+        ['POST', 'bill', 'BillHandler', 'create', 'A'],
+        ['PATCH', 'bill/$1', 'BillHandler', 'edit', 'A'],
+        ['DELETE', 'bill/$1', 'BillHandler', 'delete', 'A'],
+        ['GET', 'bill/$1', 'BillHandler', 'getOne', 'A']
 //
 //        ['POST', 'addquickdata', 'BookDataHandler', 'addQuickData', 'M'],
 //        ['DELETE', 'deletebook/$1', 'BookDataHandler', 'deleteBook', 'M'],
