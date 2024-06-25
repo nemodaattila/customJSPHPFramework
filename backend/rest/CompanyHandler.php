@@ -8,7 +8,7 @@ class CompanyHandler extends RestParent
 {
     private string $tableName = "companies";
 
-    public function getCompanyIds(): void {
+    public function getIds(): void {
         $searchParams = json_decode(getallheaders()["Search-And-Order-Params"], true);
         $searchParams["orderAndLimitParams"]['limit']++;
         $res = $this->dbConnection->getRecordsFromServer(
@@ -32,14 +32,14 @@ class CompanyHandler extends RestParent
         $this->result = $this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]);
     }
 
-    public function createCompany($parameters): void {
+    public function create($parameters): void {
         $data = $parameters->getRequestData();
         $this->dbConnection->insertARecord($this->tableName, $data);
 //TODO       $this->saveEvent(1, 1, $companyId, null);
         $this->result = true;
     }
 
-    function editCompany($parameters = null): void {
+    function edit($parameters = null): void {
         $eu = new EntityComparator();
         $company = new Company($this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]));
         $newData = $parameters->getRequestData();
@@ -51,12 +51,12 @@ class CompanyHandler extends RestParent
         $this->result = true;
     }
 
-    function deleteCompany($parameters = null) {
+    function delete($parameters = null) {
         $companyId=$parameters->getUrlParameters()[1];
 
                 $contData = $this->dbConnection->getARecordByID($this->tableName, $companyId);
                 if ($contData === null)
-                    throw new Exception('Kontakt nem létezik');
+                    throw new Exception('Cég nem létezik');
                 $this->dbConnection->deleteARecordById($this->tableName, $companyId);
 //                $this->saveEvent(4, 3, $id, ['name' => ['oldValue' => $name, 'newValue' => null], 'company' => ['oldValue' => $company, 'newValue' => null]]);
         $this->result = true;
