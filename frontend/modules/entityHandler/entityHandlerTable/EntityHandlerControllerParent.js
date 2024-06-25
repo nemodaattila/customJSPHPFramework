@@ -50,7 +50,7 @@ class EntityHandlerControllerParent extends WindowContentControllerParent {
         ]
         const tableHeaderAttributes = this.getHeaderAttributeParams()
         Object.entries(collectedData).forEach(([id, value]) => {
-            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module => module === handlerType) === -1)
+            if (tableHeaderAttributes[id].inModule !== undefined && tableHeaderAttributes[id].inModule.findIndex(module => module === this._type) === -1)
                 return
             if (stringTypes.findIndex(strType => strType === tableHeaderAttributes[id].type) !== -1)
                 collectedData[id] = encodeURIComponent(value)

@@ -9,7 +9,7 @@ class EntityCreatorControllerParent extends EntityHandlerControllerParent {
         const collectedData = this._view.getComponent('handlerTable').getInputValues()
         if (!collectedData)
             return
-        this.encodeStringParameters(collectedData)
+        // this.encodeStringParameters(collectedData)
         await this.service.sendCreateRequest(collectedData)
         this._view.getComponent('handlerTable').resetTable()
     }
