@@ -141,11 +141,7 @@ class EntityServiceControllerParent  extends ControllerParent{
         return  (await this._model.getRecordByIdForListHandling(this._model.selectedIds))
     }
 
-    async getMetaParameters() {
-        this._model.companyTypes = await RESTHandler.sendHttpRequest({url: this._model.restParameter+'/meta', requestType: 'GET'})
-        this._model.loaded = true
-        console.log(this)
-    }
+
 
     async sendDeleteRequest() {
         if (confirm("Biztos hogy törlöd a kijelölt rekordo(ka)t?") !== true)
