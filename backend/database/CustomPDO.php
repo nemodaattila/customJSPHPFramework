@@ -5,6 +5,7 @@
 
 namespace database;
 
+use Exception;
 use interface\DatabaseConnectionInterface;
 use PDO;
 use PDOStatement;
@@ -343,9 +344,9 @@ class CustomPDO implements DatabaseConnectionInterface
      * @param string $tableName táblanév
      * @param int $id rekord id
      * @return bool sikeresség
-     * @throws Exception mysql hiba
+     * @throws PDOException mysql hiba
      */
-    protected function deleteARecordById(string $tableName, int $id): bool {
+    public function deleteARecordById(string $tableName, int $id): bool {
         return $this->executeQuery('call deleteARecordById(?,?)', [$tableName, $id]);
     }
 
