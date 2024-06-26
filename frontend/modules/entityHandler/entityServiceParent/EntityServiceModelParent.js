@@ -42,6 +42,9 @@ class EntityServiceModelParent {
      * @private
      */
     _moduleDirName
+
+    _modulParams
+
     get defaultOrder() {
         return this._defaultOrder;
     }

@@ -5,6 +5,7 @@ class EntityServiceControllerParent  extends ControllerParent{
     static _instance = undefined
 
 
+
     constructor() {
         super();
         // if (self._instance) {
@@ -34,6 +35,10 @@ class EntityServiceControllerParent  extends ControllerParent{
     async init() {
         console.log('initSp')
         return new Promise(async (resolve) => {
+            if (this._model.loaded === true)
+                resolve(true)
+            await this.getMetaParameters()
+            this._model.loaded = true
             console.log('init')
             this._model.setTableHeaderAttributeOrder();
             await this.loadTableInputObjects()
@@ -72,7 +77,7 @@ class EntityServiceControllerParent  extends ControllerParent{
                createdInputObjects[attributeName] = inputObj
            }
            catch (e) {
-               Messenger.showAlert(`${inputParameters.type}  class is missing`)
+               Messenger.showAlert(`${inputParameters.type}  class is missing, check modules/entityHandler/filesToInclude.js`)
            }
        })
         this._model.tableHeaderAttributes=createdInputObjects
