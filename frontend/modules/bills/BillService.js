@@ -1,12 +1,7 @@
 /**
- * service for Companies
+ * service for bills
  */
 class BillService extends EntityServiceControllerParent {
-    /**
-     * gets company types from server
-     * @see EntityServiceControllerParent.getMetaParameters
-     * @returns {Promise<boolean>}
-     */
     async init() {
         return new Promise(async (resolve) => {
             if (this._model.loaded === true) {
@@ -18,10 +13,16 @@ class BillService extends EntityServiceControllerParent {
             resolve(await super.init())
         })
     }
+
+    /**
+     * get meta parameters from server - currencies, payment methods and bill states
+     * @returns {Promise<void>}
+     */
     async getMetaParameters() {
-        [this._currencies, this._paymentMethods, this._states] = await RESTHandler.sendHttpRequest({url: this._model.restParameter+'/meta', requestType: 'GET'})
+        [this.model.currencies, this.model.paymentMethods, this.model.states] = await RESTHandler.sendHttpRequest({
+            url: this._model.restParameter + '/meta',
+            requestType: 'GET'
+        })
         this._model.loaded = true
-
     }
-
 }

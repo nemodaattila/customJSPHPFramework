@@ -1,10 +1,11 @@
 /**
- * controller for listing companies
+ * controller for listing bills
  */
 class BillListerController extends EntityListerControllerParent {
-    subscribeToEvents() {
-        EventSubscriptionHandler.subscribe('billHandlerEvent', this, 'onHandlerEvent')
-    }
+    _eventsToSubscribe = [{
+        triggerWord: 'billHandlerEvent',
+        functionName: 'onHandlerEvent'
+    }]
 
     createPageTurnerObject() {
         return new InfinityScrollerController()

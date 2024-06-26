@@ -9,6 +9,17 @@ class EntityHandlerControllerParent extends WindowContentControllerParent {
 
     _serviceModelPointer
 
+    _eventsToSubscribe = []
+
+    subscribeToEvents()
+    {
+        this._eventsToSubscribe.forEach((eventSubscription)=>{
+            EventSubscriptionHandler.subscribe(eventSubscription.triggerWord, eventSubscription.class??this, eventSubscription.functionName)
+
+        })
+
+    }
+
     destructor() {
         super.destructor?.()
         this._serviceModelPointer = undefined

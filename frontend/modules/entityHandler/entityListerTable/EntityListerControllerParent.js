@@ -6,6 +6,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
     _rowHeight = 20
     _searchParamConnector
     _tableHeaderAttributeOrder
+    _eventsToSubscribe = []
 
     async init() {
         //TODO check zoom with search and scroll
@@ -17,6 +18,15 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         this._searchParamConnector.controllerPointer = this;
         await this.loadPageTurnerTypes()
         this.loadPageTurner()
+    }
+
+    subscribeToEvents()
+    {
+        this._eventsToSubscribe.forEach((eventSubscription)=>{
+            EventSubscriptionHandler.subscribe(eventSubscription.triggerWord, eventSubscription.class??this, eventSubscription.functionName)
+
+        })
+
     }
 
    async loadPageTurnerTypes()
