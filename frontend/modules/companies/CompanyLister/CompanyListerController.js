@@ -2,9 +2,10 @@
  * controller for listing companies
  */
 class CompanyListerController extends EntityListerControllerParent {
-    subscribeToEvents() {
-        EventSubscriptionHandler.subscribe('companyHandlerEvent', this, 'onHandlerEvent')
-    }
+    _eventsToSubscribe = [{
+        triggerWord: 'companyHandlerEvent',
+        functionName: 'onHandlerEvent'
+    }]
 
     createPageTurnerObject() {
         return new InfinityScrollerController()

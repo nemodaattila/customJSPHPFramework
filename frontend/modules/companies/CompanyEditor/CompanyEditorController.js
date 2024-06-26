@@ -2,10 +2,9 @@
  * controller for editing companies
  */
 class CompanyEditorController extends EntityEditorControllerParent {
-    subscribeToEvents() {
-        // EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
-    }
-
+    // subscribeToEvents() {
+    //     // EventSubscriptionHandler.subscribe('companyDataForEntity', this, 'refreshCompanyData')
+    // }
     async displayView(windowBody) {
         await super.displayView(windowBody)
         //TODO del record button

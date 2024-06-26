@@ -8,15 +8,10 @@ class CompanyServiceModel extends EntityServiceModelParent {
      * @private
      */
     _companyTypes = {0: 'Nem vevő'}
-
     _defaultOrder = 'name'
-
     _handlerEventTrigger = 'companyHandlerEvent'
-
     _moduleDirName = "companies"
-
     _restParameter = 'company'
-
     _successMessages = {creator: 'Cég létrehozva', editor: 'Cég(ek) módosítva', 'delete': 'Cég törölve'}
     //
     // _onClickEventAttribs = ['id', 'name']
@@ -28,8 +23,6 @@ class CompanyServiceModel extends EntityServiceModelParent {
         return this._companyTypes;
     }
 
-
-
     /**
      * !!! not simple set - forEach
      * @param types
@@ -38,8 +31,6 @@ class CompanyServiceModel extends EntityServiceModelParent {
         Object.values(types).forEach(type =>
             this._companyTypes[type.id] = type.name)
     }
-
-
 
     _moduleParams = {
         lister: {
@@ -56,21 +47,22 @@ class CompanyServiceModel extends EntityServiceModelParent {
         },
         deletable: true
     }
-
-
     _tableHeaderAttributes = {
         id: {label: 'Azonosító', type: 'NumberTableInput', inModule: ['lister']},
-        name: {label: 'Név', type: 'StringTableInput', validations : ['required'] },
-        address: {label: 'cím', type: 'StringTableInput', validations : ['required']},
-        vat_number: {label: 'Adószám', type: 'StringTableInput',validations : ['required'],inModule: ['lister','creator','editor']},
+        name: {label: 'Név', type: 'StringTableInput', validations: ['required']},
+        address: {label: 'cím', type: 'StringTableInput', validations: ['required']},
+        vat_number: {
+            label: 'Adószám',
+            type: 'StringTableInput',
+            validations: ['required'],
+            inModule: ['lister', 'creator', 'editor']
+        },
         category: {
             label: 'Kapcsolat-típus', type: 'SelectTableInput',
             values: this._companyTypes,
         },
-        comment: {label: 'Megjegyzés',type: 'StringTableInput'}
+        comment: {label: 'Megjegyzés', type: 'StringTableInput'}
     }
-
-
     // _editSubMenuParams = {
     //     editCompany: {
     //         label: 'Cég szerkesztése',
