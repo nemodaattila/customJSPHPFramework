@@ -289,7 +289,7 @@ class CustomPDO implements DatabaseConnectionInterface
         return $this->executeQuery('call updateARecordByAttribute(?,?,?,?,?)', [$tableName, $keyName, $keyValue, json_encode($attr), json_encode($attrVal, JSON_UNESCAPED_UNICODE)]);
     }
 
-    protected function getARecord(array $params) {
+    public function getARecord(array $params) {
         if ($params['value'] === null) return null;
         $tables = [];
         if (!str_contains($params['tableName'], '.')) {
@@ -393,7 +393,8 @@ class CustomPDO implements DatabaseConnectionInterface
         if ($id === null) return null;
         $this->executeQuery('call getARecordFromTableById(?,?)', [$tableName, $id]);
         $res = $this->query->fetch(PDO::FETCH_ASSOC);
-        if (!$res) $res = null;
+        if (!$res) return null;
+
         return $res;
     }
 
