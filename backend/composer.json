@@ -7,7 +7,8 @@
       "builder\\": "builder/",
       "database\\": "database/",
       "routes\\": "routes/",
-      "interface\\": "interface/"
+      "interface\\": "interface/",
+      "helper\\": "helper/"
     }
   },
   "require": {
