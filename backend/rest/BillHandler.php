@@ -29,7 +29,13 @@ class BillHandler extends RestParent
     }
 
     public function getOne($parameters): void {
-        $this->result = $this->dbConnection->getARecordByID($this->tableName, $parameters->getUrlParameters()[1]);
+                    $this->result = $this->dbConnection->getARecord(
+                        ['tableName' => $this->tableName,
+                            'value' => $parameters->getUrlParameters()[1],
+                            'connectedTableParams' => [
+                                ['table' => 'companies', 'foreignKey' => 'id', 'connectedAttribute' => 'company', 'targetAttributes' => ['name' => 'company_name']],
+                            ]
+                        ]);
     }
 
     public function create($parameters): void {
