@@ -657,7 +657,7 @@ class EntityListerTableView {
         return row
     }
 
-    createListerBodyTd(row, value)
+    createListerBodyTd(row, value = '')
     {
         return  HtmlElementCreator.createHtmlElement('td', row, {innerHTML: value})
 
