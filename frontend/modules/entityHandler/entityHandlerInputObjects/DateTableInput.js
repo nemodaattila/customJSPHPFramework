@@ -1,6 +1,5 @@
 class DateTableInput extends TableInputParent {
     displayListerFilterSelect(domContainer, modelParams = {}) {
-        modelParams.type = 'date'
         this._listerFilterSelectElement =HtmlElementCreator.createSimpleHtmlElement('input', domContainer, {type: 'date'})
     }
 
@@ -48,6 +47,8 @@ class DateTableInput extends TableInputParent {
             Messenger.showAlert('kezdő dátum nem lehet nagyobb a végdátumnál')
             return
         }
+        if (values.length === 0)
+            values = undefined
         return values;
 
 
