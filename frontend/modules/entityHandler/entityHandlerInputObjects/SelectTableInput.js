@@ -11,10 +11,10 @@ class SelectTableInput extends TableInputParent {
             }, true)
     }
 
-    displayListerValueInput(domContainer, modelParams) {
+    displayListerValueInput(domContainer) {
         this._listerValueElement =
             HtmlElementCreator.createSelectWithOptions(domContainer, this._htmlParameters,
-                modelParams.values, true, true)
+                this._values, true, true)
     }
 
     displayTallTableValueInput(domContainer, htmlParameters, isMultiple = false)
