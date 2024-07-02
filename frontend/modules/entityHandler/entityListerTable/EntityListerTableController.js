@@ -68,28 +68,12 @@ class EntityListerTableController {
         tableAttributeOrder.forEach(attribName => {
             if (!this._headerAttributeParams[attribName])
                 return
-            // let filters = this._view.getFilterInput(attribName)
-            // console.log(filters)
-            this._headerAttributeParams[attribName].addInputEventToListerFilterSelectElement(
-
-            (event) => {
-                event.stopPropagation()
+            this._headerAttributeParams[attribName].inputEvent = () => {
                 console.log(this)
-                clearTimeout(this.timeOut)
-                this.timeOut = setTimeout(() => {
-                    this._controllerPointer.onTableFilterChange()
-                }, 300);
-                if (event.target.value === 'null' || event.target.value === 'notnull') {
-                    event.target.nextElementSibling.value = '';
-                    event.target.nextElementSibling.disabled = true;
-                } else event.target.nextElementSibling.disabled = false;
-            })
-            this._headerAttributeParams[attribName].addInputEventToListerValueElement ((event) => {
-                clearTimeout(this.timeOut)
-                this.timeOut = setTimeout(() => {
-                    this._controllerPointer.onTableFilterChange()
-                }, 300);
-            })
+                this._controllerPointer.onTableFilterChange({resetScroll: false})
+            }
+            this._headerAttributeParams[attribName].addInputEventToListerFilterSelectElement()
+            this._headerAttributeParams[attribName].addInputEventToListerValueElement()
             // if (this._headerAttributeParams[attribName]?.hidden)
             //     document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
         })
@@ -124,8 +108,10 @@ class EntityListerTableController {
         const finalFilterData = []
         console.log(this)
          Object.entries(this._headerAttributeParams).forEach(([name, inputObject]) => {
-            console.log(inputObject)
+            console.log(name)
             const inputValues = inputObject.getListerFilterInputValues()
+             console.log(inputValues)
+
             if (inputValues)
                 finalFilterData.push( [name, ...inputValues])
 

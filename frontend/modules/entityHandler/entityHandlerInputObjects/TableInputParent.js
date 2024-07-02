@@ -1,10 +1,17 @@
 class TableInputParent {
+
     _listerFilterSelectElement
     _listerValueElement
     _tallTableValueInput
     _inModule
     _label
     _htmlParameters = {}
+    _inputEvent
+    _validations
+
+    set inputEvent(value) {
+        this._inputEvent = value;
+    }
 
     get inModule() {
         return this._inModule;
@@ -22,14 +29,41 @@ class TableInputParent {
         this._label = value;
     }
 
-    addInputEventToListerFilterSelectElement(event)
+    addInputEventToListerFilterSelectElement()
     {
-        this._listerFilterSelectElement.addEventListener('input', event)
+        this._listerFilterSelectElement?.addEventListener('input', (event)=>{
+                event.stopPropagation()
+                console.log(this)
+                clearTimeout(this.timeOut)
+
+                if (this._listerFilterSelectElement.value === 'null' || this._listerFilterSelectElement.value === 'notnull') {
+                    this._listerValueElement.value = '';
+                    this._listerValueElement.disabled = true;
+                } else this._listerValueElement.disabled = false;
+            this.timeOut = setTimeout(() => {
+                this._inputEvent()
+            }, 300);
+        })
     }
 
     addInputEventToListerValueElement(event)
     {
-        this._listerValueElement.addEventListener('input', event)
+        this._listerValueElement?.addEventListener('input', (event)=>{
+
+
+
+                event.stopPropagation()
+                console.log(this)
+                clearTimeout(this.timeOut)
+                this.timeOut = setTimeout(() => {
+                    this._inputEvent()
+                }, 300);
+
+            }
+
+
+
+            )
     }
 
     focusTallTableInput()
@@ -64,6 +98,8 @@ class TableInputParent {
 
     getListerFilterInputValues()
     {
+        if (this._listerFilterSelectElement === undefined)
+            return
         if (this._listerFilterSelectElement.value !== '' || this._listerValueElement.value !== '')
                         return [this.convertOperationString(this._listerFilterSelectElement.value), this._listerValueElement.value[1]]
     }
@@ -83,7 +119,7 @@ class TableInputParent {
 
     }
 
-    fillTallTableInput(value)
+    fillTallTableInput(value = '')
     {
         this._tallTableValueInput.value = value
     }
@@ -92,6 +128,38 @@ class TableInputParent {
     {
         this._tallTableValueInput.value=''
     }
+
+    // addInputEventToHeaderFilters(tableAttributeOrder) {
+    //     console.log(this._headerAttributeParams)
+    //     tableAttributeOrder.forEach(attribName => {
+    //         if (!this._headerAttributeParams[attribName])
+    //             return
+    //         // let filters = this._view.getFilterInput(attribName)
+    //         // console.log(filters)
+    //         this._headerAttributeParams[attribName].addInputEventToListerFilterSelectElement(
+    //
+    //             (event) => {
+    //                 event.stopPropagation()
+    //                 console.log(this)
+    //                 clearTimeout(this.timeOut)
+    //                 this.timeOut = setTimeout(() => {
+    //                     this._controllerPointer.onTableFilterChange()
+    //                 }, 300);
+    //                 if (event.target.value === 'null' || event.target.value === 'notnull') {
+    //                     event.target.nextElementSibling.value = '';
+    //                     event.target.nextElementSibling.disabled = true;
+    //                 } else event.target.nextElementSibling.disabled = false;
+    //             })
+    //         this._headerAttributeParams[attribName].addInputEventToListerValueElement ((event) => {
+    //             clearTimeout(this.timeOut)
+    //             this.timeOut = setTimeout(() => {
+    //                 this._controllerPointer.onTableFilterChange()
+    //             }, 300);
+    //         })
+    //         // if (this._headerAttributeParams[attribName]?.hidden)
+    //         //     document.getElementById('hcb-' + this._view.id + "-" + attribName).click()
+    //     })
+    // }
 }
 
 
