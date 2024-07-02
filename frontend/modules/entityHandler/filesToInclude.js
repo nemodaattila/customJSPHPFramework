@@ -69,5 +69,9 @@ Includer.setIncludableModuleSource(
                 'NumberTableInput.js',
                 'StringTableInput.js',
                 'SelectTableInput.js',
+                'CustomSelectorInput.js',
+                'DateTableInput.js',
+                'NonTableInput.js',
+                'CurrencyTableInput.js'
             ]
         }])
