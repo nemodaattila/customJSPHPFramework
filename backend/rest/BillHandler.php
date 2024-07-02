@@ -14,7 +14,7 @@ class BillHandler extends RestParent
         $searchParams = json_decode(getallheaders()["Search-And-Order-Params"], true);
         $searchParams["orderAndLimitParams"]['limit']++;
         $searchParams["connectedTableParams"] = [];
-        if (VariableHelper::getFirstElementFromArrayWithCondition($searchParams["filterParams"], function ($array) {
+        if (VariableHelper::checkIfAnArrayElementMeetsCondition($searchParams["filterParams"], function ($array) {
                 return $array[0] === 'company_name';
             }) === true)
             $searchParams["connectedTableParams"][] =
