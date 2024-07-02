@@ -13,37 +13,40 @@ class BillServiceModel extends EntityServiceModelParent {
      * @type {{}}
      * @private
      */
-    _currencies
+    _currencies={}
     /**
      * bill's method of pay - PayPal, card, etc.
      @type {{}}
 
      * @private
      */
-    _paymentMethods
+    _paymentMethods={}
     /**
      * pay states if bills, for e.g.: paid, to be played, etc.
      * @private
      */
-    _states
+    _states={}
 
-    set currencies(value) {
-        this._currencies = value;
+    set currencies(values) {
+        Object.values(values).forEach(type =>
+            this._currencies[type.id] = type.name)
     }
 
-    set paymentMethods(value) {
-        this._paymentMethods = value;
+    set paymentMethods(values) {
+        Object.values(values).forEach(type =>
+            this._paymentMethods[type.id] = type.name)
     }
 
-    set states(value) {
-        this._states = value;
+    set states(values) {
+        Object.values(values).forEach(type =>
+            this._states[type.id] = type.name)
     }
 
     _tableHeaderAttributes = {
         warnings: {label: 'Figyelmeztetések', type: 'none', sortable: 'false'},
         id: {label: 'Azonosító', type: 'NumberTableInput', inModule: ['lister']},
         company: {label: 'Cégazonosító', type: 'CustomSelectorInput', stringParam: 'companyName'},
-        companyName: {label: 'Cégnév', type: 'StringTableInput', inModule: ['lister']},
+        company_name: {label: 'Cégnév', type: 'StringTableInput', inModule: ['lister']},
         payment_method: {
             label: 'Fizetési mód', type: 'SelectTableInput',
             values: this._paymentMethods,
@@ -58,8 +61,8 @@ class BillServiceModel extends EntityServiceModelParent {
             validations: ['required'],
             inModule: ['lister', 'creator', 'editor']
         },
-        value: {label: 'Összeg', type: 'NumberTableInput'},
-        currency: {label: 'Valuta', type: 'CurrencyTableInput', values: this._currencies},
+        value: {label: 'Összeg', type: 'CurrencyTableInput'},
+        currency: {label: 'Valuta', type: 'SelectTableInput', values: this._currencies},
         state: {
             label: 'Fizetési állapot',
             type: 'SelectTableInput',
@@ -76,7 +79,7 @@ class BillServiceModel extends EntityServiceModelParent {
             defaultOperator: 'eq'
         },
         creator: {label: 'Feltöltő azonosító', type: 'CustomSelectorInput'},
-        creatorName: {label: 'Feltöltő neve', type: 'SelectTableInput'},
+        creator_name: {label: 'Feltöltő neve', type: 'StringTableInput'},
         date: {label: 'Feltöltés ideje', type: 'DateTableInput'},
         comment: {label: 'Megjegyzés', type: 'StringTableInput'}
         //     system: {label: 'Rendszerazonosító'},
