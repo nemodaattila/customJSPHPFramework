@@ -15,10 +15,10 @@ class Routes
      */
     private array $routes = [
         ['GET', 'company/meta', 'MetaDataHandler', 'getCompanyMeta', 'A'],
-        ['GET', 'company', 'CompanyHandler', 'getCompanyIds', 'A'],
-        ['POST', 'company', 'CompanyHandler', 'createCompany', 'A'],
-        ['PATCH', 'company/$1', 'CompanyHandler', 'editCompany', 'A'],
-        ['DELETE', 'company/$1', 'CompanyHandler', 'deleteCompany', 'A'],
+        ['GET', 'company', 'CompanyHandler', 'getIds', 'A'],
+        ['POST', 'company', 'CompanyHandler', 'create', 'A'],
+        ['PATCH', 'company/$1', 'CompanyHandler', 'edit', 'A'],
+        ['DELETE', 'company/$1', 'CompanyHandler', 'delete', 'A'],
         ['GET', 'company/$1', 'CompanyHandler', 'getOne', 'A'],
 
         ['GET', 'bill/meta', 'MetaDataHandler', 'getBillMeta', 'A'],
