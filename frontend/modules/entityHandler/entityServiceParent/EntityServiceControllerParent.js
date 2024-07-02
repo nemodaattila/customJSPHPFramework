@@ -63,6 +63,8 @@ class EntityServiceControllerParent  extends ControllerParent{
 
        Object.entries( tableHeaderAttributes).forEach(([attributeName,inputParameters]) => {
            console.log(inputParameters.type)
+           if (inputParameters.type === 'none')
+               inputParameters.type = 'NonTableInput'
            inputParameters.type = inputParameters.type??'StringTableInput'
            if (ENTITY_HANDLER_INPUT_TYPES.findIndex(type => type === inputParameters.type) ===-1) {
 
@@ -70,7 +72,6 @@ class EntityServiceControllerParent  extends ControllerParent{
                return
            }
            try {
-               console.log('typeBbject')
                const inputObj = new (eval(inputParameters.type))()
                delete inputParameters.type
                 Object.entries(inputParameters).forEach(([name, value])=> inputObj['_'+name]=value)
