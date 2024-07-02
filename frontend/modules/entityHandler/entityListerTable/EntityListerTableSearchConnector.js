@@ -68,8 +68,10 @@ class EntityListerTableSearchConnector {
         this._controllerPointer.refreshRows()
     }
 
-    resetOffset() {
+    resetOffset(resetScroll = true) {
         this._orderAndLimitParameterObject.offset = 0
+
+        if (resetScroll)
         this._offsetSourceObject?.resetScroll()
 
     }

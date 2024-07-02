@@ -100,12 +100,14 @@ class EntityListerControllerParent extends WindowContentControllerParent {
     }
 
     //reset
-    onTableFilterChange() {
+    onTableFilterChange(params = {}) {
+        console.log(params)
+        console.log({...{resetOffset: true, reDrawHeader: false},...params})
         // this._view.getComponent('listerTable').flushTable()
         // this._searchAndOrderParameters.offset = 0;
         // this._searchParamConnector.resetOffset()
         // this._searchAndOrderParameters.limit = Math.floor(parseInt(this._view.getComponent('listerTable').getTBodyHeight()) / this._rowHeight)
-        this.refreshRows({resetOffset: true, reDrawHeader: false})
+        this.refreshRows({...{resetOffset: true, reDrawHeader: false},...params})
     }
 
     onSortElementClick(parameterName, order) {
@@ -114,7 +116,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         this._searchParamConnector.setOrdering(parameterName, order)
         // this._view.getComponent('listerTable').flushTable()
         // this.getRecordsFromServer("reset", true)
-        this.refreshRows({resetOffset: true, reDrawHeader: false})
+        this.refreshRows({resetOffset: true, reDrawHeader: false, resetScroll: false})
     }
 
     // async getRecordsFromServer(type, hardReset = false) {
@@ -142,7 +144,7 @@ class EntityListerControllerParent extends WindowContentControllerParent {
         }
         this._searchParamConnector.setAutoLimit(params.maxValueChange)
         if (params.resetOffset ?? false)
-            this._searchParamConnector.resetOffset()
+            this._searchParamConnector.resetOffset(params.resetScroll ?? true)
         const searchParams = await this.collectSearchParamsForRequest(params)
         let recordIds, hasNext
         if (params.ids) {
