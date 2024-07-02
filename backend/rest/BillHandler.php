@@ -1,6 +1,8 @@
 <?php
 
 namespace rest;
+
+use helper\VariableHelper;
 use model\Company;
 use service\EntityComparator;
 
@@ -11,6 +13,12 @@ class BillHandler extends RestParent
     public function getIds(): void {
         $searchParams = json_decode(getallheaders()["Search-And-Order-Params"], true);
         $searchParams["orderAndLimitParams"]['limit']++;
+        $searchParams["connectedTableParams"] = [];
+        if (VariableHelper::getFirstElementFromArrayWithCondition($searchParams["filterParams"], function ($array) {
+                return $array[0] === 'company_name';
+            }) === true)
+            $searchParams["connectedTableParams"][] =
+                ['table' => 'companies', 'foreignKey' => 'id', 'connectedAttribute' => 'company', 'targetAttributes' => ['name' => 'company_name']];
         $res = $this->dbConnection->getRecordsFromServer(
             ["tableName" => $this->tableName,
                 "attributes" => ['id'],
@@ -18,6 +26,7 @@ class BillHandler extends RestParent
                 "orderLimit" => $searchParams["orderAndLimitParams"],
                 'filterParameters' => $searchParams["filterParams"],
                 "fetchType" => 7, //FETCH COLUMN
+                'connectedTableParams' => $searchParams["connectedTableParams"]
             ]
         );
         $hasNext = false;
@@ -29,13 +38,13 @@ class BillHandler extends RestParent
     }
 
     public function getOne($parameters): void {
-                    $this->result = $this->dbConnection->getARecord(
-                        ['tableName' => $this->tableName,
-                            'value' => $parameters->getUrlParameters()[1],
-                            'connectedTableParams' => [
-                                ['table' => 'companies', 'foreignKey' => 'id', 'connectedAttribute' => 'company', 'targetAttributes' => ['name' => 'company_name']],
-                            ]
-                        ]);
+        $this->result = $this->dbConnection->getARecord(
+            ['tableName' => $this->tableName,
+                'value' => $parameters->getUrlParameters()[1],
+                'connectedTableParams' => [
+                    ['table' => 'companies', 'foreignKey' => 'id', 'connectedAttribute' => 'company', 'targetAttributes' => ['name' => 'company_name']],
+                ]
+            ]);
     }
 
     public function create($parameters): void {
@@ -58,15 +67,12 @@ class BillHandler extends RestParent
     }
 
     function delete($parameters = null) {
-        $companyId=$parameters->getUrlParameters()[1];
-
-                $contData = $this->dbConnection->getARecordByID($this->tableName, $companyId);
-                if ($contData === null)
-                    throw new Exception('Számla nem létezik');
-                $this->dbConnection->deleteARecordById($this->tableName, $companyId);
+        $companyId = $parameters->getUrlParameters()[1];
+        $contData = $this->dbConnection->getARecordByID($this->tableName, $companyId);
+        if ($contData === null)
+            throw new Exception('Számla nem létezik');
+        $this->dbConnection->deleteARecordById($this->tableName, $companyId);
 //                $this->saveEvent(4, 3, $id, ['name' => ['oldValue' => $name, 'newValue' => null], 'company' => ['oldValue' => $company, 'newValue' => null]]);
         $this->result = true;
-
-        }
-
+    }
 }
