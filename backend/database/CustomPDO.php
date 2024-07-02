@@ -86,9 +86,7 @@ class CustomPDO implements DatabaseConnectionInterface
         }
         foreach ($conditionalAttributes as $value)
             $what[] = 't1.' . $value;
-        foreach ($filters as $filter)
-            $what[] = 't1.' . $filter[0]; //TODO ???
-        $joins = '';
+   $joins = '';
         $id = 2;
         if (isset($params['connectedTableParams'])) {
             $joins = [];
@@ -162,7 +160,6 @@ class CustomPDO implements DatabaseConnectionInterface
             $sql .= ' ORDER BY ' . $orderParams['order'] . " " . ($orderParams['orderDir'] ?? 'ASC');
         if (isset($orderParams['limit']))
             $sql .= ' LIMIT ' . $orderParams['limit'] . " OFFSET " . ($orderParams['offset'] ?? '0');
-//        var_dump($sql);
         $this->executeQuery($sql);
         return $this->query->fetchAll($params['fetchType'] ?? PDO::FETCH_ASSOC);
     }
